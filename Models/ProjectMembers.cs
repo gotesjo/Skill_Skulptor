@@ -9,9 +9,9 @@ namespace SkillSkulptor.Models
         public int ProjectId { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        public AppUser fkUser { get; set; }
+        public virtual AppUser User { get; set; }
 
         [ForeignKey(nameof(ProjectId))]
-        public Project fkProject { get; set; }
+        public virtual Project Project { get; set; }
     }
 }

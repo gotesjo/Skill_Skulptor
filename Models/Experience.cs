@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SkillSkulptor.Models
 {
     public class Experience
     {
+        [Key]
         public int ExId { get; set; }
         public string Position { get; set; }
         public string Description { get; set; }

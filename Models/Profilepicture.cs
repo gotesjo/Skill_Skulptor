@@ -8,6 +8,6 @@ namespace SkillSkulptor.Models
         public int PicrtureID { get; set; }
         public string Filename {  get; set; }
 
-        public AppUser UserPic { get; set; }
+        public virtual AppUser pictureUser{ get; set; }
     }
 }

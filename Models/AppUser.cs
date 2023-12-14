@@ -19,10 +19,10 @@ namespace SkillSkulptor.Models
         public int Picture {  get; set; }
 
         [ForeignKey(nameof(Address))]
-        public Adress fkAddress { get; set; }
+        public virtual Adress fkAddress { get; set; }
 
         [ForeignKey(nameof(Picture))]
-        public Profilepicture fkPicture { get; set; }
+        public virtual Profilepicture fkPicture { get; set; }
 
         public virtual IEnumerable<ProjectMembers> Projectmembers { get; set; } = new List<ProjectMembers>();
 
