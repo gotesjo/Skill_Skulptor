@@ -1,0 +1,101 @@
+.cvsearch-input {
+    width: 50px;
+}
+
+#unique-profile-section main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#unique-profile-section section {
+    background-color: white;
+    margin: 20px;
+    padding: 20px;
+    width: 60%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#unique-profile-section label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+#unique-profile-section input[type="text"],
+#unique-profile-section input[type="email"],
+#unique-profile-section input[type="password"],
+#unique-profile-section textarea {
+    width: calc(100% - 16px);
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#unique-profile-section textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+#unique-profile-section button {
+    background-color: var(--bs-link-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+    #unique-profile-section button:hover {
+        background-color: var(--bs-link-hover-color);
+    }
+
+.chat-online {
+    color: #34ce57
+}
+
+.chat-offline {
+    color: #e4606d
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    max-height: 800px;
+    overflow-y: scroll
+}
+
+.chat-message-left,
+.chat-message-right {
+    display: flex;
+    flex-shrink: 0
+}
+
+.chat-message-left {
+    margin-right: auto
+}
+
+.chat-message-right {
+    flex-direction: row-reverse;
+    margin-left: auto
+}
+
+.py-3 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.px-4 {
+    padding-right: 1.5rem !important;
+    padding-left: 1.5rem !important;
+}
+
+.flex-grow-0 {
+    flex-grow: 0 !important;
+}
+
+.border-top {
+    border-top: 1px solid #dee2e6 !important;
+}
