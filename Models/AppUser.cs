@@ -11,24 +11,25 @@ namespace SkillSkulptor.Models
         public string Lastname { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string Phonenr { get; set; }
+        public string? Phonenr { get; set; }
         public Boolean ProfileAccess { get; set; }
         public Boolean Active { get; set; }
 
-        public int Address { get; set; }
-        public int Picture {  get; set; }
+        public int? Address { get; set; }
+        public int? Picture {  get; set; }
 
         [ForeignKey(nameof(Address))]
         public virtual Adress fkAddress { get; set; }
 
         [ForeignKey(nameof(Picture))]
-        public virtual Profilepicture fkPicture { get; set; }
+        public virtual Profilepicture? fkPicture { get; set; }
 
         public virtual IEnumerable<ProjectMembers> Projectmembers { get; set; } = new List<ProjectMembers>();
 
-        public CV userCV { get; set; }
+        public CV? userCV { get; set; }
         public virtual IEnumerable<Project> OwnProjects { get; set; } = new List<Project>();
 
-		public virtual IEnumerable<Message> Messages { get; set; } = new List<Message>();
-	}
+		public virtual IEnumerable<Message> SentMessages { get; set; } = new List<Message>();
+        public virtual IEnumerable<Message> ReceivedMessages { get; set; } = new List<Message>();
+    }
 }

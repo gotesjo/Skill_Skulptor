@@ -1,7 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using SkillSkulptor.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<SsDbContext>(options =>
+              options.UseSqlServer(builder.Configuration.GetConnectionString("SsDbContext")));
 
 var app = builder.Build();
 
