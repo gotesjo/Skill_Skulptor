@@ -10,6 +10,7 @@ namespace SkillSkulptor.Models
         public string City { get; set; }
         public string ZipCode { get; set; }
         public string Country { get; set; }
+        public AppUser resident { get; set; }
 
     }
 }

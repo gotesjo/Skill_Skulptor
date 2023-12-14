@@ -7,5 +7,7 @@ namespace SkillSkulptor.Models
         [Key]
         public int PicrtureID { get; set; }
         public string Filename {  get; set; }
+
+        public AppUser UserPic { get; set; }
     }
 }

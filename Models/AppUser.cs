@@ -6,7 +6,7 @@ namespace SkillSkulptor.Models
     public class AppUser
     {
         [Key]
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
@@ -25,6 +25,9 @@ namespace SkillSkulptor.Models
         public Profilepicture fkPicture { get; set; }
 
         public virtual IEnumerable<ProjectMembers> Projectmembers { get; set; } = new List<ProjectMembers>();
+
+        public CV userCV { get; set; }
+        public virtual IEnumerable<Project> OwnProjects { get; set; } = new List<Project>();
 
     }
 }
