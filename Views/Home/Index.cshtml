@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Index";
 }
-
+@model List<CV>
 <!-- Header för startsidan-->
 <section>
     <div class="container-fluid">
@@ -31,28 +31,20 @@
         <div class="subheading mb-5 p-5">
             <h2>Se senaste cv på sidan</h2>
             <div class="row align-items-center pt-3">
-                <div class="col">
-                    <img src="~/datafiles/pictures/logosmallblue.png" class="img-thumbnail" alt="bild" />
-                    <h3>Personnamn</h3>
-                    <h4>Kompetenser</h4>
-                    <p>Detta är mina kompetenser</p>
-                </div>
-                <div class="col">
-                    <img src="~/datafiles/pictures/logosmallblue.png" class="img-thumbnail" alt="bild" />
-                    <h3>Personnamn</h3>
-                    <h4>Kompetenser</h4>
-                    <p>Detta är mina kompetenser</p>
-                </div>
-                <div class="col">
-                    <img src="~/datafiles/pictures/logosmallblue.png" class="img-thumbnail" alt="bild" />
-                    <h3>Personnamn</h3>
-                    <h4>Kompetenser</h4>
-                    <p>Detta är mina kompetenser</p>
-                </div>
+                @foreach(var cv in Model)
+                {
+                    <div class="col card m-3 bg-info">
+                        <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
+                        <h4>@cv.Summary</h4>
+                        <h5>Detta är mina kompetenser</h5>
+                        <p>@cv.Experiences.First().Description Employer: @cv.Experiences.First().Employer</p>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </section>
+
 <section>
     <div class="continer subheading pt-5">
         <h2>Senaste upplagda projektet</h2>

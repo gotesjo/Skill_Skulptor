@@ -7,15 +7,19 @@ namespace SkillSkulptor.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private SsDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, SsDbContext _db)
         {
+            _dbContext = _db;
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            List<CV> allCv= _dbContext.CVs.ToList();
+            return View(allCv);
         }
 
         public IActionResult Privacy()

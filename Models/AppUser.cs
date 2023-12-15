@@ -26,7 +26,7 @@ namespace SkillSkulptor.Models
 
         public virtual IEnumerable<ProjectMembers> listProjectmembers { get; set; } = new List<ProjectMembers>();
 
-        public CV? userCV { get; set; }
+        public virtual CV? userCV { get; set; }
         public virtual IEnumerable<Project> OwnProjects { get; set; } = new List<Project>();
 
 		public virtual IEnumerable<Message> SentMessages { get; set; } = new List<Message>();

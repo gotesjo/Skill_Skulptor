@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<SsDbContext>(options =>
-              options.UseSqlServer(builder.Configuration.GetConnectionString("dockerContext")));
+              options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("dockerContext")));
 
 var app = builder.Build();
 
