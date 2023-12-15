@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SkillSkulptor.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace SkillSkulptor.Migrations
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,11 +50,11 @@ namespace SkillSkulptor.Migrations
                     Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phonenr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phonenr = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProfileAccess = table.Column<bool>(type: "bit", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
-                    Address = table.Column<int>(type: "int", nullable: false),
-                    Picture = table.Column<int>(type: "int", nullable: false)
+                    Address = table.Column<int>(type: "int", nullable: true),
+                    Picture = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,14 +63,12 @@ namespace SkillSkulptor.Migrations
                         name: "FK_AppUsers_Adresses_Address",
                         column: x => x.Address,
                         principalTable: "Adresses",
-                        principalColumn: "AdressID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AdressID");
                     table.ForeignKey(
                         name: "FK_AppUsers_ProfilePictures_Picture",
                         column: x => x.Picture,
                         principalTable: "ProfilePictures",
-                        principalColumn: "PicrtureID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PicrtureID");
                 });
 
             migrationBuilder.CreateTable(
@@ -176,8 +174,8 @@ namespace SkillSkulptor.Migrations
                     ExId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Employer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Employer = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Cv = table.Column<int>(type: "int", nullable: false)
@@ -228,27 +226,27 @@ namespace SkillSkulptor.Migrations
                         name: "FK_ProjectMembers_AppUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AppUsers",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId");
                     table.ForeignKey(
                         name: "FK_ProjectMembers_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
-                        principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProjectId");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppUsers_Address",
                 table: "AppUsers",
                 column: "Address",
-                unique: true);
+                unique: true,
+                filter: "[Address] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppUsers_Picture",
                 table: "AppUsers",
                 column: "Picture",
-                unique: true);
+                unique: true,
+                filter: "[Picture] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CVs_BelongsTo",

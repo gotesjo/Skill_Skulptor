@@ -24,7 +24,7 @@ namespace SkillSkulptor.Models
         [ForeignKey(nameof(Picture))]
         public virtual Profilepicture? fkPicture { get; set; }
 
-        public virtual IEnumerable<ProjectMembers> Projectmembers { get; set; } = new List<ProjectMembers>();
+        public virtual IEnumerable<ProjectMembers> listProjectmembers { get; set; } = new List<ProjectMembers>();
 
         public CV? userCV { get; set; }
         public virtual IEnumerable<Project> OwnProjects { get; set; } = new List<Project>();

@@ -16,7 +16,7 @@ namespace SkillSkulptor.Models
         [ForeignKey(nameof(CreatedBy))]
         public virtual AppUser CreatedByUser { get; set; }
 
-        public virtual IEnumerable<ProjectMembers> Projectmembers { get; set; } = new List<ProjectMembers>();
+        public virtual IEnumerable<ProjectMembers> listProjectmembers { get; set; } = new List<ProjectMembers>();
 
     }
 }

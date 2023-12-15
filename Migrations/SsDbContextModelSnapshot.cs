@@ -398,15 +398,15 @@ namespace SkillSkulptor.Migrations
             modelBuilder.Entity("SkillSkulptor.Models.ProjectMembers", b =>
                 {
                     b.HasOne("SkillSkulptor.Models.Project", "Project")
-                        .WithMany("Projectmembers")
+                        .WithMany("listProjectmembers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SkillSkulptor.Models.AppUser", "User")
-                        .WithMany("Projectmembers")
+                        .WithMany("listProjectmembers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Project");
@@ -435,11 +435,11 @@ namespace SkillSkulptor.Migrations
                 {
                     b.Navigation("OwnProjects");
 
-                    b.Navigation("Projectmembers");
-
                     b.Navigation("ReceivedMessages");
 
                     b.Navigation("SentMessages");
+
+                    b.Navigation("listProjectmembers");
 
                     b.Navigation("userCV");
                 });
@@ -461,7 +461,7 @@ namespace SkillSkulptor.Migrations
 
             modelBuilder.Entity("SkillSkulptor.Models.Project", b =>
                 {
-                    b.Navigation("Projectmembers");
+                    b.Navigation("listProjectmembers");
                 });
 #pragma warning restore 612, 618
         }

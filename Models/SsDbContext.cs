@@ -38,13 +38,13 @@ namespace SkillSkulptor.Models
 
             modelBuilder.Entity<ProjectMembers>()
                 .HasOne(pj => pj.Project)
-                .WithMany(p => p.ProjectMembers)
+                .WithMany(p => p.listProjectmembers)
                 .HasForeignKey(pj => pj.ProjectId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ProjectMembers>()
                 .HasOne(pj => pj.User)
-                .WithMany(u => u.Projectmembers)
+                .WithMany(u => u.listProjectmembers)
                 .HasForeignKey(pj => pj.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
