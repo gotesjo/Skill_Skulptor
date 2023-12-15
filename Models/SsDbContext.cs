@@ -36,6 +36,18 @@ namespace SkillSkulptor.Models
             modelBuilder.Entity<ProjectMembers>()
                 .HasKey(pj => new { pj.UserId, pj.ProjectId });
 
+            modelBuilder.Entity<ProjectMembers>()
+                .HasOne(pj => pj.Project)
+                .WithMany(p => p.ProjectMembers)
+                .HasForeignKey(pj => pj.ProjectId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProjectMembers>()
+                .HasOne(pj => pj.User)
+                .WithMany(u => u.Projectmembers)
+                .HasForeignKey(pj => pj.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             // Eventuellt annan konfiguration för andra relationer här...
         }
 
