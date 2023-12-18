@@ -1,0 +1,44 @@
+﻿@model List<Project>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!--Projekt Content-->
+<div class="container">
+
+    <h2 class="d-block d-lg-none">PROJEKT</h2>
+
+
+    <h4 class="d-block d-lg-non">@ViewBag.Meddelande</h4>
+
+  <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Skapad Av</th>
+                    <th scope="col">Projekt Namn</th>
+                    <th scope="col">Beskrivning</th>
+                    <th scope="col">StartDatum</th>
+                    <th scope="col">SlutDatum</th>
+                    <th scope="col">Antal medverkande</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var prod in Model)
+            {
+                <tr>
+                    <td scope="col">@prod.CreatedByUser.Firstname</td>
+                    <td scope="col">@prod.ProjectName</td>
+                    <td scope="col">@prod.Description</td>
+                    <td scope="col">@prod.Startdate</td>
+                    <td scope="col">@prod.Enddate</td>
+                    <td scope="col">@prod.CreatedByUser.Firstname.Count()</td>
+                    <td><button class="btn btn-primary" type="submit">Gå med</button></td>
+                </tr>
+            }
+            </tbody>
+  </table>
+
+    <a href="@Url.Action("Index2", "Projekt")" class="btn btn-primary p">Skapa nytt projekt</a>
+
+</div>
