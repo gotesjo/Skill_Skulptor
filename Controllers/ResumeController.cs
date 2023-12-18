@@ -19,5 +19,10 @@ namespace SkillSkulptor.Controllers
             AppUser myUser = _dbContext.AppUsers.First();
             return View(myUser);
         }
+        public IActionResult Home()
+        {
+            AppUser myUser = _dbContext.AppUsers.First();
+            return View(myUser);
+        }
     }
 }
