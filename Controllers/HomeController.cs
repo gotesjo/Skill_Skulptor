@@ -18,12 +18,50 @@ namespace SkillSkulptor.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
+            ViewBag.Project = _project;
             List<CV> allCv= _dbContext.CVs.ToList();
             return View(allCv);
         }
 
+
+        [HttpPost]
+        public IActionResult Index(string search)
+        {
+            Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
+            ViewBag.Project = _project;
+
+            string[] searchTerms = search.Split(' ');
+
+            if (searchTerms.Length == 1)
+            {
+                List<CV> CvSearched = _dbContext.CVs
+                    .Where(a => a.fkUser.Firstname.Contains(search) || a.fkUser.Lastname.Contains(search))
+                    .ToList();
+
+                return View(CvSearched);
+            }
+            else if (searchTerms.Length == 2)
+            {
+                string firstName = searchTerms[0];
+                string lastName = searchTerms[1];
+
+                List<CV> CvSearched = _dbContext.CVs
+                    .Where(a => a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName))
+                    .ToList();
+
+                return View(CvSearched);
+            }
+            else
+            {
+                return View(new List<CV>());
+            }
+        }
+
+
         public IActionResult Privacy()
         {
+ 
             return View();
         }
 
