@@ -18,8 +18,19 @@ namespace SkillSkulptor.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
-            ViewBag.Project = _project;
+            try
+            {
+                Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
+                ViewBag.Project = _project;
+            }
+            catch
+            {
+                Project ExP = new Project();
+                ExP.ProjectName = "Finns inga projekt";
+                ViewBag.Project = ExP;
+
+            }
+
             List<CV> allCv= _dbContext.CVs.ToList();
             return View(allCv);
         }
@@ -28,8 +39,17 @@ namespace SkillSkulptor.Controllers
         [HttpPost]
         public IActionResult Index(string search)
         {
-            Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
-            ViewBag.Project = _project;
+            try
+            {
+                Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
+                ViewBag.Project = _project;
+            }
+            catch
+            {
+                Project ExP = new Project();
+                ExP.ProjectName = "Finns inga projekt";
+                ViewBag.Project = ExP;
+            }
 
             string[] searchTerms = search.Split(' ');
 
