@@ -31,7 +31,7 @@ namespace SkillSkulptor.Controllers
 
             }
 
-            List<CV> allCv= _dbContext.CVs.ToList();
+            List<CV> allCv= _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).ToList();
             return View(allCv);
         }
 

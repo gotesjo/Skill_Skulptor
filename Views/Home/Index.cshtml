@@ -32,11 +32,14 @@
             <div class="row align-items-center pt-3">
                 @foreach(var cv in Model)
                 {
-                    <div class="col card m-3 bg-info">
-                        <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
-                        <h4>@cv.Summary</h4>
-                        <h5>Detta är mina kompetenser</h5>
-                        <p>@cv.Experiences.First().Description Employer: @cv.Experiences.First().Employer</p>
+                    <div class="col card m-3 bg-info" >
+                        <a href="@Url.Action("Index", "Resume",@cv.fkUser.UserId)">
+                            <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
+                            <h4>@cv.Summary</h4>
+                            <br />
+                            <h5>Detta är mina kompetenser</h5>
+                            <p class="text-body">@cv.Experiences.First().Description Employer: @cv.Experiences.First().Employer</p>
+                        </a>
                     </div>
                 }
             </div>
@@ -44,7 +47,7 @@
     </div>
 
     <div class="jumbotron" >
-        <h1 class="display-4">Senaste upplagda projektet</h1>
+        <h3 class="dispaly-3">Senaste upplagda projektet</h3>
         <p class="lead">@ViewBag.Project.ProjectName</p>
         <hr class="my-4">
         <p>@ViewBag.Project.Description</p>
