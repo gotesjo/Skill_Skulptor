@@ -65,22 +65,19 @@ namespace SkillSkulptor.Models
             );
 
             modelBuilder.Entity<CV>().HasData(
-                new CV { CVID = 1, Clicks = 10, 
-                        Summary = "Experienced professional",
-                        PersonalLetter= "Förutom att vara webbutvecklare tycker jag mest om att vara utomhus. På vintern är jag en ivrig skidåkare och nybörjare. På sommaren tycker jag om att cykla mountainbike, friklättra och paddla kajak.\r\nNär jag tvingas inomhus följer jag ett antal sci-fi- och fantasy-genrefilmer och tv-program, jag är en blivande kock, och jag spenderar en stor del av min fritid på att utforska de senaste tekniska framstegen i front-end webbutvecklingsvärlden.", BelongsTo = 1 },
-                new CV { CVID = 2, Clicks = 5, 
-                        Summary = "Entry-level candidate",
-                        PersonalLetter= "Utöver min akademiska bakgrund och yrkeserfarenhet omfattar mitt liv en varierad mix av intressen och passioner. Jag har en grundutbildning inom psykologi, där jag har fördjupat mig i att förstå människors tankar och beteenden. Min tid på universitetet har gett mig insikter som jag använder för att skapa meningsfulla och användarcentrerade digitala lösningar.\r\nNär jag inte dyker in i världen av psykologi och användbarhet, finner jag glädje i att utforska konst och kreativitet. Jag har en konstnärlig sida som jag utvecklar genom att måla och delta i konstutställningar. Att skapa och uppleva konst ger mig en nödvändig kontrast till den tekniska världen.\r\nUtöver detta är jag en hängiven friluftsentusiast. Jag njuter av vandring i naturen, camping och fotografering av landskap.\r\nMin utbildning och intressen kompletterar varandra på ett sätt som berikar mitt perspektiv, vilket i sin tur påverkar hur jag närmar mig utmaningar och kreativa projekt."
-                        ,  BelongsTo = 2 
-                   }
+                new CV { CVID = 3, Clicks = 10, Summary = "Experienced professional", BelongsTo = 1 },
+                new CV { CVID = 4, Clicks = 5, Summary = "Entry-level candidate", BelongsTo = 2 }
             );
 
-     
+            modelBuilder.Entity<CV>().HasData(
+                new CV { CVID = 1, Clicks = 10, Summary = "Experienced professional", BelongsTo = 1 },
+                new CV { CVID = 2, Clicks = 5, Summary = "Entry-level candidate", BelongsTo = 2 }
+             );
 
             modelBuilder.Entity<Education>().HasData(
-                new Education { EdID = 1, Institution = "University1",Course ="Systemutveckling", Degree = "Bachelor's", StartDate = DateTime.Now.AddYears(-4), EndDate = DateTime.Now.AddYears(-1), CvId = 1 },
-                new Education { EdID = 2, Institution = "University2", Course = "Systemutveckling", Degree = "Master's", StartDate = DateTime.Now.AddYears(-3), EndDate = DateTime.Now.AddYears(-2), CvId = 1 },
-                new Education { EdID = 3, Institution = "College1", Course = "Systemutveckling", Degree = "Associate", StartDate = DateTime.Now.AddYears(-2), EndDate = DateTime.Now.AddYears(-1), CvId = 2 }
+                new Education { EdID = 1, Institution = "University1", Degree = "Bachelor's", StartDate = DateTime.Now.AddYears(-4), EndDate = DateTime.Now.AddYears(-1), CvId = 1 },
+                new Education { EdID = 2, Institution = "University2", Degree = "Master's", StartDate = DateTime.Now.AddYears(-3), EndDate = DateTime.Now.AddYears(-2), CvId = 1 },
+                new Education { EdID = 3, Institution = "College1", Degree = "Associate", StartDate = DateTime.Now.AddYears(-2), EndDate = DateTime.Now.AddYears(-1), CvId = 2 }
             );
 
             modelBuilder.Entity<Experience>().HasData(

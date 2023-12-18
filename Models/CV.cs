@@ -8,8 +8,7 @@ namespace SkillSkulptor.Models
         [Key]
         public int CVID { get; set; }
         public int Clicks { get; set; }
-        public string? Summary { get; set; }
-        public string? PersonalLetter {  get; set; }
+        public String Summary { get; set; }
         public int BelongsTo { get; set; }
 
         [ForeignKey(nameof(BelongsTo))]
