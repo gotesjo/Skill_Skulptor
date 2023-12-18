@@ -17,12 +17,10 @@ namespace SkillSkulptor.Controllers
         public IActionResult Index()
         {
             AppUser myUser = _dbContext.AppUsers.First();
+          
+            ViewBag.defaultPicturePath = "~/datafiles/pictures/defaultpicture.png";
             return View(myUser);
         }
-        public IActionResult Home()
-        {
-            AppUser myUser = _dbContext.AppUsers.First();
-            return View(myUser);
-        }
+    
     }
 }
