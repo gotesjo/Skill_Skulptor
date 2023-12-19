@@ -19,7 +19,7 @@ namespace SkillSkulptor.Controllers
 
 
 		[HttpGet]
-		public IActionResult Index()
+		public IActionResult IndexProjekt()
 		{
             var _projects = _dbContext.Projects.ToList();
             ViewBag.Meddelande = "Totalt antal projekt: " + _projects.Count;
@@ -31,6 +31,35 @@ namespace SkillSkulptor.Controllers
 		{
 			return View();
 		}
+
+		//[HttpPost]
+		//public IActionResult AddProjekt()
+		//{
+		//	Console.WriteLine("Denna borde inte kallas på addprojekt utan parametrear");
+		//	return View(new Project());
+		//}
+
+		[HttpPost]
+
+		public IActionResult AddProjekt(Project projectObject) 
+		{
+
+			Console.WriteLine("Hej jag används fakrsikt: Addprojetk");
+
+			if(projectObject == null)
+			{
+				return RedirectToAction("Index");
+			}
+			else
+			{ 
+				_dbContext.Projects.Add(projectObject);
+				_dbContext.SaveChanges();
+				return RedirectToAction("IndexProjekt");
+            }
+
+
+        }
+
 	}
 
 }
