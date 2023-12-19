@@ -1,0 +1,88 @@
+﻿@model SkillSkulptor.Models.AppUser
+@{
+    ViewData["Title"] = "Redigera Profil";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Profile" asp-action="ProfileEdit" method="post">
+
+    <!-- Personlig Information Sektion -->
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="user-info mb-4">
+        <h3>Personlig Information</h3>
+        <div class="mb-3">
+            <label asp-for="Firstname" class="form-label"></label>
+            <input asp-for="Firstname" class="form-control" placeholder="Förnamn" />
+            <span asp-validation-for="Firstname" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Lastname" class="form-label"></label>
+            <input asp-for="Lastname" class="form-control" placeholder="Efternamn" />
+            <span asp-validation-for="Lastname" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" placeholder="E-post" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phonenr" class="form-label"></label>
+            <input asp-for="Phonenr" class="form-control" placeholder="Telefonnummer" />
+            <span asp-validation-for="Phonenr" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Adress Information Sektion -->
+    <div class="address-info mb-4">
+        <h3>Adress Information</h3>
+        <div class="mb-3">
+            <label asp-for="fkAddress.Street" class="form-label">Gata</label>
+            <input asp-for="fkAddress.Street" class="form-control" placeholder="Gatunamn" />
+            <span asp-validation-for="fkAddress.Street" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="fkAddress.City" class="form-label">Stad</label>
+            <input asp-for="fkAddress.City" class="form-control" placeholder="Stad" />
+            <span asp-validation-for="fkAddress.City" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="fkAddress.ZipCode" class="form-label">Postnummer</label>
+            <input asp-for="fkAddress.ZipCode" class="form-control" placeholder="Postnummer" />
+            <span asp-validation-for="fkAddress.ZipCode" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="fkAddress.Country" class="form-label">Land</label>
+            <input asp-for="fkAddress.Country" class="form-control" placeholder="Land" />
+            <span asp-validation-for="fkAddress.Country" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+    <!-- Profil & Aktivitetsinställningar -->
+    <div class="profile-settings mb-4">
+        <h3>Profilinställningar</h3>
+        <div class="mb-3 form-check">
+            <input asp-for="ProfileAccess" type="checkbox" class="form-check-input" />
+            <label asp-for="ProfileAccess" class="form-check-label">Profil Åtkomst</label>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="Active" type="checkbox" class="form-check-input" />
+            <label asp-for="Active" class="form-check-label">Aktiv</label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spara Ändringar</button>
+</form>
+
+<div class="mb-5"></div>
+    
