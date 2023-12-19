@@ -3,29 +3,26 @@
 	<h2>Här ska det skapas nya projekt</h2>
 
 <!--Skapa projekt Content-->
+<div asp-validation-summary="All" class="text-danger"></div>
 <form asp-action="AddProjekt" method="Post" class="flex-md-column justify-content-center m-5">
     <div class="form1 form-group">
         <label asp-for="ProjectName">Namn</label>
         <input asp-for="ProjectName" type="text" class="form-control" placeholder="Skriv namnet här">
-        @Html.ValidationMessageFor(model => model.ProjectName, "", new { @class = "text-danger" })
     </div>
     <div class="form4 form-group">
         <label asp-for="Description">Beskrivning</label>
-        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Beskriv projektet här (max 500ord)"></textarea>
     </div>
     <div class="form2 form-group">
         <label asp-for="Startdate">StartDatum</label>
         <input asp-for="Startdate" type="date" class="form-control" placeholder="Skriv StartDatum här">
-        @Html.ValidationMessageFor(model => model.Startdate, "", new { @class = "text-danger" })
     </div>
     <div class="form3 form-group">
         <label asp-for="Enddate">SlutDatum</label>
         <input asp-for="Enddate" type="date" class="form-control" placeholder="Skriv SlutDatum här">
-        @Html.ValidationMessageFor(model => model.Enddate, "", new { @class = "text-danger" })
     </div>
   <div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Lägg till Projektet</button>
+        <button type="submit" class="btn btn-primary btn-lg btn-block m-5">Lägg till Projektet</button>
   </div>
 
  </form>

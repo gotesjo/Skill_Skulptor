@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Castle.Core.Logging;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SkillSkulptor.Models;
@@ -43,21 +44,33 @@ namespace SkillSkulptor.Controllers
 
 		public IActionResult AddProjekt(Project projectObject) 
 		{
-
-			Console.WriteLine("Hej jag används fakrsikt: Addprojetk");
-
-			if(projectObject == null)
+			try
 			{
-				return RedirectToAction("Index");
+				if (ModelState.IsValid)
+				{
+                    _dbContext.Projects.Add(projectObject);
+                    _dbContext.SaveChanges();
+                    return RedirectToAction("IndexProjekt", projectObject);
+                }
+				else
+				{
+                    return View("index2", projectObject);
+                }
+				
+					
+				
 			}
-			else
-			{ 
-				_dbContext.Projects.Add(projectObject);
-				_dbContext.SaveChanges();
-				return RedirectToAction("IndexProjekt");
+            catch (DbUpdateException ex)
+            {
+
+                _Logger.LogError(ex, "Ett fel inträffade vid försök att spara ändringar i databasen.");
+
+
+                ViewBag.ErrorMessage = "Ett fel inträffade vid försök att spara ändringar i databasen.";
+
+
+                return View("IndexProjekt", projectObject);
             }
-
-
         }
 
 	}
