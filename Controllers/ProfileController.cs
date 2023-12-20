@@ -8,72 +8,110 @@ namespace SkillSkulptor.Controllers
 {
 	public class ProfileController : Controller
 	{
-		private SsDbContext _dbContext;
+        private SsDbContext _dbContext;
+        private IWebHostEnvironment _hostingEnvironment;
 
-		public ProfileController(SsDbContext db)
-		{
-			_dbContext = db;
-		}
+        public ProfileController(SsDbContext db, IWebHostEnvironment hostingEnvironment)
+        {
+            _dbContext = db;
+            _hostingEnvironment = hostingEnvironment;
+        }
 
 		[HttpGet]
 		public IActionResult Index()
 		{
-			// Hämta alla projekt från databasen
-			var user = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == 1);
-
-			if (user == null)
-			{
-				return NotFound();
-			}
-
-
+            var user = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == 1);
 
 			return View(user);
 		}
 
-		[HttpPost]
-		public IActionResult ProfileEdit(AppUser user)
-		{
+        [HttpGet]
+        public IActionResult ChangePassword() 
+        {
+            var user = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == 1);
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProfileEdit(AppUser user, IFormFile file)
+        {
             try
             {
                 // Hämta den befintliga användaren från databasen
                 var existingUser = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == user.UserId);
-
 
                 // Uppdatera övriga egenskaper (förnamn, efternamn, e-post etc.)
                 existingUser.Firstname = user.Firstname;
                 existingUser.Lastname = user.Lastname;
                 existingUser.Email = user.Email;
                 existingUser.Phonenr = user.Phonenr;
+                existingUser.Active = user.Active;
+                existingUser.ProfileAccess = user.ProfileAccess;
                 existingUser.fkAddress.Street = user.fkAddress.Street;
                 existingUser.fkAddress.City = user.fkAddress.City;
                 existingUser.fkAddress.ZipCode = user.fkAddress.ZipCode;
                 existingUser.fkAddress.Country = user.fkAddress.Country;
-            
-
 
                 // Kontrollera om ett nytt lösenord har angetts
                 if (!string.IsNullOrEmpty(user.Password))
+                {
+                    // Om ett nytt lösenord har angetts, uppdatera lösenordet
+                    existingUser.Password = user.Password;
+                }
+
+                if (file != null && file.Length > 0)
+                {
+                    using (var stream = new MemoryStream())
                     {
-                        // Om ett nytt lösenord har angetts, uppdatera lösenordet
-                        existingUser.Password = user.Password;
+                        await file.CopyToAsync(stream);
+
+                        if(existingUser.fkPicture != null)
+                        {
+                            existingUser.fkPicture.ImageData = stream.ToArray();
+                            existingUser.fkPicture.Filename = file.FileName;
+                        }
+                        else
+                        {
+                            existingUser.fkPicture = new Profilepicture
+                            {
+                                Filename = file.FileName,
+                                ImageData = stream.ToArray()
+                            };
+                        }
+
                     }
+                }
 
-            _dbContext.Update(existingUser);
-            _dbContext.SaveChanges();
+                _dbContext.Update(existingUser);
+                _dbContext.SaveChanges();
 
-            return View("Index", user); // Ladda om Index-vyn med uppdaterade data
-                
+                return RedirectToAction("Index");
 
             }
             catch (Exception ex)
             {
-                // Logga felmeddelandet eller använd debugverktyg för att undersöka problemet.
-                // Du kan också använda ex.Message för att få mer information om felet.
                 return RedirectToAction("Index", "Error"); // Visa en felvy
             }
         }
-                
+
+        public async Task<IActionResult> UserImage(int userId)
+        {
+            var userPicture = await _dbContext.ProfilePictures
+                                              .FirstOrDefaultAsync(p => p.pictureUser.UserId == userId);
+
+            if (userPicture?.ImageData != null)
+            {
+                // Anta att bilden är av typen JPEG, uppdatera MIME-typen enligt bildformatet
+                return File(userPicture.ImageData, "image/jpeg");
+            }
+
+            
+            var path = Path.Combine(_hostingEnvironment.WebRootPath, "images", "default-profile.png");
+            var imageBytes = await System.IO.File.ReadAllBytesAsync(path);
+            return File(imageBytes, "image/png"); // Anpassa MIME-typen enligt standardbilden
+        }
+
 
     }
 }

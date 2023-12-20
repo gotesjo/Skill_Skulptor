@@ -5,7 +5,24 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-controller="Profile" asp-action="ProfileEdit" method="post">
+<form asp-controller="Profile" asp-action="ProfileEdit" method="post" enctype="multipart/form-data">
+
+    <!-- Profil Bildinformation -->
+    <div class="mb-3">
+        <h3>Profilbild</h3>
+        <label for="file" class="form-label">Nuvarande Bild</label>
+        <div>
+            @if (Model.fkPicture != null && Model.fkPicture.ImageData != null)
+            {
+                <img src="@Url.Action("UserImage", "Profile", new { userId = Model.UserId })" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
+            }
+            else
+            {
+                <img src="@Url.Content("~/images/default-profile.png")" alt="Ingen profilbild tillgänglig" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
+            }
+            <input type="file" id="file" name="file" class="form-control" />
+        </div>
+    </div>
 
     <!-- Personlig Information Sektion -->
     <input type="hidden" asp-for="UserId" />
@@ -65,8 +82,6 @@
         </div>
     </div>
 
-
-
     <!-- Profil & Aktivitetsinställningar -->
     <div class="profile-settings mb-4">
         <h3>Profilinställningar</h3>
@@ -82,6 +97,9 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Spara Ändringar</button>
+
+    <a href="@Url.Action("ChangePassword", "Profile")" class="btn btn-primary">Ändra Lösenord</a>
+
 </form>
 
 <div class="mb-5"></div>

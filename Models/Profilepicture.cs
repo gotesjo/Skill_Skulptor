@@ -6,6 +6,7 @@ namespace SkillSkulptor.Models
     {
         [Key]
         public int PicrtureID { get; set; }
+        public byte[]? ImageData { get; set; }
         public string? Filename {  get; set; }
 
         public virtual AppUser pictureUser{ get; set; }

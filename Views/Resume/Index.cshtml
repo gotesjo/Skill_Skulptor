@@ -9,14 +9,24 @@
     <section class="resume-section" id="about">
         <div class="resume-section-content">
 
-            @if (Model.fkPicture != null && !string.IsNullOrEmpty(Model.fkPicture.Filename))
+       <form asp-controller="Resume" method="post" enctype="multipart/form-data">
+
+    <!-- Profil Bildinformation -->
+    <div class="mb-3">
+
+        <div>
+            @if (Model.fkPicture != null && Model.fkPicture.ImageData != null)
             {
-                <img class="img-thumbnail border border-0 w-50 float-end" src="@Url.Content(Model.fkPicture.Filename)" />
+                <img src="@Url.Action("UserImage", "Profile", new { userId = Model.UserId })" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
             }
             else
             {
-                <img class="img-thumbnail border border-0 w-50 float-end" src="@Url.Content(ViewBag.defaultPicturePath)" />
-            })
+                <img src="@Url.Content("~/images/default-profile.png")" alt="Ingen profilbild tillgänglig" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
+            }
+        </div>
+    </div>
+                ´
+            </form>
 
             
             <h1 class="mb-0">
