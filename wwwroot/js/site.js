@@ -31,3 +31,32 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+
+
+//För konversationssida
+
+$(document).ready(function () {
+    $(document).on('click', '.user-div', function () {
+        var userId = $(this).data('user-id');
+
+        // Anropa din metod med användarens id och uppdatera konversationen
+        UpdateConversation(userId);
+        console.log('User clicked. User ID:', userId);
+    });
+
+    function UpdateConversation(userId) {
+        // Använd AJAX för att skicka en asynkron förfrågan till servern
+        $.ajax({
+            type: 'GET',
+            url: '/Message/GetConversation',
+            data: { userId: userId }, // Här skickar du med userId som parameter
+            success: function (result) {
+                // Uppdatera konversationssektionen med den nya delvis vyn
+                $('#conversation').html(result);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+});

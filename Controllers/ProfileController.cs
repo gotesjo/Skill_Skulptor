@@ -17,18 +17,18 @@ namespace SkillSkulptor.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-		[HttpGet]
-		public IActionResult Index()
-		{
-            var user = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == 1);
+        [HttpGet]
+        public IActionResult Index()
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Firstname.StartsWith("E"));
 
-			return View(user);
-		}
+            return View(user);
+        }
 
         [HttpGet]
-        public IActionResult ChangePassword() 
+        public IActionResult ChangePassword()
         {
-            var user = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == 1);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Firstname.StartsWith("E"));
 
             return View(user);
         }
@@ -39,7 +39,7 @@ namespace SkillSkulptor.Controllers
             try
             {
                 // Hämta den befintliga användaren från databasen
-                var existingUser = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == user.UserId);
+                var existingUser = _dbContext.Users.FirstOrDefault(u => u.Id == user.Id);
 
                 // Uppdatera övriga egenskaper (förnamn, efternamn, e-post etc.)
                 existingUser.Firstname = user.Firstname;
@@ -54,10 +54,10 @@ namespace SkillSkulptor.Controllers
                 existingUser.fkAddress.Country = user.fkAddress.Country;
 
                 // Kontrollera om ett nytt lösenord har angetts
-                if (!string.IsNullOrEmpty(user.Password))
+                if (!string.IsNullOrEmpty(user.PasswordHash))
                 {
                     // Om ett nytt lösenord har angetts, uppdatera lösenordet
-                    existingUser.Password = user.Password;
+                    existingUser.PasswordHash = user.PasswordHash;
                 }
 
                 if (file != null && file.Length > 0)
@@ -95,10 +95,10 @@ namespace SkillSkulptor.Controllers
             }
         }
 
-        public async Task<IActionResult> UserImage(int userId)
+        public async Task<IActionResult> UserImage(string userId)
         {
             var userPicture = await _dbContext.ProfilePictures
-                                              .FirstOrDefaultAsync(p => p.pictureUser.UserId == userId);
+                                              .FirstOrDefaultAsync(p => p.pictureUser.Id == userId);
 
             if (userPicture?.ImageData != null)
             {

@@ -17,7 +17,7 @@
         <div>
             @if (Model.fkPicture != null && Model.fkPicture.ImageData != null)
             {
-                <img src="@Url.Action("UserImage", "Profile", new { userId = Model.UserId })" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
+                <img src="@Url.Action("UserImage", "Profile", new { userId = Model.Id })" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
             }
             else
             {

@@ -11,8 +11,8 @@ namespace SkillSkulptor.Models
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Vänligen skriv in ditt Email")]
-        public string Email { get; set; }
+        [Required(ErrorMessage = "Vänligen skriv in ditt användarnamn")]
+        public string Username { get; set; }
         [Required(ErrorMessage = "Vänligen skriv in ditt lösenord")]
         public string Password { get; set; }
         public bool RemeberMe { get; set; }

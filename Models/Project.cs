@@ -19,7 +19,7 @@ namespace SkillSkulptor.Models
         [Required(ErrorMessage = "SlutDatum är obligatoriskt.")]
         [DataType(DataType.Date)]
         public DateTime? Enddate { get; set; }
-        public int? CreatedBy { get; set; } = 1;
+        public string? CreatedBy { get; set; } = "2";
 
         [ForeignKey(nameof(CreatedBy))]
         public virtual AppUser? CreatedByUser { get; set; }

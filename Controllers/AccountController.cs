@@ -12,12 +12,12 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace SkillSkulptor.Controllers
 {
-	public class LoginController : Controller
+	public class AccountController : Controller
 	{
 		private UserManager<AppUser> userManager;
 		private SignInManager<AppUser> signInManager;
 
-		public LoginController (UserManager<AppUser> userMngr,
+		public AccountController (UserManager<AppUser> userMngr,
 			SignInManager<AppUser> signInMngr)
 		{
 			this.userManager = userMngr;
@@ -29,17 +29,15 @@ namespace SkillSkulptor.Controllers
 			LoginViewModel loginViewModel = new LoginViewModel();
 			return View(loginViewModel);
 		}
-		public ActionResult Signup()
-		{
-			return View();
-		}
+
+
 		[HttpPost]
         public async Task<ActionResult> Login(LoginViewModel loginViewModel)
         {
 			if(ModelState.IsValid)
 			{
 				var result = await signInManager.PasswordSignInAsync(
-					loginViewModel.Email,
+					loginViewModel.Username,
 					loginViewModel.Password,
 					isPersistent: loginViewModel.RemeberMe,
 					lockoutOnFailure: false);
@@ -53,33 +51,7 @@ namespace SkillSkulptor.Controllers
 				}
 			}
 			return View(loginViewModel);
-			//bool userExists = context.AppUsers.Any(o => o.Email == credentials.Email && o.Password == credentials.Password);
-			//AppUser user = context.AppUsers.FirstOrDefault(o => o.Email == credentials.Email && o.Password == credentials.Password);
 
-			//if (userExists)
-			//{
-			//	var claims = new List<Claim>
-			//		{
-			//		new Claim(ClaimTypes.Name, user.Firstname)
-			//	};
-			//	var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-			//	var authProperties = new AuthenticationProperties
-			//	{
-
-			//	};
-
-
-   //             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-
-			//	return RedirectToAction("Index", "Home");
-			
-			//if (userExists)
-			//{
-			//             FormAuthentication.SetAuthCookie(user.Firstname, false);
-			//	return RedirectToAction("Index", "Home");	
-			//}
-			//ModelState.AddModelError("", "Email eller lösenord är felaktigt");
-			//return View();
 		}
 
         public ActionResult Signout()
@@ -88,5 +60,37 @@ namespace SkillSkulptor.Controllers
 		}
 
 
+        [HttpGet]
+		public ActionResult SignUp()
+        {
+            UserRegistrationViewModel userRegistrationViewModel = new UserRegistrationViewModel();
+            return View(userRegistrationViewModel);
+        }
+
+		[HttpPost]
+		public async Task<IActionResult> SignUp(UserRegistrationViewModel _urm)
+		{
+			if (ModelState.IsValid)
+			{
+                AppUser appUser = new AppUser();
+				appUser.UserName = _urm.Username;
+                appUser.Email = _urm.Email;
+                appUser.Firstname = _urm.Firstname;
+                appUser.Lastname = _urm.Lastname;
+
+                var result = await userManager.CreateAsync(appUser, _urm.Password);
+                if (result.Succeeded)
+                {
+                    await signInManager.SignInAsync(appUser, isPersistent: true);
+                    return RedirectToAction("Index", "Home");
+
+                }
+
+            }
+
+			return View(_urm);
+		}
+
+	
     }
 }

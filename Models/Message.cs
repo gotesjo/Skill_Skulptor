@@ -11,8 +11,8 @@ namespace SkillSkulptor.Models
 		public DateTime Datum { get; set; }
 		public Boolean ViewStatus { get; set; }
 
-		public int FromUserID { get; set; }
-		public int ToUserID { get; set; }
+		public string FromUserID { get; set; }
+		public string ToUserID { get; set; }
 
 		[ForeignKey(nameof(FromUserID))]
 		public virtual AppUser fkFromUser { get; set; }

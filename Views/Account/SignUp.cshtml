@@ -1,0 +1,61 @@
+﻿@model UserRegistrationViewModel
+
+
+<section class="vh-100">
+    <form method="post" asp-action="SignUp" >
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-primary text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+
+                            <div class="mb-md-5 mt-md-4 pb-5">
+
+                                <h2 class="fw-bold mb-2 text-uppercase">Registrera ny användare</h2>
+                                <p class="text-white-50 mb-5">Vänligen fyll i dina uppgifter</p>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input asp-for="Username" type="text" id="RegUsername" class="form-control form-control-lg" />
+                                    <label class="form-label" for="RegUsername">Användarnamn</label>
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input asp-for="Email" type="email" id="typeEmailX" class="form-control form-control-lg" />
+                                    <label class="form-label" for="typeEmailX">Email</label>
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input asp-for="Password" type="password" id="typePasswordX" class="form-control form-control-lg" />
+                                    <label class="form-label" for="typePasswordX">Lösenord</label>
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input asp-for="ConfirmPassord" type="password" id="typePasswordConfirm" class="form-control form-control-lg" />
+                                    <label class="form-label" for="typePasswordConfirm">Bekräfta Lösenordet</label>
+                                </div>
+
+                                <br />
+
+                                <div class="form-outline form-white mb-4">
+                                    <input asp-for="Firstname" type="text" id="fNamn" class="form-control form-control-lg" />
+                                    <label class="form-label" for="fNamn">Förnamn</label>
+                                </div>
+                                <div class="form-outline form-white mb-4">
+                                    <input asp-for="Lastname" type="text" id="lNamn" class="form-control form-control-lg" />
+                                    <label class="form-label" for="lNamn">Förnamn</label>
+                                </div>
+
+
+                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Registrera dig</button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+
