@@ -81,10 +81,10 @@
             {
                  <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                 <div class="flex-grow-1">
-                    <h3 class="mb-0">@Model.userCV.Educations.First().Institution</h3>
-                    <div class="subheading mb-3">@Model.userCV.Educations.First().Course</div>
+                    <h3 class="mb-0">@education.Institution</h3>
+                    <div class="subheading mb-3">@education.Course</div>
                 
-                    <p>@Model.userCV.Educations.First().Degree</p>
+                    <p>@education.Degree</p>
                 </div>
                     <div class="flex-shrink-0"><span class="text-primary"> Startdatum @Model.userCV.Educations.First().StartDate <br /> Slutdatum @Model.userCV.Educations.First().EndDate </span></div> <br>
             </div>
@@ -98,11 +98,12 @@
     <section class="resume-section" id="skills">
         <div class="resume-section-content">
             <h2 class="mb-5">Färdigheter</h2>
-            <div class="subheading mb-3">@Model.userCV.Qualifications.First().QName</div>
+             @foreach (var qualification in Model.userCV.Qualifications)
+           { <div class="subheading mb-3">@qualification.QName</div>
             <ul class="fa-ul mb-0">
                 <li>
                     <span class="fa-li"><i class="fas fa-check"></i></span>
-                    @Model.userCV.Qualifications.First().Description
+                    @qualification.Description
                 </li>
             
                
@@ -110,7 +111,9 @@
             
           
          
-        </div>
+        
+           }
+       </div>
     </section>
     <hr class="m-0" />
     <!-- Interests-->

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkillSkulptor.Models;
 
@@ -11,9 +12,11 @@ using SkillSkulptor.Models;
 namespace SkillSkulptor.Migrations
 {
     [DbContext(typeof(SsDbContext))]
-    partial class SsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231221105233_merExempelData")]
+    partial class merExempelData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,29 +271,29 @@ namespace SkillSkulptor.Migrations
                             Course = "Systemutveckling",
                             CvId = 1,
                             Degree = "Bachelor's",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1694),
+                            EndDate = new DateTime(2022, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(907),
                             Institution = "Handelshögskolan vid Örebro Universitet",
-                            StartDate = new DateTime(2019, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1466)
+                            StartDate = new DateTime(2019, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(762)
                         },
                         new
                         {
                             EdID = 2,
                             Course = "Masterprogrammet i biomedicin",
-                            CvId = 2,
+                            CvId = 1,
                             Degree = "Master's",
-                            EndDate = new DateTime(2021, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1715),
+                            EndDate = new DateTime(2021, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(927),
                             Institution = "Karolinska institutet",
-                            StartDate = new DateTime(2020, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1708)
+                            StartDate = new DateTime(2020, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(921)
                         },
                         new
                         {
                             EdID = 3,
                             Course = "Psykologi",
-                            CvId = 3,
+                            CvId = 2,
                             Degree = "Bachelor's",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1726),
+                            EndDate = new DateTime(2022, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(936),
                             Institution = "Uppsala Universitet",
-                            StartDate = new DateTime(2021, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1720)
+                            StartDate = new DateTime(2021, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(932)
                         });
                 });
 
@@ -334,9 +337,9 @@ namespace SkillSkulptor.Migrations
                             Cv = 1,
                             Description = "Arbetade med utveckling av programvara och löste tekniska problem",
                             Employer = "Nexer Group",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1822),
+                            EndDate = new DateTime(2022, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1046),
                             Position = "Systemutvecklare",
-                            StartDate = new DateTime(2020, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1818)
+                            StartDate = new DateTime(2020, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1041)
                         },
                         new
                         {
@@ -344,9 +347,9 @@ namespace SkillSkulptor.Migrations
                             Cv = 2,
                             Description = "Bidrog till banbrytande forskningsprojekt",
                             Employer = "Biomedical Innovations Ltd.",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1837),
+                            EndDate = new DateTime(2022, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1057),
                             Position = "Research Assistant",
-                            StartDate = new DateTime(2021, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1833)
+                            StartDate = new DateTime(2021, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1052)
                         },
                         new
                         {
@@ -354,9 +357,9 @@ namespace SkillSkulptor.Migrations
                             Cv = 3,
                             Description = "Utförde psykologiska utvärderingar och stödde klienter",
                             Employer = "Mindscape Solutions AB",
-                            EndDate = new DateTime(2023, 6, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1846),
+                            EndDate = new DateTime(2023, 6, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1065),
                             Position = "Psykologisk Konsult",
-                            StartDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1842)
+                            StartDate = new DateTime(2022, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1062)
                         },
                         new
                         {
@@ -364,9 +367,9 @@ namespace SkillSkulptor.Migrations
                             Cv = 1,
                             Description = "Designade och implementerade mjukvarulösningar för kundprojekt",
                             Employer = "DigitalWave Innovations",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1862),
+                            EndDate = new DateTime(2022, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1076),
                             Position = "Applikationsutvecklare",
-                            StartDate = new DateTime(2020, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1858)
+                            StartDate = new DateTime(2020, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1072)
                         },
                         new
                         {
@@ -374,9 +377,9 @@ namespace SkillSkulptor.Migrations
                             Cv = 3,
                             Description = "Genomförde individuella rådgivningssessioner och utvecklade psykologiska interventionsstrategier",
                             Employer = "MindWellness Consulting",
-                            EndDate = new DateTime(2023, 4, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1871),
+                            EndDate = new DateTime(2023, 4, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1087),
                             Position = "Psykologisk Rådgivare",
-                            StartDate = new DateTime(2021, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1868)
+                            StartDate = new DateTime(2021, 12, 21, 11, 52, 31, 857, DateTimeKind.Local).AddTicks(1083)
                         });
                 });
 

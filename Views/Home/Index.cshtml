@@ -30,7 +30,7 @@
                 @foreach(var cv in Model)
                 {
                     <div class="col card m-3 bg-info" >
-                        <a href="@Url.Action("Index", "Resume",@cv.fkUser.UserId)">
+                        <a href="@Url.Action("Index", "Resume", new{id=@cv.fkUser.UserId})">
                             <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
                             <h4>@cv.Summary</h4>
                             <br />

@@ -17,12 +17,21 @@ namespace SkillSkulptor.Controllers
             _logger = logger;
             _hostingEnvironment = hostingEnvironment;
         }
+        [HttpGet]
         public IActionResult Index()
         {
             AppUser myUser = _dbContext.AppUsers.First();
           
             ViewBag.defaultPicturePath = "~/datafiles/pictures/defaultpicture.png";
             return View(myUser);
+        }
+        
+        
+        [HttpGet("{id:int}")]
+        public IActionResult Index(int id)
+        {
+          var myUser = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == id);
+                return View (myUser);
         }
         public async Task<IActionResult> UserImage(int userId)
         {
