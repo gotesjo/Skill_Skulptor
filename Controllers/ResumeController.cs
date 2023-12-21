@@ -20,35 +20,35 @@ namespace SkillSkulptor.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            AppUser myUser = _dbContext.AppUsers.First();
+            AppUser myUser = _dbContext.Users.First();
           
             ViewBag.defaultPicturePath = "~/datafiles/pictures/defaultpicture.png";
             return View(myUser);
         }
         
         
-        [HttpGet("{id:int}")]
-        public IActionResult Index(int id)
-        {
-          var myUser = _dbContext.AppUsers.FirstOrDefault(u => u.UserId == id);
-                return View (myUser);
-        }
-        public async Task<IActionResult> UserImage(int userId)
-        {
-            var userPicture = await _dbContext.ProfilePictures
-                                              .FirstOrDefaultAsync(p => p.pictureUser.UserId == userId);
+        //[HttpGet("{id:int}")]
+        //public IActionResult Index(int id)
+        //{
+        //  var myUser = _dbContext.Users.FirstOrDefault(u => u.UserId == id);
+        //        return View (myUser);
+        //}
+        //public async Task<IActionResult> UserImage(int userId)
+        //{
+        //    var userPicture = await _dbContext.ProfilePictures
+        //                                      .FirstOrDefaultAsync(p => p.pictureUser.UserId == userId);
 
-            if (userPicture?.ImageData != null)
-            {
-                // Anta att bilden är av typen JPEG, uppdatera MIME-typen enligt bildformatet
-                return File(userPicture.ImageData, "image/jpeg");
-            }
+        //    if (userPicture?.ImageData != null)
+        //    {
+        //        // Anta att bilden är av typen JPEG, uppdatera MIME-typen enligt bildformatet
+        //        return File(userPicture.ImageData, "image/jpeg");
+        //    }
 
 
-            var path = Path.Combine(_hostingEnvironment.WebRootPath, "images", "default-profile.png");
-            var imageBytes = await System.IO.File.ReadAllBytesAsync(path);
-            return File(imageBytes, "image/png"); // Anpassa MIME-typen enligt standardbilden
-        }
+        //    var path = Path.Combine(_hostingEnvironment.WebRootPath, "images", "default-profile.png");
+        //    var imageBytes = await System.IO.File.ReadAllBytesAsync(path);
+        //    return File(imageBytes, "image/png"); // Anpassa MIME-typen enligt standardbilden
+        //}
 
     }
 }
