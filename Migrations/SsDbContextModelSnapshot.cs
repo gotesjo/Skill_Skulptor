@@ -25,6 +25,139 @@ namespace SkillSkulptor.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("SkillSkulptor.Models.Adress", b =>
                 {
                     b.Property<int>("AdressID")
@@ -51,33 +184,15 @@ namespace SkillSkulptor.Migrations
                     b.HasKey("AdressID");
 
                     b.ToTable("Adresses");
-
-                    b.HasData(
-                        new
-                        {
-                            AdressID = 1,
-                            City = "City1",
-                            Country = "Country1",
-                            Street = "123 Main St",
-                            ZipCode = "12345"
-                        },
-                        new
-                        {
-                            AdressID = 2,
-                            City = "City2",
-                            Country = "Country2",
-                            Street = "456 Oak St",
-                            ZipCode = "67890"
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.AppUser", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -85,9 +200,16 @@ namespace SkillSkulptor.Migrations
                     b.Property<int?>("Address")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Firstname")
                         .IsRequired()
@@ -97,9 +219,28 @@ namespace SkillSkulptor.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Phonenr")
                         .HasColumnType("nvarchar(max)");
@@ -110,45 +251,35 @@ namespace SkillSkulptor.Migrations
                     b.Property<bool>("ProfileAccess")
                         .HasColumnType("bit");
 
-                    b.HasKey("UserId");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("Address")
                         .IsUnique()
                         .HasFilter("[Address] IS NOT NULL");
 
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
                     b.HasIndex("Picture")
                         .IsUnique()
                         .HasFilter("[Picture] IS NOT NULL");
 
-                    b.ToTable("AppUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            Active = true,
-                            Address = 1,
-                            Email = "john.doe@example.com",
-                            Firstname = "John",
-                            Lastname = "Doe",
-                            Password = "password1",
-                            Phonenr = "123456789",
-                            Picture = 1,
-                            ProfileAccess = true
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            Active = true,
-                            Address = 2,
-                            Email = "jane.smith@example.com",
-                            Firstname = "Jane",
-                            Lastname = "Smith",
-                            Password = "password2",
-                            Phonenr = "987654321",
-                            Picture = 2,
-                            ProfileAccess = true
-                        });
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.CV", b =>
@@ -159,8 +290,9 @@ namespace SkillSkulptor.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CVID"));
 
-                    b.Property<int>("BelongsTo")
-                        .HasColumnType("int");
+                    b.Property<string>("BelongsTo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Clicks")
                         .HasColumnType("int");
@@ -177,24 +309,6 @@ namespace SkillSkulptor.Migrations
                         .IsUnique();
 
                     b.ToTable("CVs");
-
-                    b.HasData(
-                        new
-                        {
-                            CVID = 1,
-                            BelongsTo = 1,
-                            Clicks = 10,
-                            PersonalLetter = "Förutom att vara webbutvecklare tycker jag mest om att vara utomhus. På vintern är jag en ivrig skidåkare och nybörjare. På sommaren tycker jag om att cykla mountainbike, friklättra och paddla kajak.\r\nNär jag tvingas inomhus följer jag ett antal sci-fi- och fantasy-genrefilmer och tv-program, jag är en blivande kock, och jag spenderar en stor del av min fritid på att utforska de senaste tekniska framstegen i front-end webbutvecklingsvärlden.",
-                            Summary = "Experienced professional"
-                        },
-                        new
-                        {
-                            CVID = 2,
-                            BelongsTo = 2,
-                            Clicks = 5,
-                            PersonalLetter = "Utöver min akademiska bakgrund och yrkeserfarenhet omfattar mitt liv en varierad mix av intressen och passioner. Jag har en grundutbildning inom psykologi, där jag har fördjupat mig i att förstå människors tankar och beteenden. Min tid på universitetet har gett mig insikter som jag använder för att skapa meningsfulla och användarcentrerade digitala lösningar.\r\nNär jag inte dyker in i världen av psykologi och användbarhet, finner jag glädje i att utforska konst och kreativitet. Jag har en konstnärlig sida som jag utvecklar genom att måla och delta i konstutställningar. Att skapa och uppleva konst ger mig en nödvändig kontrast till den tekniska världen.\r\nUtöver detta är jag en hängiven friluftsentusiast. Jag njuter av vandring i naturen, camping och fotografering av landskap.\r\nMin utbildning och intressen kompletterar varandra på ett sätt som berikar mitt perspektiv, vilket i sin tur påverkar hur jag närmar mig utmaningar och kreativa projekt.",
-                            Summary = "Entry-level candidate"
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.Education", b =>
@@ -231,38 +345,6 @@ namespace SkillSkulptor.Migrations
                     b.HasIndex("CvId");
 
                     b.ToTable("Educations");
-
-                    b.HasData(
-                        new
-                        {
-                            EdID = 1,
-                            Course = "Systemutveckling",
-                            CvId = 1,
-                            Degree = "Bachelor's",
-                            EndDate = new DateTime(2022, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5175),
-                            Institution = "University1",
-                            StartDate = new DateTime(2019, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5065)
-                        },
-                        new
-                        {
-                            EdID = 2,
-                            Course = "Systemutveckling",
-                            CvId = 1,
-                            Degree = "Master's",
-                            EndDate = new DateTime(2021, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5183),
-                            Institution = "University2",
-                            StartDate = new DateTime(2020, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5180)
-                        },
-                        new
-                        {
-                            EdID = 3,
-                            Course = "Systemutveckling",
-                            CvId = 2,
-                            Degree = "Associate",
-                            EndDate = new DateTime(2022, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5190),
-                            Institution = "College1",
-                            StartDate = new DateTime(2021, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5187)
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.Experience", b =>
@@ -297,28 +379,6 @@ namespace SkillSkulptor.Migrations
                     b.HasIndex("Cv");
 
                     b.ToTable("Experiences");
-
-                    b.HasData(
-                        new
-                        {
-                            ExId = 1,
-                            Cv = 1,
-                            Description = "Worked on various projects",
-                            Employer = "Company1",
-                            EndDate = new DateTime(2022, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5239),
-                            Position = "Developer",
-                            StartDate = new DateTime(2020, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5235)
-                        },
-                        new
-                        {
-                            ExId = 2,
-                            Cv = 2,
-                            Description = "Assisted with tasks",
-                            Employer = "Company2",
-                            EndDate = new DateTime(2022, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5245),
-                            Position = "Intern",
-                            StartDate = new DateTime(2021, 12, 19, 12, 21, 36, 656, DateTimeKind.Local).AddTicks(5243)
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.Message", b =>
@@ -332,15 +392,17 @@ namespace SkillSkulptor.Migrations
                     b.Property<DateTime>("Datum")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FromUserID")
-                        .HasColumnType("int");
+                    b.Property<string>("FromUserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ToUserID")
-                        .HasColumnType("int");
+                    b.Property<string>("ToUserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("ViewStatus")
                         .HasColumnType("bit");
@@ -371,18 +433,6 @@ namespace SkillSkulptor.Migrations
                     b.HasKey("PicrtureID");
 
                     b.ToTable("ProfilePictures");
-
-                    b.HasData(
-                        new
-                        {
-                            PicrtureID = 1,
-                            Filename = "profile1.jpg"
-                        },
-                        new
-                        {
-                            PicrtureID = 2,
-                            Filename = "profile2.jpg"
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.Project", b =>
@@ -393,12 +443,13 @@ namespace SkillSkulptor.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"));
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime?>("Enddate")
                         .IsRequired()
@@ -421,8 +472,8 @@ namespace SkillSkulptor.Migrations
 
             modelBuilder.Entity("SkillSkulptor.Models.ProjectMembers", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
@@ -458,22 +509,57 @@ namespace SkillSkulptor.Migrations
                     b.HasIndex("CvId");
 
                     b.ToTable("Qualifications");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            QID = 1,
-                            CvId = 1,
-                            Description = "Certification description 1",
-                            QName = "Certification1"
-                        },
-                        new
-                        {
-                            QID = 2,
-                            CvId = 2,
-                            Description = "Certification description 2",
-                            QName = "Certification2"
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("SkillSkulptor.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("SkillSkulptor.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkillSkulptor.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("SkillSkulptor.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.AppUser", b =>
@@ -547,9 +633,7 @@ namespace SkillSkulptor.Migrations
                 {
                     b.HasOne("SkillSkulptor.Models.AppUser", "CreatedByUser")
                         .WithMany("OwnProjects")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedBy");
 
                     b.Navigation("CreatedByUser");
                 });

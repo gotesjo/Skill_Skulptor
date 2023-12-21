@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillSkulptor.Models;
 using System.Diagnostics;
@@ -15,6 +16,7 @@ namespace SkillSkulptor.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Index()
         {

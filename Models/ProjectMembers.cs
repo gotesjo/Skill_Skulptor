@@ -5,7 +5,7 @@ namespace SkillSkulptor.Models
 {
     public class ProjectMembers
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int ProjectId { get; set; }
 
         [ForeignKey(nameof(UserId))]

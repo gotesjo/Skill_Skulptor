@@ -18,7 +18,7 @@ namespace SkillSkulptor.Controllers
 		{
 			AppUser _loggedInUser = GetLoggedInUser(); 
 
-			List<AppUser> _users = _dbContext.AppUsers.ToList();
+			List<AppUser> _users = _dbContext.Users.ToList();
 
 			var viewModel = new SearchViewModel
 			{
@@ -39,7 +39,7 @@ namespace SkillSkulptor.Controllers
 
 			AppUser _loggedInUser = GetLoggedInUser(); 
 
-			List<AppUser> _users = _dbContext.AppUsers.Where(user => user.Firstname.Contains(searchString)).ToList();
+			List<AppUser> _users = _dbContext.Users.Where(user => user.Firstname.Contains(searchString)).ToList();
 
 			var viewModel = new SearchViewModel
 			{
@@ -52,26 +52,26 @@ namespace SkillSkulptor.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult GetConversation(int userId)
-		{
-			// Hämta konversationsdata baserat på användarens ID
-			int myUserID = 1;
-			List<Message> conversation = _dbContext.Messages.Where(received => received.FromUserID == userId && received.ToUserID == myUserID).ToList();
-			conversation.AddRange(_dbContext.Messages.Where(sent => sent.ToUserID == userId && sent.FromUserID == myUserID).ToList());
+		//public IActionResult GetConversation(int userId)
+		//{
+		//	// Hämta konversationsdata baserat på användarens ID
+		//	int myUserID = 1;
+		//	List<Message> conversation = _dbContext.Messages.Where(received => received.FromUserID == userId && received.ToUserID == myUserID).ToList();
+		//	conversation.AddRange(_dbContext.Messages.Where(sent => sent.ToUserID == userId && sent.FromUserID == myUserID).ToList());
 
-			conversation = conversation.OrderBy(message => message.MessageId).ToList();
-			MessageServiceModel data = new MessageServiceModel();
-			data.messagesObject = conversation;
-			data.receiver = _dbContext.AppUsers.Find(userId);
+		//	conversation = conversation.OrderBy(message => message.MessageId).ToList();
+		//	MessageServiceModel data = new MessageServiceModel();
+		//	data.messagesObject = conversation;
+		//	data.receiver = _dbContext.AppUsers.Find(userId);
 
-			return PartialView("_ConversationPartial", data);
-		}
+		//	return PartialView("_ConversationPartial", data);
+		//}
 
 
 
 		private AppUser GetLoggedInUser()
 		{
-			return _dbContext.AppUsers.First();
+			return _dbContext.Users.First();
 		}
 	}
 }

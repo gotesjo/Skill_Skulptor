@@ -10,7 +10,7 @@ namespace SkillSkulptor.Models
         public int Clicks { get; set; }
         public string? Summary { get; set; }
         public string? PersonalLetter {  get; set; }
-        public int BelongsTo { get; set; }
+        public string BelongsTo { get; set; }
 
         [ForeignKey(nameof(BelongsTo))]
         public virtual AppUser fkUser { get; set; }

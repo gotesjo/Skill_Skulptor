@@ -19,15 +19,15 @@ namespace SkillSkulptor.Controllers
         }
         public IActionResult Index()
         {
-            AppUser myUser = _dbContext.AppUsers.First();
+            AppUser myUser = _dbContext.Users.First();
           
             ViewBag.defaultPicturePath = "~/datafiles/pictures/defaultpicture.png";
             return View(myUser);
         }
-        public async Task<IActionResult> UserImage(int userId)
+        public async Task<IActionResult> UserImage(string userId)
         {
             var userPicture = await _dbContext.ProfilePictures
-                                              .FirstOrDefaultAsync(p => p.pictureUser.UserId == userId);
+                                              .FirstOrDefaultAsync(p => p.pictureUser.Id == userId);
 
             if (userPicture?.ImageData != null)
             {

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SkillSkulptor.Models;
 
@@ -7,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<SsDbContext>(options =>
               options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("dockerContext")));
+
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<SsDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -23,6 +28,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

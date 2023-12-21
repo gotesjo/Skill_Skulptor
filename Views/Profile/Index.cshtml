@@ -14,7 +14,7 @@
         <div>
             @if (Model.fkPicture != null && Model.fkPicture.ImageData != null)
             {
-                <img src="@Url.Action("UserImage", "Profile", new { userId = Model.UserId })" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
+                <img src="@Url.Action("UserImage", "Profile", new { userId = Model.Id })" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
             }
             else
             {
@@ -25,7 +25,7 @@
     </div>
 
     <!-- Personlig Information Sektion -->
-    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="Id" />
 
     <div class="user-info mb-4">
         <h3>Personlig Information</h3>
