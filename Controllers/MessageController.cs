@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using SkillSkulptor.Models;
 
 namespace SkillSkulptor.Controllers
@@ -49,6 +50,24 @@ namespace SkillSkulptor.Controllers
 
 			return View("Index", viewModel);
 		}
+
+		[HttpGet]
+		public IActionResult GetConversation(int userId)
+		{
+			// Hämta konversationsdata baserat på användarens ID
+			int myUserID = 1;
+			List<Message> conversation = _dbContext.Messages.Where(received => received.FromUserID == userId && received.ToUserID == myUserID).ToList();
+			conversation.AddRange(_dbContext.Messages.Where(sent => sent.ToUserID == userId && sent.FromUserID == myUserID).ToList());
+
+			conversation = conversation.OrderBy(message => message.MessageId).ToList();
+			MessageServiceModel data = new MessageServiceModel();
+			data.messagesObject = conversation;
+			data.receiver = _dbContext.AppUsers.Find(userId);
+
+			return PartialView("_ConversationPartial", data);
+		}
+
+
 
 		private AppUser GetLoggedInUser()
 		{
