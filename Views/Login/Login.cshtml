@@ -4,7 +4,8 @@
     ViewData["Title"] = "Inloggning";
 }
 
-
+<div asp-validation-summary="All" class="text-danger"></div> 
+<form asp-action="Inloggning" method="Post" class="flex-md-column justify-content-center m-5">
 <section class="vh-100">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -18,13 +19,13 @@
                             <p class="text-white-50 mb-5">Skriv in din email och lösenord</p>
 
                             <div class="form-outline form-white mb-4">
-                                <input type="email" id="typeEmailX" class="form-control form-control-lg" />
-                                <label class="form-label" for="typeEmailX">Email</label>
+                                <input asp-for ="Email" type="email" class="form-control form-control-lg" placeholder="Skriv din email" />
+                                <label asp-for="Email">Email</label>
                             </div>
 
                             <div class="form-outline form-white mb-4">
-                                <input type="password" id="typePasswordX" class="form-control form-control-lg" />
-                                <label class="form-label" for="typePasswordX">Lösenord</label>
+                                <input asp-for ="Password" type="password" class="form-control form-control-lg" placeholder="Skriv ditt lösenord" />
+                                <label asp-for ="Password">Lösenord</label>
                             </div>
 
                             <button class="btn btn-outline-light btn-lg px-5" type="submit">Logga in</button>
@@ -36,6 +37,9 @@
                                 Har du inget konto? <a href="#!" class="text-white-50 fw-bold">Registrera dig här!</a>
                             </p>
                         </div>
+                        <div class="form-outline formbg-white mb-4">
+                            <a asp-action="Register">Regisstrera dig!</a>
+                        </div>
 
                     </div>
                 </div>
@@ -43,5 +47,5 @@
         </div>
     </div>
 </section> 
-
+</form>
 
