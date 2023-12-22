@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillSkulptor.Models;
 
@@ -9,21 +10,23 @@ namespace SkillSkulptor.Controllers
     {
         private readonly ILogger<ResumeController> _logger;
         private SsDbContext _dbContext;
-        private IWebHostEnvironment _hostingEnvironment;
+		private UserManager<AppUser> userManager;
+		private IWebHostEnvironment _hostingEnvironment;
 
-        public ResumeController(ILogger<ResumeController> logger, SsDbContext _db, IWebHostEnvironment hostingEnvironment)
+        public ResumeController(ILogger<ResumeController> logger, SsDbContext _db, IWebHostEnvironment hostingEnvironment, UserManager<AppUser> _userManager)
         {
             _dbContext = _db;
             _logger = logger;
-            _hostingEnvironment = hostingEnvironment;
+            userManager = _userManager;
+			_hostingEnvironment = hostingEnvironment;
         }
         [HttpGet]
         public IActionResult Index()
         {
-            AppUser myUser = _dbContext.Users.First();
-          
-            ViewBag.defaultPicturePath = "~/datafiles/pictures/defaultpicture.png";
-            return View(myUser);
+			AppUser loggedInUser = userManager.GetUserAsync(User).Result;
+
+			ViewBag.defaultPicturePath = "~/datafiles/pictures/defaultpicture.png";
+            return View(loggedInUser);
         }
         
         

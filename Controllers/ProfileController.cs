@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillSkulptor.Models;
 using System.Linq;
@@ -9,29 +10,31 @@ namespace SkillSkulptor.Controllers
 	public class ProfileController : Controller
 	{
         private SsDbContext _dbContext;
-        private IWebHostEnvironment _hostingEnvironment;
+		private UserManager<AppUser> userManager;
+		private IWebHostEnvironment _hostingEnvironment;
 
-        public ProfileController(SsDbContext db, IWebHostEnvironment hostingEnvironment)
+        public ProfileController(SsDbContext db, IWebHostEnvironment hostingEnvironment, UserManager<AppUser> _userManager)
         {
             _dbContext = db;
-            _hostingEnvironment = hostingEnvironment;
+			userManager = _userManager;
+			_hostingEnvironment = hostingEnvironment;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Firstname.StartsWith("E"));
+			AppUser user = userManager.GetUserAsync(User).Result;
 
-            return View(user);
+			return View(user);
         }
 
         [HttpGet]
         public IActionResult ChangePassword()
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Firstname.StartsWith("E"));
+			AppUser user = userManager.GetUserAsync(User).Result;
 
-            return View(user);
-        }
+			return View(user);
+		}
 
         [HttpPost]
         public async Task<IActionResult> ProfileEdit(AppUser user, IFormFile file)

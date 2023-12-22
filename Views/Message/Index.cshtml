@@ -2,53 +2,55 @@
 
 <div class="container p-0">
 
-	<h1 class="h3 mb-3">Messages</h1>
+	<h1 class="h3 mb-3">Meddelanden</h1>
+	<div class="row">
+		<div class="card">
+			<div class="column g-0">
+				<div class="col-12 col-lg-5 col-xl-3 border-right">
 
-	<div class="card">
-		<div class="column g-0">
-			<div class="col-12 col-lg-5 col-xl-3 border-right">
-
-				<div class="px-4 d-none d-md-block">
-					<div class="d-flex align-items-center">
-						<div class="flex-grow-1 d-inline-block">
-							<form asp-controller="Message" asp-action="Search" method="post">
-								<input type="text" class="form-control my-3" placeholder="Sök på användare..." name="searchString" >
-								<button class="btn btn-primary" type="submit">Sök</button>
-							</form>
-						</div>
-					</div>
-				</div>
-
-				<!-- Användare att skicka till -->
-				@foreach(AppUser user in Model.Users)
-				{
-					<div class="list-group-item list-group-item-action border-0 user-div" data-user-id=@user.Id>
-@* 						<div class="badge bg-success float-right">1</div> *@
-						<div class="d-flex align-items-start">
-							<img src="https://bootdey.com/img/Content/avatar/avatar5.png" class="rounded-circle mr-1" alt="@user.Firstname @user.Lastname" width="40" height="40">
-							<div class="flex-grow-1 ml-3">
-								@user.Firstname @user.Lastname
-								@* <div class="small"><span class="fas fa-circle chat-online"></span> Online</div> *@
+					<div class="px-4 d-none d-md-block">
+						<div class="d-flex align-items-center">
+							<div class="flex-grow-1 d-inline-block">
+								<form asp-controller="Message" asp-action="Search" method="post">
+									<input type="text" class="form-control my-3" placeholder="Sök på användare..." name="searchString" >
+									<button class="btn btn-primary" type="submit">Sök</button>
+								</form>
 							</div>
 						</div>
 					</div>
-				}
-				
-				
 
-				<!-- Användaren man chattar med -->
-				<hr class="d-block d-lg-none mt-1 mb-0">
-			</div>
-			<div id="conversation">
-				@if (Model.ConversationData != null)
-				{
-					@Html.Partial("_ConversationPartial", Model.ConversationData)
-				}
-				else
-				{
-					<p>Conversation data is not available.</p>
-				}
-			</div>
+					<!-- Användare att skicka till -->
+					@foreach(AppUser user in Model.Users)
+					{
+						<div class="list-group-item list-group-item-action border-0 user-div" data-user-id=@user.Id>
+	@* 						<div class="badge bg-success float-right">1</div> *@
+							<div class="d-flex align-items-start">
+								<img src="@Url.Action("UserImage", "Profile", new { userId = user.Id })" class="rounded-circle mr-1" alt="@user.Firstname @user.Lastname" width="40" height="40">
+								<div class="flex-grow-1 ml-3">
+									@user.Firstname @user.Lastname
+									@* <div class="small"><span class="fas fa-circle chat-online"></span> Online</div> *@
+								</div>
+							</div>
+						</div>
+					}
+				
+				
+				</div>
+
+					<!-- Användaren man chattar med -->
+					<hr class="d-block d-lg-none mt-1 mb-0">
+				</div>
+				<div id="conversation">
+					@if (Model.ConversationData != null)
+					{
+						@Html.Partial("_ConversationPartial", Model.ConversationData)
+					}
+					else
+					{
+						<p>Finns inga konversationer.</p>
+					}
+				</div>
+
 		</div>
 	</div>
 </div>

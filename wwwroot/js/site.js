@@ -37,26 +37,57 @@ window.addEventListener('DOMContentLoaded', event => {
 
 $(document).ready(function () {
     $(document).on('click', '.user-div', function () {
-        var userId = $(this).data('user-id');
+        var otherUserID = $(this).data('user-id');
 
         // Anropa din metod med användarens id och uppdatera konversationen
-        UpdateConversation(userId);
-        console.log('User clicked. User ID:', userId);
+        UpdateConversation(otherUserID);
+        console.log('User clicked. User ID:', otherUserID);
     });
-
-    function UpdateConversation(userId) {
-        // Använd AJAX för att skicka en asynkron förfrågan till servern
-        $.ajax({
-            type: 'GET',
-            url: '/Message/GetConversation',
-            data: { userId: userId }, // Här skickar du med userId som parameter
-            success: function (result) {
-                // Uppdatera konversationssektionen med den nya delvis vyn
-                $('#conversation').html(result);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
+    scrollToBottom();
 });
+
+function UpdateConversation(otherUserID) {
+    // Använd AJAX för att skicka en asynkron förfrågan till servern
+    $.ajax({
+        type: 'GET',
+        url: '/Message/GetConversation',
+        data: { otherUserID: otherUserID }, // Här skickar du med userId som parameter
+        success: function (result) {
+            // Uppdatera konversationssektionen med den nya delvis vyn
+            $('#conversation').html(result);
+            scrollToBottom();
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+//Metod för att skicka meddelanden och sedan uppdatera vyn.
+function sendMessage() {
+    console.log("knappen är klickad");
+    var newMessage = document.getElementById("Newmessage").value;
+    var _otherUserId = $(".receiver_user-div").data("user-id");
+
+    var data = {
+        Newmessage: newMessage,
+        receiverId: _otherUserId
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/Message/Send", 
+        data: data,
+        success: function () {
+            UpdateConversation(_otherUserId);
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+}
+
+function scrollToBottom() {
+    var messageContainer = document.getElementById('messageContainer');
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+}
