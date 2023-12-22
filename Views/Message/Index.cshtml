@@ -40,7 +40,14 @@
 				<hr class="d-block d-lg-none mt-1 mb-0">
 			</div>
 			<div id="conversation">
-				@Html.Partial("_ConversationPartial", Model.ConversationData)
+				@if (Model.ConversationData != null)
+				{
+					@Html.Partial("_ConversationPartial", Model.ConversationData)
+				}
+				else
+				{
+					<p>Conversation data is not available.</p>
+				}
 			</div>
 		</div>
 	</div>

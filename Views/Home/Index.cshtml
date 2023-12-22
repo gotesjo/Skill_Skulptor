@@ -4,13 +4,14 @@
 @model List<CV>
 
 <!-- Header för startsidan-->
-<div class="jumbotron jumbotron-fluid pt-0">
+@* <div class="jumbotron jumbotron-fluid pt-0">
         <img class="img-fluid" src="~/datafiles/pictures/logobluelarge.png" />
- </div>
+ </div> *@
 
 <section class="bg-primary text-light p-5">
     <div class="container">
         <div class="d-md-flex justify-content-evenly align-items-center">
+            <h2 class="mb-3">Skill Skulptor</h2>
             <h3 class="mb-3">Sök på cv</h3>
             <form method="post" action="@Url.Action("Index", "Home")">
                 <div class="input-group mb-3 cvsearch-input">
@@ -33,25 +34,25 @@
                     <div class="col card m-3 bg-info">
                         <a href="@Url.Action("Index", "Resume",@cv.fkUser.Id)">
                             <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
-                            <h6>@cv.Summary</h6>
+                            <h6 class="subheading">@cv.Summary</h6>
                             <br />
                             <h5>Detta är mina Erfarenheter</h5>
                             @if (cv.Experiences.Any())
                             {
-                                <p class="text-body">@cv.Experiences.First().Position Employer: @cv.Experiences.First().Employer</p>
+                                <h6>@cv.Experiences.First().Position Employer: @cv.Experiences.First().Employer</h6>
                             }
                             else
                             {
-                                <span>Inga Erfarenheter</span>
+                                <h6>Inga Erfarenheter</h6>
                             }
                             <h5>Utbildningar</h5>
                             @if (cv.Educations.Any())
                             {
-                                <p class="text-body">@cv.Educations.First().Institution Utbildning: @cv.Educations.First().Course</p>
+                                <h6>@cv.Educations.First().Institution Utbildning: @cv.Educations.First().Course</h6>
                             }
                             else
                             {
-                                <span>Ingen utbildning</span>
+                                <h6>Ingen utbildning</h6>
                             }
                         </a>
                     </div>
