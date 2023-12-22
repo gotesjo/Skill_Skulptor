@@ -2,6 +2,7 @@
     ViewData["Title"] = "Index";
 }
 @model List<CV>
+
 <!-- Header för startsidan-->
 <div class="jumbotron jumbotron-fluid pt-0">
         <img class="img-fluid" src="~/datafiles/pictures/logobluelarge.png" />
@@ -29,15 +30,32 @@
             <div class="row align-items-center pt-3">
                 @foreach(var cv in Model)
                 {
-                    <div class="col card m-3 bg-info" >
+                    <div class="col card m-3 bg-info">
                         <a href="@Url.Action("Index", "Resume",@cv.fkUser.Id)">
                             <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
-                            <h4>@cv.Summary</h4>
+                            <h6>@cv.Summary</h6>
                             <br />
-                            <h5>Detta är mina kompetenser</h5>
-                            <p class="text-body">@cv.Experiences.First().Description Employer: @cv.Experiences.First().Employer</p>
+                            <h5>Detta är mina Erfarenheter</h5>
+                            @if (cv.Experiences.Any())
+                            {
+                                <p class="text-body">@cv.Experiences.First().Position Employer: @cv.Experiences.First().Employer</p>
+                            }
+                            else
+                            {
+                                <span>Inga Erfarenheter</span>
+                            }
+                            <h5>Utbildningar</h5>
+                            @if (cv.Educations.Any())
+                            {
+                                <p class="text-body">@cv.Educations.First().Institution Utbildning: @cv.Educations.First().Course</p>
+                            }
+                            else
+                            {
+                                <span>Ingen utbildning</span>
+                            }
                         </a>
                     </div>
+                    
                 }
             </div>
         </div>

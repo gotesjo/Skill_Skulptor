@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using SkillSkulptor.Models;
 
@@ -7,16 +8,20 @@ namespace SkillSkulptor.Controllers
     public class MessageController : Controller
     {
         private SsDbContext _dbContext;
+		private UserManager<AppUser> userManager;
+		private SignInManager<AppUser> signInManager;
 
-        public MessageController(SsDbContext _db)
+		public MessageController(SsDbContext _db,SignInManager<AppUser> _signInManager, UserManager<AppUser> _userManager)
         {
             _dbContext = _db;
-        }
+			userManager = _userManager;
+			signInManager = _signInManager;
+	}
 
 
 		public IActionResult Index()
 		{
-			AppUser _loggedInUser = GetLoggedInUser(); 
+			AppUser _loggedInUser = GetLoggedInUser();
 
 			List<AppUser> _users = _dbContext.Users.ToList();
 
@@ -71,7 +76,9 @@ namespace SkillSkulptor.Controllers
 
 		private AppUser GetLoggedInUser()
 		{
-			return _dbContext.Users.First();
+			AppUser loggedInUser = userManager.GetUserAsync(User).Result;
+			return loggedInUser;
+			
 		}
 	}
 }

@@ -25,10 +25,11 @@ namespace SkillSkulptor.Controllers
                 Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
                 ViewBag.Project = _project;
             }
-            catch
+            catch (Exception ex)
             {
                 Project ExP = new Project();
                 ExP.ProjectName = "Finns inga projekt";
+                Console.WriteLine(ex.Message);
                 ViewBag.Project = ExP;
 
             }
