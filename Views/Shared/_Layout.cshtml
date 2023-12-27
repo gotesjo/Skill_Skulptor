@@ -1,4 +1,5 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,14 +31,17 @@
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href=@Url.Action("Index", "Resume")>Mitt CV</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href=@Url.Action("IndexProjekt", "Projekt")>Alla Projekt</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="@Url.Action("Login", "Login")">Logga in</a></li>
-                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="@Url.Action("Index", "Profile")">Redigera profil</a></li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="@Url.Action("Index","Message")">
-                        Meddelanden
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="@Url.Action("Index", "Profile")">Redigera profil</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="@Url.Action("Index","Message")">
+                            Meddelanden
                         <i class="fas fa-envelope fa-lg"></i>
                         <span class="badge rounded-pill badge-notification bg-danger">1</span>
-                    </a>
-                </li>
+                        </a>
+                    </li>
+                }
             </ul>
         </div>
     </nav>

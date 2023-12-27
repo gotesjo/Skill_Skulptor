@@ -26,6 +26,7 @@ namespace SkillSkulptor.Controllers
 			AppUser _loggedInUser = GetLoggedInUser();
 
 			List<AppUser> _users = _dbContext.Users.ToList();
+			_users.Remove(_loggedInUser);
 
 			var viewModel = new SearchViewModel
 			{

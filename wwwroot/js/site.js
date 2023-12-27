@@ -87,6 +87,28 @@ function sendMessage() {
     });
 }
 
+function readMessage() {
+    console.log("Försöker läsa meddelandet");
+    var messageId = $("readMessage-div").data("user-id");
+
+    var data = {
+        _messageID: messageId
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/Message/MarkRead",
+        data: data,
+        success: function () {
+            UpdateConversation(_otherUserId);
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+
+}
+
 function scrollToBottom() {
     var messageContainer = document.getElementById('messageContainer');
     messageContainer.scrollTop = messageContainer.scrollHeight;

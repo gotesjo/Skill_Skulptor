@@ -40,7 +40,11 @@
 								@message.Text
 								@message.MessageId
 							</div>
-						</div>
+						@if(message.ViewStatus == false)
+						{
+						<button type="button" onclick="readMessage()" class="btn btn-secondary btn-sm readMessage-div" data-user-id="@message.MessageId">Markera Läst</button>
+						}
+					</div>
 					}
 				</div>
 			</div>
