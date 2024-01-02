@@ -1,50 +1,122 @@
-﻿@model AppUser
+﻿@model SkillSkulptor.Models.ResumeViewModel
+@{
+    ViewData["Title"] = "Mitt CV";
+}
 
-
-
-
-<!-- Page Content-->
 <div class="container-fluid p-0">
-    <!-- About-->
+    @if (Model.UserCV == null)
+    {
+        <section class="resume-section" id="no-cv">
+            <div class="resume-section-content">
+                <h2>Inget CV hittades för @Model.User.Firstname @Model.User.Lastname</h2>
+                <p>För att skapa ditt CV, klicka på knappen nedan.</p>
+                <a class="btn btn-primary" asp-controller="Resume" asp-action="CreateCV">Skapa Mitt CV</a>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="resume-section" id="about">
+            <div class="resume-section-content">
+                <div class="mb-3">
+                    <img src="@(Model.User.fkPicture?.ImageData != null ? Url.Action("UserImage", "Profile", new { userId = Model.User.Id }) : Url.Content("~/images/default-profile.png"))"
+                         alt="Profilbild"
+                         class="img-thumbnail img-responsive mb-3"
+                         style="max-width: 300px; height: auto;" />
+                </div>
+
+                <h1 class="mb-0">
+                    @Model.User.Firstname
+                    <span class="text-primary">@Model.User.Lastname</span>
+                </h1>
+                @if (Model.User.fkAddress != null)
+                {
+                    <div class="subheading mb-5">
+                        @Model.User.fkAddress.Street · @Model.User.fkAddress.City · @Model.User.fkAddress.ZipCode · @Model.User.fkAddress.Country
+                        <a href="mailto:@Model.User.Email">@Model.User.Email</a>
+                    </div>
+                }
+                <p class="lead mb-5">@Model.User.userCV?.Summary</p>
+
+                @if (Model.User.userCV.Experiences != null)
+                {
+                    <h2 class="mb-5">Erfarenheter</h2>
+                    @foreach (var experience in Model.User.userCV.Experiences)
+                    {
+                        <div class="mb-3">
+                            <h3>@experience.Position hos @experience.Employer</h3>
+                            <p>@experience.Description</p>
+                            <p>Från @experience.StartDate till @experience.EndDate</p>
+                        </div>
+                    }
+                }
+
+                @if (Model.User.userCV.Educations != null)
+                {
+                    <h2 class="mb-5">Utbildning</h2>
+                    @foreach (var education in Model.User.userCV.Educations)
+                    {
+                        <div class="mb-3">
+                            <h3>@education.Institution</h3>
+                            <p>@education.Course, @education.Degree</p>
+                            <p>Från @education.StartDate till @education.EndDate</p>
+                        </div>
+                    }
+                }
+
+                @if (Model.User.userCV.Qualifications != null)
+                {
+                    <h2 class="mb-5">Färdigheter</h2>
+                    @foreach (var skill in Model.User.userCV.Qualifications)
+                    {
+                        <p>@skill.QName: @skill.Description</p>
+                    }
+                }
+
+                <h2 class="mb-5">Intressen</h2>
+                <p>@Model.User.userCV.PersonalLetter</p>
+            </div>
+        </section>
+    }
+</div>
+
+
+
+
+
+
+@* @model AppUser
+@{ViewData["Title"] = "Redigera Profil";
+}
+
+<!-- Page Content -->
+<div class="container-fluid p-0">
+    <!-- About -->
     <section class="resume-section" id="about">
         <div class="resume-section-content">
+            <form asp-controller="Resume" asp-action ="SubmitResume" method="post" enctype="multipart/form-data">
+                <!-- Profil Bildinformation -->
+                <div class="mb-3">
+                    <div>
+                        <img src="@Model.fkPicture?.ImageData != null ? Url.Action("UserImage", "Profile", new { userId = Model.Id }) : Url.Content("~/images/default-profile.png")" 
+                             alt="Profilbild" 
+                             class="img-thumbnail img-responsive mb-3" 
+                             style="max-width: 300px; height: auto;" />
+                    </div>
+                </div>
 
-       <form asp-controller="Resume" method="post" enctype="multipart/form-data">
-
-    <!-- Profil Bildinformation -->
-    <div class="mb-3">
-
-        <div>
-            @if (Model.fkPicture != null && Model.fkPicture.ImageData != null)
-            {
-                <img src="@Url.Action("UserImage", "Profile", new { userId = Model.Id })" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
-            }
-            else
-            {
-                <img src="@Url.Content("~/images/default-profile.png")" alt="Ingen profilbild tillgänglig" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
-            }
-        </div>
-    </div>
-                ´
+                <!-- User Information -->
+                <h1 class="mb-0">
+                    @Model.Firstname
+                    <span class="text-primary">@Model.Lastname</span>
+                </h1>
+                <div class="subheading mb-5">
+                    @Model.fkAddress?.Street · @Model.fkAddress?.City · @Model.fkAddress?.Street · @Model.Phonenr
+                    <a href="mailto:@Model.Email">@Model.Email</a>
+                </div>
+                <p class="lead mb-5">@Model.userCV?.Summary</p>
+                <!-- Social Icons etc... -->
             </form>
-
-            
-            <h1 class="mb-0">
-                @Model.Firstname
-                <span class="text-primary">@Model.Lastname</span>
-            </h1>
-            <div class="subheading mb-5">
-                @Model.fkAddress.Street · @Model.fkAddress.City · @Model.fkAddress.Street · @Model.Phonenr
-                
-                <a href="mailto:name@email.com">@Model.Email</a>
-            </div>
-            <p class="lead mb-5">@Model.userCV.Summary</p>
-            <div class="social-icons">
-                <a class="social-icon" href="#!"><i class="fab fa-linkedin-in"></i></a>
-                <a class="social-icon" href="#!"><i class="fab fa-github"></i></a>
-                <a class="social-icon" href="#!"><i class="fab fa-twitter"></i></a>
-                <a class="social-icon" href="#!"><i class="fab fa-facebook-f"></i></a>
-            </div>
         </div>
     </section>
     <hr class="m-0" />
@@ -171,4 +243,4 @@
             </ul>
         </div>
     </section>
-</div>
+</div> *@

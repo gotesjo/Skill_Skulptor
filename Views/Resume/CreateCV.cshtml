@@ -1,0 +1,11 @@
+﻿@model CV
+@{
+    ViewData["Title"] = "Skapa CV";
+}
+
+<form asp-controller="Resume" asp-action="SaveCV" method="post">
+    <!-- Formulärfält för CV (exempelvis sammanfattning, erfarenheter, utbildningar etc.) -->
+    <!-- ... -->
+
+    <button type="submit" class="btn btn-primary">Skicka in CV</button>
+</form>
