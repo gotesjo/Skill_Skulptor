@@ -165,5 +165,13 @@ namespace SkillSkulptor.Controllers
 			return loggedInUser;
 			
 		}
+
+		[HttpGet]
+		public IActionResult UnreadMessages()
+		{
+			AppUser myuser = GetLoggedInUser();
+			int unreadMessages = myuser.ReceivedMessages.Where(m => m.ViewStatus == false).Count();
+			return Json(unreadMessages);
+		}
 	}
 }

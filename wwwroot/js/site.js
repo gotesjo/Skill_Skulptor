@@ -36,6 +36,13 @@ window.addEventListener('DOMContentLoaded', event => {
 //För konversationssida
 
 $(document).ready(function () {
+
+    // Uppdatera meddelandeantal vid sidan av
+    updateUnreadMessagesCount();
+
+    // Timer för uppdareringen
+    setInterval(updateUnreadMessagesCount, 1000);
+
     $(document).on('click', '.user-div', function () {
         var otherUserID = $(this).data('user-id');
 
@@ -115,3 +122,29 @@ function scrollToBottom() {
     var messageContainer = document.getElementById('messageContainer');
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
+
+// Hantering av olästa meddelanden
+
+
+    // Funktion för att uppdatera meddelandeantal
+    function updateUnreadMessagesCount() {
+        $.ajax({
+            url: '/Message/UnreadMessages', 
+            type: 'GET',
+            success: function (result) {
+                var unreadMessagesCountElement = $('#unreadMessagesCount');
+
+                // Uppdatera antalet olästa meddelanden
+                unreadMessagesCountElement.text(result);
+
+                if (result === 0) {
+                    unreadMessagesCountElement.hide();
+                } else {
+                    unreadMessagesCountElement.show();
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
