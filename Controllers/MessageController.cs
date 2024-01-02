@@ -8,7 +8,7 @@ using AutoMapper;
 
 namespace SkillSkulptor.Controllers
 {
-	[Authorize]
+    [Authorize]
     public class MessageController : Controller
     {
         private SsDbContext _dbContext;
@@ -23,7 +23,7 @@ namespace SkillSkulptor.Controllers
 	}
 
 
-		public IActionResult Index()
+		public IActionResult Start()
 		{
 			AppUser _loggedInUser = GetLoggedInUser();
 
@@ -44,7 +44,7 @@ namespace SkillSkulptor.Controllers
 		{
 			if (string.IsNullOrEmpty(searchString))
 			{
-				return RedirectToAction("Index");
+				return RedirectToAction("Start");
 			}
 
 			AppUser _loggedInUser = GetLoggedInUser(); 
@@ -58,7 +58,7 @@ namespace SkillSkulptor.Controllers
 				SearchString = searchString
 			};
 
-			return View("Index", viewModel);
+			return View("Start", viewModel);
 		}
 
 		[HttpGet]
@@ -169,9 +169,15 @@ namespace SkillSkulptor.Controllers
 		[HttpGet]
 		public IActionResult UnreadMessages()
 		{
-			AppUser myuser = GetLoggedInUser();
-			int unreadMessages = myuser.ReceivedMessages.Where(m => m.ViewStatus == false).Count();
-			return Json(unreadMessages);
+			if (User.Identity.IsAuthenticated)
+			{
+                AppUser myuser = GetLoggedInUser();
+                int unreadMessages = myuser.ReceivedMessages.Where(m => m.ViewStatus == false).Count();
+                return Json(unreadMessages);
+            } else
+			{
+				return Json(null);
+			}
 		}
 	}
 }

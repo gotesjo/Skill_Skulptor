@@ -16,7 +16,7 @@ namespace SkillSkulptor.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+        
         [HttpGet]
         public IActionResult Index()
         {
@@ -55,31 +55,39 @@ namespace SkillSkulptor.Controllers
                 ViewBag.Project = ExP;
             }
 
-            string[] searchTerms = search.Split(' ');
-
-            if (searchTerms.Length == 1)
+            if (search != null)
             {
-                List<CV> CvSearched = _dbContext.CVs
-                    .Where(a => a.fkUser.Firstname.Contains(search) || a.fkUser.Lastname.Contains(search))
-                    .ToList();
+                string[] searchTerms = search.Split(' ');
 
-                return View(CvSearched);
-            }
-            else if (searchTerms.Length == 2)
-            {
-                string firstName = searchTerms[0];
-                string lastName = searchTerms[1];
+                if (searchTerms.Length == 1)
+                {
+                    List<CV> CvSearched = _dbContext.CVs
+                        .Where(a => a.fkUser.Firstname.Contains(search) || a.fkUser.Lastname.Contains(search))
+                        .ToList();
 
-                List<CV> CvSearched = _dbContext.CVs
-                    .Where(a => a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName))
-                    .ToList();
+                    return View(CvSearched);
+                }
+                else if (searchTerms.Length == 2)
+                {
+                    string firstName = searchTerms[0];
+                    string lastName = searchTerms[1];
 
-                return View(CvSearched);
+                    List<CV> CvSearched = _dbContext.CVs
+                        .Where(a => a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName))
+                        .ToList();
+
+                    return View(CvSearched);
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
             else
             {
-                return View(new List<CV>());
+                return RedirectToAction("Index");
             }
+            
         }
 
 

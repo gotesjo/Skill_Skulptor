@@ -127,7 +127,7 @@ function scrollToBottom() {
 
 
     // Funktion för att uppdatera meddelandeantal
-    function updateUnreadMessagesCount() {
+function updateUnreadMessagesCount() {
         $.ajax({
             url: '/Message/UnreadMessages', 
             type: 'GET',
@@ -147,4 +147,4 @@ function scrollToBottom() {
                 console.error(error);
             }
         });
-    }
+}

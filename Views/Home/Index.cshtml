@@ -32,7 +32,7 @@
                 @foreach(var cv in Model)
                 {
                     <div class="col card m-3 bg-info">
-                        <a href="@Url.Action("Index", "Resume",@cv.fkUser.Id)">
+                        <a href="@Url.Action("Index", "Resume",new { id = cv.fkUser.Id })">
                             <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
                             <h6 class="subheading">@cv.Summary</h6>
                             <br />
@@ -68,7 +68,10 @@
         <hr class="my-4">
         <p>@ViewBag.Project.Description</p>
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="#" role="button">Gå med i projektet</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a class="btn btn-primary btn-lg" href="#" role="button">Gå med i projektet</a>
+            }
         </p>
     </div>
 

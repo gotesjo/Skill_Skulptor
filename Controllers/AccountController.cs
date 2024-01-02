@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SkillSkulptor.Controllers
 {
@@ -54,10 +55,12 @@ namespace SkillSkulptor.Controllers
 
 		}
 
-        public ActionResult Signout()
+		[HttpGet]
+        public async Task<ActionResult> Signout()
 		{
-			return View();
-		}
+			await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
 
 
         [HttpGet]
