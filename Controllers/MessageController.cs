@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.VisualBasic;
 using SkillSkulptor.Models;
+using AutoMapper;
 
 namespace SkillSkulptor.Controllers
 {
@@ -92,6 +94,12 @@ namespace SkillSkulptor.Controllers
 					mess_obj.ImageId = message.fkFromUser.Id;
 				}
 
+				var config = new MapperConfiguration(cfg => cfg.CreateMap<Message, Message_object>());
+				var mapper = new Mapper(config);
+
+				// Använd AutoMapper för att kartlägga egenskaperna
+				mess_obj = mapper.Map<Message_object>(message);
+
 				mess_obj.classCss = messdir;
 				mess_obj.MessageName = messName;
 				mess_obj.MessageId = message.MessageId;
@@ -104,7 +112,19 @@ namespace SkillSkulptor.Controllers
 			data.messagesObjects = list_objects;
 			data.receiver = _dbContext.Users.Find(otherUserID);
 
-			return PartialView("_ConversationPartial", data);
+			if (data.messagesObjects != null && data.messagesObjects.Any())
+			{
+				return PartialView("_ConversationPartial", data);
+			}
+			else
+			{
+				MessageServiceModel dataNewMessage = new MessageServiceModel();
+				dataNewMessage.receiver = _dbContext.Users.Find(otherUserID);
+
+				return PartialView("_NewMessagePartial", dataNewMessage);
+			}
+
+
 		}
 
 		[HttpPost]
@@ -121,6 +141,20 @@ namespace SkillSkulptor.Controllers
 			_dbContext.SaveChanges();
 
 			return RedirectToAction("GetConversation", new {otherUserId = message.ToUserID });
+		}
+
+		[HttpPost]
+		public IActionResult MarkRead(int _messageID)
+		{
+			int id = _messageID;
+			Message message = _dbContext.Messages.Find(id);
+			message.ViewStatus = true;
+
+			_dbContext.Messages.Update(message);
+			_dbContext.SaveChanges();
+
+			return RedirectToAction("GetConversation", new { otherUserId = message.ToUserID });
+
 		}
 
 

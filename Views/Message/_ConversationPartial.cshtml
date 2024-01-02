@@ -32,17 +32,16 @@
 					{
 						<div class="@message.classCss pb-4">
 							<div>
-								<img src='@Url.Action("UserImage", "Profile", new { userId = message.ImageId })' class="rounded-circle mr-1" alt="@message.MessageName" width="40" height="40">
+								<img src='@Url.Action("UserImage", "Profile", new { userId = message.fkFromUser.Id })' class="rounded-circle mr-1" alt="@message.MessageName" width="40" height="40">
 								<div class="text-muted small text-nowrap mt-2">@message.Datum</div>
 							</div>
 							<div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
 								<div class="font-weight-bold mb-1">@message.MessageName</div>
 								@message.Text
-								@message.MessageId
 							</div>
-						@if(message.ViewStatus == false)
+						@if(message.ViewStatus == false && message.fkFromUser == Model.receiver)
 						{
-						<button type="button" onclick="readMessage()" class="btn btn-secondary btn-sm readMessage-div" data-user-id="@message.MessageId">Markera Läst</button>
+						<button type="button" onclick="readMessage('@message.MessageId')" class="btn btn-secondary btn-sm readMessage-div" data-message-id=@message.MessageId>Markera Läst</button>
 						}
 					</div>
 					}

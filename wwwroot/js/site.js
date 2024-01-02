@@ -87,9 +87,11 @@ function sendMessage() {
     });
 }
 
-function readMessage() {
+function readMessage(Message_id) {
     console.log("Försöker läsa meddelandet");
-    var messageId = $("readMessage-div").data("user-id");
+    var messageId = Message_id;
+    var _otherUserId = $(".receiver_user-div").data("user-id");
+    console.log(messageId);
 
     var data = {
         _messageID: messageId
@@ -100,7 +102,7 @@ function readMessage() {
         url: "/Message/MarkRead",
         data: data,
         success: function () {
-            UpdateConversation(_otherUserId);
+            /*UpdateConversation(_otherUserId);*/
         },
         error: function (error) {
             console.error(error);
