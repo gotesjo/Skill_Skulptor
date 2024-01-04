@@ -41,33 +41,53 @@ namespace SkillSkulptor.Controllers
         [HttpGet]
         public IActionResult CreateCV()
         {
-            // Visa sidan för att skapa ett nytt CV
-            return View(new CV());
+            var viewModel = new ResumeViewModel
+            {
+                UserCV = new CV(),
+                Experiences = new List<Experience>(),  // Lista för nya erfarenheter
+                Educations = new List<Education>(),   // Lista för nya utbildningar
+                Qualifications = new List<Qualification>() // Lista för nya kvalifikationer
+            };
+
+            return View(viewModel);
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> CreateCV(CV cvModel)
+        public async Task<IActionResult> CreateCV(ResumeViewModel resumeViewModel)
         {
             if (ModelState.IsValid)
             {
                 var loggedInUser = await userManager.GetUserAsync(User);
                 if (loggedInUser != null)
                 {
-                    cvModel.BelongsTo = loggedInUser.Id;
-                    _dbContext.CVs.Add(cvModel);
+                    var cv = new CV
+                    {
+                        BelongsTo = loggedInUser.Id,
+                        Summary = resumeViewModel.UserCV.Summary,
+                        PersonalLetter = resumeViewModel.UserCV.PersonalLetter,
+                      
+                        Experiences = new List<Experience>(resumeViewModel.Experiences),
+                        Educations = new List<Education>(resumeViewModel.Educations),
+                        Qualifications = new List<Qualification>(resumeViewModel.Qualifications)
+                    };
+
+                    _dbContext.CVs.Add(cv);
                     await _dbContext.SaveChangesAsync();
 
-                    return RedirectToAction("Index"); // Återgå till översiktssidan efter att CV:t har skapats
+                    return RedirectToAction("Index"); 
                 }
                 else
                 {
                     ModelState.AddModelError("", "Ingen inloggad användare hittades.");
                 }
             }
-            return View(cvModel); // Om valideringsfel finns, visa formuläret igen
+            return View(resumeViewModel); // Om valideringsfel finns, visa formuläret igen
         }
 
-        // Eventuella ytterligare metoder och logik...
+
+
     }
 }
 
