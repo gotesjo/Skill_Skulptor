@@ -80,8 +80,17 @@
                     <h2 class="mb-5">Vill du Kontakta @Model.User.Firstname</h2>
                     <div class="border-top">
                         <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowMessage" />
+
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Skriv ditt namn" id="UnknowName" />
+                            @if (Model.User.Id == Model.UserCV.BelongsTo)
+                            {
+                                <input type="text" disabled class="form-control" placeholder=" Från: @Model.User.Firstname @Model.User.Lastname" id="KnownUser" data-knowUser-id=@Model.User.Id />
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowName" />
+                            }
+
                             <button type="button" onclick="sendUnknownMessage()" class="btn btn-primary send-unknown-div" data-to-id=@Model.User.Id>Skicka</button>
                         </div>
                     </div>

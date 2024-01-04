@@ -74,13 +74,13 @@ function UpdateConversation(otherUserID) {
 }
 
 //Metod för att skicka meddelanden och sedan uppdatera vyn.
-function sendMessage() {
-    console.log("knappen är klickad");
-    var newMessage = document.getElementById("Newmessage").value;
-    var _otherUserId = $(".receiver_user-div").data("user-id");
+function sendMessage(newMessage, otherUserId) {
+
+    _newMessage = newMessage || document.getElementById("Newmessage").value;
+    _otherUserId = otherUserId || $(".receiver_user-div").data("user-id");
 
     var data = {
-        Newmessage: newMessage,
+        Newmessage: _newMessage,
         receiverId: _otherUserId
     };
 
@@ -159,7 +159,15 @@ function updateUnreadMessagesCount() {
 
 function sendUnknownMessage() {
     var _sendTo = document.querySelector('.send-unknown-div').getAttribute('data-to-id');
-    var _from = document.getElementById("UnknowName").value;
+
+    //ifall en användare är inloggad eller inte
+    try {
+        _from = document.getElementById("UnknowName").value;
+    } catch (error) {
+        console.error("Error getting value for UnknowName:", error);
+        _from = null; 
+    }
+
     var _message = document.getElementById("UnknowMessage").value;
 
     if (_message < 1) {
@@ -169,16 +177,25 @@ function sendUnknownMessage() {
         messageinput.style.background("red");
 
     }
-    if (!isNameValid(_from)) {
+
+    if (_from === null) {
+        sendMessage(_message, _sendTo);
+        clearSendUnknownForm();
+        return;
+    }
+    else if (!isNameValid(_from)) {
         alert('Ogiltigt namn!');
         return;
     }
+
+
 
     var data = {
         newmessage: _message,
         receiverId: _sendTo,
         from: _from
     };
+
 
     $.ajax({
         type: "POST",
