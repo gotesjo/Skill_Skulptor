@@ -109,10 +109,15 @@ namespace SkillSkulptor.Controllers
                 return File(userPicture.ImageData, "image/jpeg");
             }
 
-            
-            var path = Path.Combine(_hostingEnvironment.WebRootPath, "images", "default-profile.png");
-            var imageBytes = await System.IO.File.ReadAllBytesAsync(path);
-            return File(imageBytes, "image/png"); // Anpassa MIME-typen enligt standardbilden
+
+            var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "datafiles", "pictures", "default-profile.jpg");
+            var imageBytes = await System.IO.File.ReadAllBytesAsync(imagePath);
+
+            // Ange rätt MIME-typ beroende på filtypen
+            var mimeType = "image/jpeg"; // Om din bild är en JPEG. Anpassa efter din bildtyp.
+
+            return File(imageBytes, mimeType);
+
         }
 
 

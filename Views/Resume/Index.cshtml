@@ -19,7 +19,7 @@
         <section class="resume-section" id="about">
             <div class="resume-section-content">
                 <div class="mb-3">
-                    <img src="@(Model.User.fkPicture?.ImageData != null ? Url.Action("UserImage", "Profile", new { userId = Model.User.Id }) : Url.Content("~/images/default-profile.png"))"
+                    <img src="@(Model.User.fkPicture?.ImageData != null ? Url.Action("UserImage", "Profile", new { userId = Model.User.Id }) : Url.Content("~/datafiles/pictures/default-profile.jpg"))"
                          alt="Profilbild"
                          class="img-thumbnail img-responsive mb-3"
                          style="max-width: 300px; height: auto;" />
@@ -76,25 +76,32 @@
                 <h2 class="mb-5">Intressen</h2>
                 <p>@Model.User.userCV.PersonalLetter</p>
 
-                <div class="resume-section d-block">
-                    <h2 class="mb-5">Vill du Kontakta @Model.User.Firstname</h2>
-                    <div class="border-top">
-                        <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowMessage" />
+                @if (!User.Identity.IsAuthenticated || !Model.User.UserName.Equals(User.Identity.Name))
+                {
+                        <div class="resume-section d-block">
+                            <h2 class="mb-5">Vill du Kontakta @Model.User.Firstname</h2>
+                            <div class="border-top">
+                                <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowMessage" />
 
-                        <div class="input-group">
-                            @if (Model.User.Id == Model.UserCV.BelongsTo)
-                            {
-                                <input type="text" disabled class="form-control" placeholder=" Från: @Model.User.Firstname @Model.User.Lastname" id="KnownUser" data-knowUser-id=@Model.User.Id />
-                            }
-                            else
-                            {
-                                <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowName" />
-                            }
+                                <div class="input-group">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <input type="text" disabled class="form-control" placeholder=" Från: @User.Identity.Name" id="KnownUser"/>
+                                    }
+                                    else
+                                    {
+                                        <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowName" />
+                                    }
 
-                            <button type="button" onclick="sendUnknownMessage()" class="btn btn-primary send-unknown-div" data-to-id=@Model.User.Id>Skicka</button>
+                                    <button type="button" onclick="sendUnknownMessage()" class="btn btn-primary send-unknown-div" data-to-id=@Model.User.Id>Skicka</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    }else
+                    {
+                        <button type="button" class="btn btn-primary">Redigera CV</button>
+                        <button type="button" class="btn btn-danger">Radera CV</button>
+                    }
 
             </div>
             

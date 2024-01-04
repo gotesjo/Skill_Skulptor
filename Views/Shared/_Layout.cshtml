@@ -38,7 +38,7 @@
                 @* Dölja Min CV sida ifall man inte är inloggad*@
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href=@Url.Action("Index", "Resume")>Mitt CV</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" asp-controller="Resume" asp-action="Index">Mitt CV</a></li>
                     
                 }
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href=@Url.Action("IndexProjekt", "Projekt")>Alla Projekt</a></li>
