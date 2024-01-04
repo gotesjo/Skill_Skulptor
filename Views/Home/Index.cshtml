@@ -32,7 +32,7 @@
                 @foreach(var cv in Model)
                 {
                     <div class="col card m-3 bg-info">
-                        <a href="@Url.Action("Index", "Resume",new { id = cv.fkUser.Id })">
+                        <a asp-controller="Resume" asp-action="Index" asp-route-id="@cv.fkUser.Id">
                             <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
                             <h6 class="subheading">@cv.Summary</h6>
                             <br />

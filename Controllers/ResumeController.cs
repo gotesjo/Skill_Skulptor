@@ -18,23 +18,43 @@ namespace SkillSkulptor.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? id)
         {
-            var loggedInUser = await userManager.GetUserAsync(User);
-            if (loggedInUser == null)
+            string _id = null;
+            ResumeViewModel viewModel = new ResumeViewModel();
+
+            if (id == null)
             {
-                return RedirectToAction("Login", "Account");
+                AppUser loggedInUser = await userManager.GetUserAsync(User);
+                _id = loggedInUser.Id;
+            }
+            else
+            {
+                _id = id;
+            }
+            AppUser choosenUser;
+            CV userCV;
+
+            try
+            {
+                choosenUser = _dbContext.Users.Find(_id);
+                userCV = choosenUser.userCV;
+            } 
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return RedirectToAction("Index", "Home");
+            }
+            
+
+            if(choosenUser != null)
+            {
+                viewModel.UserCV = userCV;
+                viewModel.User = choosenUser;
+                return View(viewModel);
             }
 
-            var userCV = _dbContext.CVs.FirstOrDefault(cv => cv.BelongsTo == loggedInUser.Id);
-
-            var viewModel = new ResumeViewModel
-            {
-                User = loggedInUser,
-                UserCV = userCV
-            };
-
-            return View(viewModel);
+            return RedirectToAction("Index", "Home");
         }
 
 
