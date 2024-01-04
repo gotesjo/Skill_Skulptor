@@ -201,7 +201,7 @@ namespace SkillSkulptor.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEducation(CreateQualificationModel model)
+        public IActionResult CreateQualification(CreateQualificationModel model)
         {
             if (ModelState.IsValid)
             {
