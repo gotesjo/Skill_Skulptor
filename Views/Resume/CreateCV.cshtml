@@ -1,4 +1,4 @@
-﻿@model SkillSkulptor.Models.ResumeViewModel
+﻿@model CreateResumeModel
 @{
     ViewData["Title"] = "Skapa CV";
 }
@@ -6,112 +6,94 @@
 <h2>@ViewData["Title"]</h2>
 
 <form asp-controller="Resume" asp-action="CreateCV" method="post" enctype="multipart/form-data">
-    <!-- Redan existerande fält... -->
+    <!-- Sammanfattning -->
+    <div class="summary-info mb-4">
+        <h3>Sammanfattning</h3>
+        <div class="mb-3">
+            <label for="Summary" class="form-label">Sammanfattning</label>
+            <textarea id="Summary" name="User.userCV.Summary" class="form-control" placeholder="En kort sammanfattning av ditt CV"></textarea>
+        </div>
+    </div>
+
     <!-- Erfarenheter Sektion -->
     <div class="experiences-info mb-4">
         <h3>Erfarenheter</h3>
-        <div id="experiences-container">
-            <!-- Dynamiska fält för erfarenheter läggs till här -->
+        <div class="mb-3">
+            @for (int i = 0; i < Model.UserCV.Experiences.Count(); i++)
+            {
+                <div>
+                    <label asp-for="UserCV.Experiences[i].Position" class="form-label">Position</label>
+                    <input asp-for="UserCV.Experiences[i].Position" class="form-control" placeholder="Position" />
+
+                    <label asp-for="UserCV.Experiences[i].Description" class="form-label">Beskrivning</label>
+                    <input asp-for="UserCV.Experiences[i].Description" class="form-control" placeholder="Beskrivning" />
+
+                    <label asp-for="UserCV.Experiences[i].Employer" class="form-label">Arbetsgivare</label>
+                    <input asp-for="UserCV.Experiences[i].Employer" class="form-control" placeholder="Beskrivning" />
+
+                    <label asp-for="UserCV.Experiences[i].StartDate" class="form-label">Startdatum</label>
+                    <input asp-for="UserCV.Experiences[i].StartDate" class="form-control" />
+
+                    <label asp-for="UserCV.Experiences[i].EndDate" class="form-label">Slutdatum</label>
+                    <input asp-for="UserCV.Experiences[i].EndDate" class="form-control" />
+                </div>
+
+            }
         </div>
-        <button type="button" onclick="addExperience()">Lägg till Erfarenhet</button>
+
     </div>
 
     <!-- Utbildningar Sektion -->
     <div class="educations-info mb-4">
         <h3>Utbildningar</h3>
-        <div id="educations-container">
-            <!-- Dynamiska fält för erfarenheter läggs till här -->
+        <div class="mb-3">
+            @for (int i = 0; i < Model.UserCV.Educations.Count(); i++)
+            {
+                <label asp-for="UserCV.Educations[i].Institution" class="form-label">Institution</label>
+                <input asp-for="UserCV.Educations[i].Institution" class="form-control" placeholder="Institution" />
+
+                <label asp-for="UserCV.Educations[i].Course" class="form-label">Program</label>
+                <input asp-for="UserCV.Educations[i].Course"  class="form-control" placeholder="Program" />
+
+                <label asp-for="UserCV.Educations[i].Degree" class="form-label">Examen</label>
+                <input asp-for="UserCV.Educations[i].Degree"  class="form-control" placeholder="Examen" />
+
+                <label asp-for="UserCV.Educations[i].StartDate" class="form-label">Startdatum</label>
+                <input asp-for="UserCV.Educations[i].StartDate"  class="form-control" />
+
+                <label asp-for="UserCV.Educations[i].EndDate" class="form-label">Startdatum</label>
+                <input asp-for="UserCV.Educations[i].EndDate"  class="form-control" />
+            }
+
         </div>
-        <button type="button" onclick="addEducation()">Lägg till Utbildning</button>
     </div>
 
     <!-- Färdigheter Sektion -->
-      <div class="qualifications-info mb-4">
-        <h3>Färdigheter</h3>
-        <div id="qualifications-container">
-            <!-- Dynamiska fält för erfarenheter läggs till här -->
+    <div class="qualifications-info mb-4">
+        <h3>Kompetenser</h3>
+        <div class="mb-3">
+            @for (int i = 0; i < Model.UserCV.Qualifications.Count(); i++)
+            {
+
+
+                <label asp-for="UserCV.Qualifications[i].QName" class="form-label">Typ av kompetens</label>
+                <input asp-for="UserCV.Qualifications[i].QName"  class="form-control" placeholder="Typ av kompetenser" />
+
+
+                <label asp-for="UserCV.Qualifications[i].Description" class="form-label">Beskrivning</label>
+                <input asp-for="UserCV.Qualifications[i].Description"  class="form-control" placeholder="Beskrivning" />
+            }
         </div>
-        <button type="button" onclick="addQualifications()">Lägg till Färdigheter</button>
     </div>
-    <!-- Liknande hantering för färdigheter -->
+
     <!-- Intressen Sektion -->
     <div class="interests-info mb-4">
         <h3>Intressen</h3>
         <div class="mb-3">
-            <label for="personalLetter" class="form-label">Personligt Brev</label>
-            <textarea id="personalLetter" name="User.userCV.PersonalLetter" class="form-control" placeholder="Personligt brev"></textarea>
+            <label asp-for="UserCV.PersonalLetter" class="form-label">Personligt Brev</label>
+            <textarea asp-for="UserCV.PersonalLetter" class="form-control" placeholder="Personligt brev"></textarea>
         </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Spara CV</button>
 </form>
-
-<script>
-    function addExperience() {
-        var container = document.getElementById('experiences-container');
-        var count = container.children.length;
-
-        var html = '<div class="mb-3">' +
-            '<label for="Experiences_' + count + '__Position" class="form-label">Position</label>' +
-            '<input type="text" name="Experiences[' + count + '].Position" id="Experiences_' + count + '__Position" class="form-control" placeholder="Position" />' +
-            '<label for="Experiences_' + count + '__Employer" class="form-label">Arbetsgivare</label>' +
-            '<input type="text" name="Experiences[' + count + '].Employer" id="Experiences_' + count + '__Employer" class="form-control" placeholder="Arbetsgivare" />' +
-            '<label for="Experiences_' + count + '__Description" class="form-label">Beskrivning</label>' +
-            '<textarea name="Experiences[' + count + '].Description" id="Experiences_' + count + '__Description" class="form-control" placeholder="Beskrivning"></textarea>' +
-            '<label for="Experiences_' + count + '__StartDate" class="form-label">Startdatum</label>' +
-            '<input type="date" name="Experiences[' + count + '].StartDate" id="Experiences_' + count + '__StartDate" class="form-control" />' +
-            '<label for="Experiences_' + count + '__EndDate" class="form-label">Slutdatum</label>' +
-            '<input type="date" name="Experiences[' + count + '].EndDate" id="Experiences_' + count + '__EndDate" class="form-control" />' +
-            '</div>';
-
-        container.innerHTML += html;
-
-        
-        
-    }
-</script>
-
-<script>
-    
-    function addEducation()
-    {
-
-        var container = document.getElementById('educations-container');
-        var count = container.children.length;
-
-        var html = '<div class="mb-3">' +
-            '<label for="Educations_' + count + '__Institution" class="form-label">Institution</label>' +
-            '<input type="text" name="Educations[' + count + '].Insitution" id="Educations_' + count + '__Institution" class="form-control" placeholder="Institution" />' +
-            '<label for="Educations_' + count + '__Course" class="form-label">Kurser</label>' +
-            '<input type="text" name="Educations[' + count + '].Course" id="Educations_' + count + '__Course" class="form-control" placeholder="Course" />' +
-            '<label for="Educations_' + count + '__Degree" class="form-label">Betyg</label>' +
-            '<input type="text" name="Educations[' + count + '].Degree" id="Educations_' + count + '__Degree" class="form-control" placeholder="Degree" />' +
-            '<label for="Educations_' + count + '__StartDate" class="form-label">Startdatum</label>' +
-            '<input type="date" name="Educations[' + count + '].StartDate" id="Educations_' + count + '__StartDate" class="form-control" />' +
-            '<label for="Educations_' + count + '__EndDate" class="form-label">Slutdatum</label>' +
-            '<input type="date" name="Educations[' + count + '].EndDate" id="Educations_' + count + '__EndDate" class="form-control" />' +
-            '</div>';
-
-        container.innerHTML += html;
-    }
-
-</script>
-
-<script>
-
-    function addQualifications() {
-
-        var container = document.getElementById('qualifications-container');
-        var count = container.children.length;
-
-        var html = '<div class="mb-3">' +
-            '<label for="Qualifications_' + count + '__QName" class="form-label">QName</label>' +
-            '<input type="text" name="Qualifications[' + count + '].QName" id="Qualifications_' + count + '__QName class="form-control" placeholder="Qname" />' +
-            '<label for="Qualifications_' + count + '__Description" class="form-label">Beskrivning</label>' +
-            '<input type="text" name="Qualifications[' + count + '].Description" id="Qualifications_' + count + '__Description" class="form-control" placeholder="Description" />' +
-            '</div>';
-
-        container.innerHTML += html;
-    }
-
-</script>

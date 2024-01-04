@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SkillSkulptor.Models;
+using System.Linq.Expressions;
 
 namespace SkillSkulptor.Controllers
 {
@@ -61,49 +62,57 @@ namespace SkillSkulptor.Controllers
         [HttpGet]
         public IActionResult CreateCV()
         {
-            var viewModel = new ResumeViewModel
-            {
-                UserCV = new CV(),
-                Experiences = new List<Experience>(),  // Lista för nya erfarenheter
-                Educations = new List<Education>(),   // Lista för nya utbildningar
-                Qualifications = new List<Qualification>() // Lista för nya kvalifikationer
-            };
+            CreateResumeModel model = new CreateResumeModel();
+            CV cV = new CV();
 
-            return View(viewModel);
+            
+            cV.Experiences = new List<Experience>();
+            cV.Educations = new List<Education>();
+            cV.Qualifications = new List<Qualification>();
+
+            Experience experience = new Experience();
+            cV.Experiences.Add(experience);
+
+            Education education = new Education();
+            cV.Educations.Add(education);
+
+            Qualification quali = new Qualification();
+            cV.Qualifications.Add(quali);
+
+            model.UserCV = cV;
+
+            return View(model);
         }
 
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateCV(ResumeViewModel resumeViewModel)
+        public async Task<IActionResult> CreateCV(CreateResumeModel model)
         {
+            AppUser loggedInUser = await userManager.GetUserAsync(User);
+            model.UserCV.fkUser = loggedInUser;
+
+            ModelState.Clear();
+
             if (ModelState.IsValid)
             {
-                var loggedInUser = await userManager.GetUserAsync(User);
+
                 if (loggedInUser != null)
                 {
-                    var cv = new CV
-                    {
-                        BelongsTo = loggedInUser.Id,
-                        Summary = resumeViewModel.UserCV.Summary,
-                        PersonalLetter = resumeViewModel.UserCV.PersonalLetter,
-                      
-                        Experiences = new List<Experience>(resumeViewModel.Experiences),
-                        Educations = new List<Education>(resumeViewModel.Educations),
-                        Qualifications = new List<Qualification>(resumeViewModel.Qualifications)
-                    };
+                    model.UserCV.BelongsTo = loggedInUser.Id;
 
-                    _dbContext.CVs.Add(cv);
+                    _dbContext.CVs.Add(model.UserCV);
                     await _dbContext.SaveChangesAsync();
 
-                    return RedirectToAction("Index"); 
+                    return RedirectToAction("Index");
                 }
                 else
                 {
                     ModelState.AddModelError("", "Ingen inloggad användare hittades.");
                 }
             }
-            return View(resumeViewModel); // Om valideringsfel finns, visa formuläret igen
+            
+            return View(model); // Om valideringsfel finns, visa formuläret igen
         }
 
 

@@ -15,8 +15,8 @@ namespace SkillSkulptor.Models
         [ForeignKey(nameof(BelongsTo))]
         public virtual AppUser fkUser { get; set; }
 
-        public virtual IEnumerable<Experience> Experiences { get; set; } = new List<Experience>();
-        public virtual IEnumerable<Education> Educations { get; set; } = new List<Education>();
-        public virtual IEnumerable<Qualification> Qualifications { get; set; } = new List<Qualification>();
+        public virtual List<Experience> Experiences { get; set; } = new List<Experience>();
+        public virtual List<Education> Educations { get; set; } = new List<Education>();
+        public virtual List<Qualification> Qualifications { get; set; } = new List<Qualification>();
     }
 }
