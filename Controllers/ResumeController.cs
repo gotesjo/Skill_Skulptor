@@ -77,7 +77,6 @@ namespace SkillSkulptor.Controllers
         {
             AppUser loggedInUser = await userManager.GetUserAsync(User);
 
-
             if (ModelState.IsValid)
             {
 
@@ -90,31 +89,19 @@ namespace SkillSkulptor.Controllers
                     _cv.Clicks = 0;
 
                     //Education
-                    if(model.Education != null)
+                    if (model.Education != null)
                     {
                         _cv.Educations.Add(MakeEducation(model.Education));
-                    }
-                    else
-                    {
-                        ModelState.Remove("model.Education");
                     }
                     //Experience
                     if (model.Experience != null)
                     {
                         _cv.Experiences.Add(MakeExperience(model.Experience));
                     }
-                    else
-                    {
-                        ModelState.Remove("model.Experience");
-                    }
                     //Qualification
                     if (model.Qualification != null)
                     {
                         _cv.Qualifications.Add(MakeQualification(model.Qualification));
-                    }
-                    else
-                    {
-                        ModelState.Remove("model.Qualification");
                     }
 
                     _dbContext.CVs.Add(_cv);
@@ -129,6 +116,117 @@ namespace SkillSkulptor.Controllers
             }
 
             return View(model); // Om valideringsfel finns, visa formuläret igen
+        }
+
+        [HttpGet]
+        public IActionResult CreateExperience()
+        {
+            CreateExperienceModel model = new CreateExperienceModel(); 
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public IActionResult CreateExperience(CreateExperienceModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Experience exp = MakeExperience(model);
+
+                try
+                {
+                    exp.Cv = GetLoggedInUser().userCV.CVID;
+                    _dbContext.Experiences.Add(exp);
+                    _dbContext.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return RedirectToAction("Index");
+                }
+                
+            }
+            else
+            {
+                return View(model);
+            }
+
+        }
+
+        [HttpGet]
+        public IActionResult CreateEducation()
+        {
+            CreateEducationModel model = new CreateEducationModel();
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public IActionResult CreateEducation(CreateEducationModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Education edu = MakeEducation(model);
+
+                try
+                {
+                    edu.CvId = GetLoggedInUser().userCV.CVID;
+                    _dbContext.Educations.Add(edu);
+                    _dbContext.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return RedirectToAction("Index");
+                }
+
+            }
+            else
+            {
+                return View(model);
+            }
+
+        }
+
+        [HttpGet]
+        public IActionResult CreateQualification()
+        {
+            CreateQualificationModel model = new CreateQualificationModel();
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public IActionResult CreateEducation(CreateQualificationModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Qualification qu = MakeQualification(model);
+
+                try
+                {
+                    qu.CvId = GetLoggedInUser().userCV.CVID;
+                    _dbContext.Qualifications.Add(qu);
+                    _dbContext.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return RedirectToAction("Index");
+                }
+
+            }
+            else
+            {
+                return View(model);
+            }
+
         }
 
         private Education MakeEducation(CreateEducationModel model)
@@ -160,6 +258,13 @@ namespace SkillSkulptor.Controllers
             qu.Description = model.QDescription;
 
             return qu;
+        }
+
+        private AppUser GetLoggedInUser()
+        {
+            AppUser loggedInUser = userManager.GetUserAsync(User).Result;
+            return loggedInUser;
+
         }
 
 

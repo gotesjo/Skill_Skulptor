@@ -1,0 +1,44 @@
+﻿@model CreateExperienceModel
+@{
+    ViewData["Title"] = "Lägg till en Erfarenhet";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Resume" asp-action="CreateExperience" method="post" enctype="multipart/form-data">
+
+    <!-- Erfarenheter Sektion -->
+    <div class="experiences-info mb-4">
+        <h3>Erfarenheter</h3>
+        <div class="mb-3">
+            <div>
+                <label asp-for="Position" class="form-label">Position</label>
+                <span asp-validation-for="Position" class="text-danger"></span>
+                <input asp-for="Position" class="form-control" placeholder="Position" />
+
+                <label asp-for="ExDescription" class="form-label">Beskrivning</label>
+                <span asp-validation-for="ExDescription" class="text-danger"></span>
+                <input asp-for="ExDescription" class="form-control" placeholder="Beskrivning" />
+
+
+                <label asp-for="Employer" class="form-label">Arbetsgivare</label>
+                <span asp-validation-for="Employer" class="text-danger"></span>
+                <input asp-for="Employer" class="form-control" placeholder="Beskrivning" />
+
+
+                <label asp-for="ExStartDate" class="form-label">Startdatum</label>
+                <span asp-validation-for="ExStartDate" class="text-danger"></span>
+                <input asp-for="ExStartDate" class="form-control" />
+
+
+                <label asp-for="ExEndDate" class="form-label">Slutdatum</label>
+                <span asp-validation-for="ExEndDate" class="text-danger"></span>
+                <input asp-for="ExEndDate" class="form-control" />
+
+            </div>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lägg till Erfarenheten</button>
+</form>

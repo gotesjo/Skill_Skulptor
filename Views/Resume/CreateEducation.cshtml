@@ -1,0 +1,44 @@
+﻿@model CreateEducationModel
+@{
+    ViewData["Title"] = "Lägg till en Utbildning";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Resume" asp-action="CreateEducation" method="post" enctype="multipart/form-data">
+
+    <!-- Erfarenheter Sektion -->
+    <div class="experiences-info mb-4">
+        <h3>Erfarenheter</h3>
+        <div class="mb-3">
+            <div>
+                <label asp-for="Institution" class="form-label">Institution</label>
+                <span asp-validation-for="Institution" class="text-danger"></span>
+                <input asp-for="Institution" class="form-control" placeholder="Institution" />
+
+
+                <label asp-for="Course" class="form-label">Program</label>
+                <span asp-validation-for="Course" class="text-danger"></span>
+                <input asp-for="Course" class="form-control" placeholder="Program" />
+
+
+                <label asp-for="Degree" class="form-label">Examen</label>
+                <span asp-validation-for="Degree" class="text-danger"></span>
+                <input asp-for="Degree" class="form-control" placeholder="Examen" />
+
+
+                <label asp-for="EdStartDate" class="form-label">Startdatum</label>
+                <span asp-validation-for="EdStartDate" class="text-danger"></span>
+                <input asp-for="EdStartDate" class="form-control" />
+
+
+                <label asp-for="EdEndDate" class="form-label">Startdatum</label>
+                <span asp-validation-for="EdEndDate" class="text-danger"></span>
+                <input asp-for="EdEndDate" class="form-control" />
+            </div>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lägg till Utbildning</button>
+</form>

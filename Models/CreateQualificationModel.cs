@@ -4,10 +4,11 @@ namespace SkillSkulptor.Models
 {
     public class CreateQualificationModel
     {
-        [MaxLength(100, ErrorMessage = "Skriv en färdighet")]
-        public string QName { get; set; }
+        [Required(ErrorMessage ="Du måste ha en färdighet")]
+        [MaxLength(100, ErrorMessage = "Får max vara 100 tecken")]
+        public string? QName { get; set; }
 
         [MaxLength(200, ErrorMessage = "Du får bara skicka max 200 tecken")]
-        public string QDescription { get; set; }
+        public string? QDescription { get; set; }
     }
 }

@@ -1,0 +1,28 @@
+﻿@model CreateQualificationModel
+@{
+    ViewData["Title"] = "Lägg till en Kompetens";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Resume" asp-action="CreateQualification" method="post" enctype="multipart/form-data">
+
+    <!-- Kompetens Sektion -->
+    <div class="experiences-info mb-4">
+        <h3>Erfarenheter</h3>
+        <div class="mb-3">
+            <div>
+                <label asp-for="QName" class="form-label">Typ av kompetens</label>
+                <span asp-validation-for="QName" class="text-danger"></span>
+                <input asp-for="QName" class="form-control" placeholder="Typ av kompetenser" />
+
+                <label asp-for="QDescription" class="form-label">Beskrivning</label>
+                <span asp-validation-for="QDescription" class="text-danger"></span>
+                <input asp-for="QDescription" class="form-control" placeholder="Beskrivning" />
+            </div>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lägg till Kompetens</button>
+</form>
