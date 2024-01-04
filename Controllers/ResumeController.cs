@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillSkulptor.Models;
@@ -60,49 +61,63 @@ namespace SkillSkulptor.Controllers
         }
 
 
+        [Authorize]
         [HttpGet]
         public IActionResult CreateCV()
         {
             CreateResumeModel model = new CreateResumeModel();
-            CV cV = new CV();
-
-
-            cV.Experiences = new List<Experience>();
-            cV.Educations = new List<Education>();
-            cV.Qualifications = new List<Qualification>();
-
-            Experience experience = new Experience();
-            cV.Experiences.Add(experience);
-
-            Education education = new Education();
-            cV.Educations.Add(education);
-
-            Qualification quali = new Qualification();
-            cV.Qualifications.Add(quali);
-
-            model.UserCV = cV;
 
             return View(model);
         }
 
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateCV(CreateResumeModel model)
         {
             AppUser loggedInUser = await userManager.GetUserAsync(User);
-            model.UserCV.fkUser = loggedInUser;
 
-            ModelState.Clear();
 
             if (ModelState.IsValid)
             {
 
                 if (loggedInUser != null)
                 {
-                    model.UserCV.BelongsTo = loggedInUser.Id;
+                    CV _cv = new CV();
+                    _cv.fkUser = loggedInUser;
+                    _cv.Summary = model.Summary;
+                    _cv.PersonalLetter = model.PersonalLetter;
+                    _cv.Clicks = 0;
 
-                    _dbContext.CVs.Add(model.UserCV);
+                    //Education
+                    if(model.Education != null)
+                    {
+                        _cv.Educations.Add(MakeEducation(model.Education));
+                    }
+                    else
+                    {
+                        ModelState.Remove("model.Education");
+                    }
+                    //Experience
+                    if (model.Experience != null)
+                    {
+                        _cv.Experiences.Add(MakeExperience(model.Experience));
+                    }
+                    else
+                    {
+                        ModelState.Remove("model.Experience");
+                    }
+                    //Qualification
+                    if (model.Qualification != null)
+                    {
+                        _cv.Qualifications.Add(MakeQualification(model.Qualification));
+                    }
+                    else
+                    {
+                        ModelState.Remove("model.Qualification");
+                    }
+
+                    _dbContext.CVs.Add(_cv);
                     await _dbContext.SaveChangesAsync();
 
                     return RedirectToAction("Index");
@@ -114,6 +129,37 @@ namespace SkillSkulptor.Controllers
             }
 
             return View(model); // Om valideringsfel finns, visa formuläret igen
+        }
+
+        private Education MakeEducation(CreateEducationModel model)
+        {
+            Education ed = new Education();
+            ed.StartDate = model.EdStartDate;
+            ed.EndDate = model.EdEndDate;
+            ed.Institution = model.Institution;
+            ed.Course = model.Course;
+            ed.Degree = model.Degree;
+
+            return ed;
+        }
+        private Experience MakeExperience(CreateExperienceModel model)
+        {
+            Experience ex = new Experience();
+            ex.StartDate = model.ExStartDate;
+            ex.EndDate = model.ExEndDate;
+            ex.Position = model.Position;
+            ex.Description = model.ExDescription;
+            ex.Employer = model.Employer;
+
+            return ex;
+        }
+        private Qualification MakeQualification(CreateQualificationModel model)
+        {
+            Qualification qu = new Qualification();
+            qu.QName = model.QName;
+            qu.Description = model.QDescription;
+
+            return qu;
         }
 
 

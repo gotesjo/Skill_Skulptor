@@ -10,8 +10,9 @@
     <div class="summary-info mb-4">
         <h3>Sammanfattning</h3>
         <div class="mb-3">
-            <label for="Summary" class="form-label">Sammanfattning</label>
-            <textarea id="Summary" name="User.userCV.Summary" class="form-control" placeholder="En kort sammanfattning av ditt CV"></textarea>
+            <label asp-for="Summary" class="form-label">Sammanfattning</label>
+            <textarea asp-for="Summary" id="Summary"   class="form-control" placeholder="En kort sammanfattning av ditt CV"></textarea>
+            <span asp-validation-for="Summary" class="text-danger"></span>
         </div>
     </div>
 
@@ -19,26 +20,28 @@
     <div class="experiences-info mb-4">
         <h3>Erfarenheter</h3>
         <div class="mb-3">
-            @for (int i = 0; i < Model.UserCV.Experiences.Count(); i++)
-            {
-                <div>
-                    <label asp-for="UserCV.Experiences[i].Position" class="form-label">Position</label>
-                    <input asp-for="UserCV.Experiences[i].Position" class="form-control" placeholder="Position" />
+            <div>
+                <label asp-for="Experience.Position" class="form-label">Position</label>
+                <input asp-for="Experience.Position" class="form-control" placeholder="Position" />
+                <span asp-validation-for="Experience.Position" class="text-danger"></span>
 
-                    <label asp-for="UserCV.Experiences[i].Description" class="form-label">Beskrivning</label>
-                    <input asp-for="UserCV.Experiences[i].Description" class="form-control" placeholder="Beskrivning" />
+                <label asp-for="Experience.ExDescription" class="form-label">Beskrivning</label>
+                <input asp-for="Experience.ExDescription" class="form-control" placeholder="Beskrivning" />
+                <span asp-validation-for="Experience.ExDescription" class="text-danger"></span>
 
-                    <label asp-for="UserCV.Experiences[i].Employer" class="form-label">Arbetsgivare</label>
-                    <input asp-for="UserCV.Experiences[i].Employer" class="form-control" placeholder="Beskrivning" />
+                <label asp-for="Experience.Employer" class="form-label">Arbetsgivare</label>
+                <input asp-for="Experience.Employer" class="form-control" placeholder="Beskrivning" />
+                <span asp-validation-for="Experience.Employer" class="text-danger"></span>
 
-                    <label asp-for="UserCV.Experiences[i].StartDate" class="form-label">Startdatum</label>
-                    <input asp-for="UserCV.Experiences[i].StartDate" class="form-control" />
 
-                    <label asp-for="UserCV.Experiences[i].EndDate" class="form-label">Slutdatum</label>
-                    <input asp-for="UserCV.Experiences[i].EndDate" class="form-control" />
-                </div>
+                <label asp-for="Experience.ExStartDate" class="form-label">Startdatum</label>
+                <input asp-for="Experience.ExStartDate" class="form-control" />
+                <span asp-validation-for="Experience.ExStartDate" class="text-danger"></span>
 
-            }
+                <label asp-for="Experience.ExEndDate" class="form-label">Slutdatum</label>
+                <input asp-for="Experience.ExEndDate" class="form-control" />
+                <span asp-validation-for="Experience.ExEndDate" class="text-danger"></span>
+            </div>
         </div>
 
     </div>
@@ -47,24 +50,26 @@
     <div class="educations-info mb-4">
         <h3>Utbildningar</h3>
         <div class="mb-3">
-            @for (int i = 0; i < Model.UserCV.Educations.Count(); i++)
-            {
-                <label asp-for="UserCV.Educations[i].Institution" class="form-label">Institution</label>
-                <input asp-for="UserCV.Educations[i].Institution" class="form-control" placeholder="Institution" />
+            <label asp-for="Education.Institution" class="form-label">Institution</label>
+            <input asp-for="Education.Institution" class="form-control" placeholder="Institution" />
+            <span asp-validation-for="Education.Institution" class="text-danger"></span>
 
-                <label asp-for="UserCV.Educations[i].Course" class="form-label">Program</label>
-                <input asp-for="UserCV.Educations[i].Course"  class="form-control" placeholder="Program" />
+            <label asp-for="Education.Course" class="form-label">Program</label>
+            <input asp-for="Education.Course" class="form-control" placeholder="Program" />
+            <span asp-validation-for="Education.Course" class="text-danger"></span>
 
-                <label asp-for="UserCV.Educations[i].Degree" class="form-label">Examen</label>
-                <input asp-for="UserCV.Educations[i].Degree"  class="form-control" placeholder="Examen" />
+            <label asp-for="Education.Degree" class="form-label">Examen</label>
+            <input asp-for="Education.Degree" class="form-control" placeholder="Examen" />
+            <span asp-validation-for="Education.Degree" class="text-danger"></span>
 
-                <label asp-for="UserCV.Educations[i].StartDate" class="form-label">Startdatum</label>
-                <input asp-for="UserCV.Educations[i].StartDate"  class="form-control" />
+            <label asp-for="Education.EdStartDate" class="form-label">Startdatum</label>
+            <input asp-for="Education.EdStartDate" class="form-control" />
+            <span asp-validation-for="Education.EdStartDate" class="text-danger"></span>
 
-                <label asp-for="UserCV.Educations[i].EndDate" class="form-label">Startdatum</label>
-                <input asp-for="UserCV.Educations[i].EndDate"  class="form-control" />
-            }
 
+            <label asp-for="Education.EdEndDate" class="form-label">Startdatum</label>
+            <input asp-for="Education.EdEndDate" class="form-control" />
+            <span asp-validation-for="Education.EdEndDate" class="text-danger"></span>
         </div>
     </div>
 
@@ -72,17 +77,14 @@
     <div class="qualifications-info mb-4">
         <h3>Kompetenser</h3>
         <div class="mb-3">
-            @for (int i = 0; i < Model.UserCV.Qualifications.Count(); i++)
-            {
+            <label asp-for="Qualification.QName" class="form-label">Typ av kompetens</label>
+            <input asp-for="Qualification.QName" class="form-control" placeholder="Typ av kompetenser" />
+            <span asp-validation-for="Qualification.QName" class="text-danger"></span>
 
 
-                <label asp-for="UserCV.Qualifications[i].QName" class="form-label">Typ av kompetens</label>
-                <input asp-for="UserCV.Qualifications[i].QName"  class="form-control" placeholder="Typ av kompetenser" />
-
-
-                <label asp-for="UserCV.Qualifications[i].Description" class="form-label">Beskrivning</label>
-                <input asp-for="UserCV.Qualifications[i].Description"  class="form-control" placeholder="Beskrivning" />
-            }
+            <label asp-for="Qualification.QDescription" class="form-label">Beskrivning</label>
+            <input asp-for="Qualification.QDescription" class="form-control" placeholder="Beskrivning" />
+            <span asp-validation-for="Qualification.QDescription" class="text-danger"></span>
         </div>
     </div>
 
@@ -90,8 +92,9 @@
     <div class="interests-info mb-4">
         <h3>Intressen</h3>
         <div class="mb-3">
-            <label asp-for="UserCV.PersonalLetter" class="form-label">Personligt Brev</label>
-            <textarea asp-for="UserCV.PersonalLetter" class="form-control" placeholder="Personligt brev"></textarea>
+            <label asp-for="PersonalLetter" class="form-label">Personligt Brev</label>
+            <textarea asp-for="PersonalLetter" class="form-control" placeholder="Personligt brev"></textarea>
+            <span asp-validation-for="PersonalLetter" class="text-danger"></span>
         </div>
     </div>
 
