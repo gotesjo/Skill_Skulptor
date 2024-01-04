@@ -26,15 +26,21 @@
             <tbody>
             @foreach (var prod in Model)
             {
-                <tr>
-                    <td scope="col">@prod.CreatedByUser.Firstname</td>
+
+                    <tr>
+                        <td scope="col">@prod.CreatedByUser</td>
                     <td scope="col">@prod.ProjectName</td>
                     <td scope="col">@prod.Description</td>
                     <td scope="col">@prod.Startdate</td>
                     <td scope="col">@prod.Enddate</td>
-                    <td scope="col">@prod.CreatedByUser.Firstname.Count()</td>
-                    <td><button class="btn btn-primary" type="submit">Gå med</button></td>
-                </tr>
+                    <td scope="col">@prod.MaxPeople</td>
+
+                    <form method="post" asp-controller="Projekt" asp-action="JoinProject">
+                        <input type="hidden" name="projectId" value="@prod.ProjectId" />
+                    <td> <button class="btn btn-primary" type="submit">Gå med</button> </td>
+                    </form>
+                    </tr>
+                
             }
             </tbody>
   </table>
