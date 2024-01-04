@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SkillSkulptor.Models;
 using System.Linq.Expressions;
 
@@ -40,15 +41,15 @@ namespace SkillSkulptor.Controllers
             {
                 choosenUser = _dbContext.Users.Find(_id);
                 userCV = choosenUser.userCV;
-            } 
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return RedirectToAction("Index", "Home");
             }
-            
 
-            if(choosenUser != null)
+
+            if (choosenUser != null)
             {
                 viewModel.UserCV = userCV;
                 viewModel.User = choosenUser;
@@ -65,7 +66,7 @@ namespace SkillSkulptor.Controllers
             CreateResumeModel model = new CreateResumeModel();
             CV cV = new CV();
 
-            
+
             cV.Experiences = new List<Experience>();
             cV.Educations = new List<Education>();
             cV.Qualifications = new List<Qualification>();
@@ -111,10 +112,38 @@ namespace SkillSkulptor.Controllers
                     ModelState.AddModelError("", "Ingen inloggad användare hittades.");
                 }
             }
-            
+
             return View(model); // Om valideringsfel finns, visa formuläret igen
         }
 
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteCV()
+        {
+            var loggedInUser = await userManager.GetUserAsync(User);
+            if (loggedInUser == null)
+            {
+                // Användaren är inte inloggad
+                return RedirectToAction("Login", "Account"); // Eller någon annan lämplig åtgärd
+            }
+
+            var userCV = _dbContext.CVs.FirstOrDefault(cv => cv.BelongsTo == loggedInUser.Id);
+            if (userCV == null)
+            {
+                // Användaren har inget CV att ta bort eller försöker ta bort någon annans CV
+                TempData["ErrorMessage"] = "Du har inte behörighet att ta bort detta CV.";
+                return RedirectToAction("Index", "Home"); 
+            }
+
+            _dbContext.CVs.Remove(userCV);
+            await _dbContext.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Ditt CV har tagits bort.";
+            return RedirectToAction("Index", "Home"); 
+        }
 
 
     }

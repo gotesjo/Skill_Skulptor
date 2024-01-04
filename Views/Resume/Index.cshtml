@@ -78,30 +78,30 @@
 
                 @if (!User.Identity.IsAuthenticated || !Model.User.UserName.Equals(User.Identity.Name))
                 {
-                        <div class="resume-section d-block">
-                            <h2 class="mb-5">Vill du Kontakta @Model.User.Firstname</h2>
-                            <div class="border-top">
-                                <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowMessage" />
-
-                                <div class="input-group">
-                                    @if (User.Identity.IsAuthenticated)
-                                    {
-                                        <input type="text" disabled class="form-control" placeholder=" Från: @User.Identity.Name" id="KnownUser"/>
-                                    }
-                                    else
-                                    {
-                                        <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowName" />
-                                    }
-
-                                    <button type="button" onclick="sendUnknownMessage()" class="btn btn-primary send-unknown-div" data-to-id=@Model.User.Id>Skicka</button>
-                                </div>
+                    <div class="resume-section d-block">
+                        <h2 class="mb-5">Vill du Kontakta @Model.User.Firstname</h2>
+                        <div class="border-top">
+                            <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowMessage" />
+                            <div class="input-group">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <input type="text" disabled class="form-control" placeholder="Från: @User.Identity.Name" id="KnownUser" />
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowName" />
+                                }
+                                <button type="button" onclick="sendUnknownMessage()" class="btn btn-primary send-unknown-div" data-to-id=@Model.User.Id>Skicka</button>
                             </div>
                         </div>
-                    }else
-                    {
-                        <button type="button" class="btn btn-primary">Redigera CV</button>
-                        <button type="button" class="btn btn-danger">Radera CV</button>
-                    }
+                    </div>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-primary">Redigera CV</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDeleteCV('@Model.User.Id')">Radera CV</button>
+                }
+
 
             </div>
             
