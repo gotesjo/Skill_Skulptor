@@ -12,8 +12,8 @@ using SkillSkulptor.Models;
 namespace SkillSkulptor.Migrations
 {
     [DbContext(typeof(SsDbContext))]
-    [Migration("20231221101602_initialStart")]
-    partial class initialStart
+    [Migration("20231221131357_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

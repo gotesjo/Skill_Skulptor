@@ -25,6 +25,139 @@ namespace SkillSkulptor.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("SkillSkulptor.Models.Adress", b =>
                 {
                     b.Property<int>("AdressID")
@@ -51,41 +184,15 @@ namespace SkillSkulptor.Migrations
                     b.HasKey("AdressID");
 
                     b.ToTable("Adresses");
-
-                    b.HasData(
-                        new
-                        {
-                            AdressID = 1,
-                            City = "Örebro",
-                            Country = "Sweden",
-                            Street = "Dragonvägen 15",
-                            ZipCode = "70254"
-                        },
-                        new
-                        {
-                            AdressID = 2,
-                            City = "Stockholm",
-                            Country = "Sweden",
-                            Street = "Pastellvägen 12",
-                            ZipCode = "12136"
-                        },
-                        new
-                        {
-                            AdressID = 3,
-                            City = "Örebro",
-                            Country = "Sweden",
-                            Street = "Granrisvägen 23",
-                            ZipCode = "70234"
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.AppUser", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -93,9 +200,16 @@ namespace SkillSkulptor.Migrations
                     b.Property<int?>("Address")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Firstname")
                         .IsRequired()
@@ -105,9 +219,28 @@ namespace SkillSkulptor.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Phonenr")
                         .HasColumnType("nvarchar(max)");
@@ -118,58 +251,35 @@ namespace SkillSkulptor.Migrations
                     b.Property<bool>("ProfileAccess")
                         .HasColumnType("bit");
 
-                    b.HasKey("UserId");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("Address")
                         .IsUnique()
                         .HasFilter("[Address] IS NOT NULL");
 
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
                     b.HasIndex("Picture")
                         .IsUnique()
                         .HasFilter("[Picture] IS NOT NULL");
 
-                    b.ToTable("AppUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            Active = true,
-                            Address = 1,
-                            Email = "john.larsson@orebrokommun.com",
-                            Firstname = "John",
-                            Lastname = "Larsson",
-                            Password = "password1",
-                            Phonenr = "0732341481",
-                            Picture = 1,
-                            ProfileAccess = true
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            Active = true,
-                            Address = 2,
-                            Email = "jessica.nyman@gmail.com",
-                            Firstname = "Jessica",
-                            Lastname = "Nyman",
-                            Password = "password2",
-                            Phonenr = "0703414521",
-                            Picture = 2,
-                            ProfileAccess = true
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            Active = true,
-                            Address = 3,
-                            Email = "david.persson@gmail.com",
-                            Firstname = "David",
-                            Lastname = "Persson",
-                            Password = "password3",
-                            Phonenr = "0707893321",
-                            Picture = 3,
-                            ProfileAccess = true
-                        });
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.CV", b =>
@@ -180,8 +290,9 @@ namespace SkillSkulptor.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CVID"));
 
-                    b.Property<int>("BelongsTo")
-                        .HasColumnType("int");
+                    b.Property<string>("BelongsTo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Clicks")
                         .HasColumnType("int");
@@ -198,32 +309,6 @@ namespace SkillSkulptor.Migrations
                         .IsUnique();
 
                     b.ToTable("CVs");
-
-                    b.HasData(
-                        new
-                        {
-                            CVID = 1,
-                            BelongsTo = 1,
-                            Clicks = 10,
-                            PersonalLetter = "Förutom att vara webbutvecklare tycker jag mest om att vara utomhus. På vintern är jag en ivrig skidåkare och nybörjare. På sommaren tycker jag om att cykla mountainbike, friklättra och paddla kajak.\r\nNär jag tvingas inomhus följer jag ett antal sci-fi- och fantasy-genrefilmer och tv-program, jag är en blivande kock, och jag spenderar en stor del av min fritid på att utforska de senaste tekniska framstegen i front-end webbutvecklingsvärlden.",
-                            Summary = "Jag är John Larsson, en entusiastisk webbutvecklare från Örebro. Jag studerar för tillfället systemutveckling på Örebros Universitet där jag är inne på min 4e termin. Utomhusaktiviteter är en viktig del av mitt liv, där jag under vintern älskar skidåkning och strävar efter att bli bättre varje säsong. På sommaren omfamnar jag äventyr genom mountainbikecykling, friklättring och kajakpaddling. Trots min passion för teknik och webbutveckling tar jag även tid att utforska kreativa intressen som att bli en skicklig kock och njuta av sci-fi- och fantasy-genrefilmer. Min starka drivkraft och mångsidighet gör mig till en dedikerad professionell med ögon för innovation och nytänkande."
-                        },
-                        new
-                        {
-                            CVID = 2,
-                            BelongsTo = 2,
-                            Clicks = 5,
-                            PersonalLetter = "Med en Masterexamen i biomedicin från Karolinska institutet och en stark passion för vetenskaplig forskning, är jag ivrig att bidra till ert team med mina kunskaper och erfarenheter.Under min akademiska karriär har jag utvecklat en djup förståelse för biomedicinska processer och dess tillämpningar. Jag har arbetat med flera forskningsprojekt där jag inte bara bidragit med min vetenskapliga expertis, men också visat förmåga att arbeta effektivt i team, lösa komplexa problem och hantera tidspressade situationer.\r\nBortom min professionella sfär, ägnar jag mig åt idrott och fysisk välbefinnande. Att idrotta, särskilt löpning och simning, är inte bara min hobby, utan också ett sätt för mig att upprätthålla balans och fokus i mitt liv. Jag tror starkt på att ett hälsosamt sinne och kropp bidrar till professionell effektivitet och kreativitet.\r\nMatlagning är en annan passion jag har, där jag utforskar nya recept och smaker. Detta har lärt mig vikten av precision, tålamod och kreativitet - egenskaper som jag även tillämpar i mitt yrkesliv.\r\nMed mina vetenskapliga kompetenser och personliga intressen är jag övertygad om att jag kan tillföra värdefulla insikter.",
-                            Summary = "Jag är Jessica Nyman, en driven biomedicinsk forskare från Stockholm med en masterexamen i biomedicin från Karolinska institutet. Min karriär har varit präglad av ett starkt engagemang för vetenskaplig forskning och innovation, med fokus på att utforska nya gränser inom mitt fält. Utöver min akademiska strävan, är jag också passionerad för idrott och fysisk aktivitet. Jag tillbringar mycket av min fritid med olika sporter som löpning, simning och gruppträning, vilket inte bara håller mig fysiskt aktiv utan även mentalt fokuserad. Dessutom har jag ett stort intresse för matlagning, där jag älskar att experimentera med nya recept och smakkombinationer. Denna blandning av professionell drivkraft och personliga intressen skapar en dynamisk balans i mitt liv, vilket jag tror bidrar till min effektivitet och kreativitet både på och utanför arbetet."
-                        },
-                        new
-                        {
-                            CVID = 3,
-                            BelongsTo = 3,
-                            Clicks = 25,
-                            PersonalLetter = "Utöver min akademiska bakgrund och yrkeserfarenhet omfattar mitt liv en varierad mix av intressen och passioner. Jag har en grundutbildning inom psykologi, där jag har fördjupat mig i att förstå människors tankar och beteenden. Min tid på universitetet har gett mig insikter som jag använder för att skapa meningsfulla och användarcentrerade digitala lösningar.\r\nNär jag inte dyker in i världen av psykologi och användbarhet, finner jag glädje i att utforska konst och kreativitet. Jag har en konstnärlig sida som jag utvecklar genom att måla och delta i konstutställningar. Att skapa och uppleva konst ger mig en nödvändig kontrast till den tekniska världen.\r\nUtöver detta är jag en hängiven friluftsentusiast. Jag njuter av vandring i naturen, camping och fotografering av landskap.\r\nMin utbildning och intressen kompletterar varandra på ett sätt som berikar mitt perspektiv, vilket i sin tur påverkar hur jag närmar mig utmaningar och kreativa projekt.",
-                            Summary = "Jag är David Persson, en nyutexaminerad kandidat som är bosatt i Örebro, Sverige, med en stark akademisk bakgrund inom psykologi. Min utbildning har gett mig en djup förståelse för mänskliga tankar och beteenden, vilket jag sömlöst integrerar i skapandet av meningsfulla och användarcentrerade digitala lösningar. Utöver den tekniska världen är jag en passionerad konstnär och deltar aktivt i måleri och konstutställningar, vilket visar på min kreativa talang.\r\n\r\nFör att skapa en uppfriskande kontrast till den tekniska världen är jag också en entusiastisk naturälskare och finner glädje i vandring, camping och fotografering av vackra landskap. Denna mångsidighet präglar min karaktär och gör att jag kan närma mig utmaningar och kreativa projekt med en mångfacetterad och berikande synvinkel.\r\n\r\nInte bara är min profil tillgänglig, utan den är också aktivt engagerad, vilket återspeglar mitt starka intresse för professionell utveckling. I det dynamiska samspel mellan psykologi, teknologi och kreativitet framträder jag som en mångsidig och kompetent individ."
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.Education", b =>
@@ -260,38 +345,6 @@ namespace SkillSkulptor.Migrations
                     b.HasIndex("CvId");
 
                     b.ToTable("Educations");
-
-                    b.HasData(
-                        new
-                        {
-                            EdID = 1,
-                            Course = "Systemutveckling",
-                            CvId = 1,
-                            Degree = "Bachelor's",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1694),
-                            Institution = "Handelshögskolan vid Örebro Universitet",
-                            StartDate = new DateTime(2019, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1466)
-                        },
-                        new
-                        {
-                            EdID = 2,
-                            Course = "Masterprogrammet i biomedicin",
-                            CvId = 2,
-                            Degree = "Master's",
-                            EndDate = new DateTime(2021, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1715),
-                            Institution = "Karolinska institutet",
-                            StartDate = new DateTime(2020, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1708)
-                        },
-                        new
-                        {
-                            EdID = 3,
-                            Course = "Psykologi",
-                            CvId = 3,
-                            Degree = "Bachelor's",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1726),
-                            Institution = "Uppsala Universitet",
-                            StartDate = new DateTime(2021, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1720)
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.Experience", b =>
@@ -326,58 +379,6 @@ namespace SkillSkulptor.Migrations
                     b.HasIndex("Cv");
 
                     b.ToTable("Experiences");
-
-                    b.HasData(
-                        new
-                        {
-                            ExId = 1,
-                            Cv = 1,
-                            Description = "Arbetade med utveckling av programvara och löste tekniska problem",
-                            Employer = "Nexer Group",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1822),
-                            Position = "Systemutvecklare",
-                            StartDate = new DateTime(2020, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1818)
-                        },
-                        new
-                        {
-                            ExId = 2,
-                            Cv = 2,
-                            Description = "Bidrog till banbrytande forskningsprojekt",
-                            Employer = "Biomedical Innovations Ltd.",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1837),
-                            Position = "Research Assistant",
-                            StartDate = new DateTime(2021, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1833)
-                        },
-                        new
-                        {
-                            ExId = 3,
-                            Cv = 3,
-                            Description = "Utförde psykologiska utvärderingar och stödde klienter",
-                            Employer = "Mindscape Solutions AB",
-                            EndDate = new DateTime(2023, 6, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1846),
-                            Position = "Psykologisk Konsult",
-                            StartDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1842)
-                        },
-                        new
-                        {
-                            ExId = 4,
-                            Cv = 1,
-                            Description = "Designade och implementerade mjukvarulösningar för kundprojekt",
-                            Employer = "DigitalWave Innovations",
-                            EndDate = new DateTime(2022, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1862),
-                            Position = "Applikationsutvecklare",
-                            StartDate = new DateTime(2020, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1858)
-                        },
-                        new
-                        {
-                            ExId = 5,
-                            Cv = 3,
-                            Description = "Genomförde individuella rådgivningssessioner och utvecklade psykologiska interventionsstrategier",
-                            Employer = "MindWellness Consulting",
-                            EndDate = new DateTime(2023, 4, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1871),
-                            Position = "Psykologisk Rådgivare",
-                            StartDate = new DateTime(2021, 12, 21, 12, 20, 30, 416, DateTimeKind.Local).AddTicks(1868)
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.Message", b =>
@@ -391,15 +392,17 @@ namespace SkillSkulptor.Migrations
                     b.Property<DateTime>("Datum")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FromUserID")
-                        .HasColumnType("int");
+                    b.Property<string>("FromUserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ToUserID")
-                        .HasColumnType("int");
+                    b.Property<string>("ToUserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("ViewStatus")
                         .HasColumnType("bit");
@@ -430,23 +433,6 @@ namespace SkillSkulptor.Migrations
                     b.HasKey("PicrtureID");
 
                     b.ToTable("ProfilePictures");
-
-                    b.HasData(
-                        new
-                        {
-                            PicrtureID = 1,
-                            Filename = "profile1.jpg"
-                        },
-                        new
-                        {
-                            PicrtureID = 2,
-                            Filename = "profile2.jpg"
-                        },
-                        new
-                        {
-                            PicrtureID = 3,
-                            Filename = "profile3.jpg"
-                        });
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.Project", b =>
@@ -457,8 +443,8 @@ namespace SkillSkulptor.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"));
 
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -486,8 +472,8 @@ namespace SkillSkulptor.Migrations
 
             modelBuilder.Entity("SkillSkulptor.Models.ProjectMembers", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
@@ -523,113 +509,57 @@ namespace SkillSkulptor.Migrations
                     b.HasIndex("CvId");
 
                     b.ToTable("Qualifications");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            QID = 1,
-                            CvId = 1,
-                            Description = "Validerar kunskapen i att utveckla och implementera Azure-lösningar.",
-                            QName = "Microsoft Certified: Azure Developer Associate"
-                        },
-                        new
-                        {
-                            QID = 2,
-                            CvId = 1,
-                            Description = "Bekräftar kompetensen i Java-programmering och utveckling.",
-                            QName = "Oracle Certified Professional, Java SE Programmer"
-                        },
-                        new
-                        {
-                            QID = 3,
-                            CvId = 1,
-                            Description = "Ger förståelse för Scrum-principer och effektivt teamarbete.",
-                            QName = "Certified ScrumMaster (CSM)"
-                        },
-                        new
-                        {
-                            QID = 4,
-                            CvId = 1,
-                            Description = "Bestyrker förmågan att utveckla applikationer på AWS-plattformen.",
-                            QName = "AWS Certified Developer - Associate"
-                        },
-                        new
-                        {
-                            QID = 5,
-                            CvId = 1,
-                            Description = "Bekräftar grundläggande kunskaper inom IT-säkerhet.",
-                            QName = "CompTIA Security+"
-                        },
-                        new
-                        {
-                            QID = 6,
-                            CvId = 3,
-                            Description = "Validerar kompetens inom personalutveckling och talanghantering.",
-                            QName = "Certified Professional in Talent Development (CPTD)"
-                        },
-                        new
-                        {
-                            QID = 7,
-                            CvId = 3,
-                            Description = "Certifierar förståelsen och tillämpningen av emotionell intelligens.",
-                            QName = "Emotional Intelligence Appraisal Certification"
-                        },
-                        new
-                        {
-                            QID = 8,
-                            CvId = 3,
-                            Description = "Befäster kunskaper om första hjälpen vid mentala hälsoproblem.",
-                            QName = "Certified Mental Health First Aid Responder"
-                        },
-                        new
-                        {
-                            QID = 9,
-                            CvId = 3,
-                            Description = "Bekräftar färdigheter inom beteendeanalys och konsultation.",
-                            QName = "Certified Behavioral Consultant (CBC)"
-                        },
-                        new
-                        {
-                            QID = 10,
-                            CvId = 3,
-                            Description = "Validerar användningen av personlighetstestning för arbetsrelaterade bedömningar.",
-                            QName = "Occupational Personality Questionnaire (OPQ) Certification"
-                        },
-                        new
-                        {
-                            QID = 11,
-                            CvId = 2,
-                            Description = "Godkänner efterlevnad av etiska och vetenskapliga standarder inom klinisk forskning.",
-                            QName = "Good Clinical Practice (GCP) Certification"
-                        },
-                        new
-                        {
-                            QID = 12,
-                            CvId = 2,
-                            Description = "Bekräftar kompetens inom klinisk forskning och regler.",
-                            QName = "Certified Clinical Research Professional (CCRP)"
-                        },
-                        new
-                        {
-                            QID = 13,
-                            CvId = 2,
-                            Description = "Validerar kunskaper och färdigheter inom molekylärbiologiska metoder.",
-                            QName = "Molecular Biology Techniques Certification"
-                        },
-                        new
-                        {
-                            QID = 14,
-                            CvId = 2,
-                            Description = "Befäster förmågan att säkert arbeta i biologiska laboratoriemiljöer.",
-                            QName = "Biosafety Level 2 (BSL-2) Laboratory Certification"
-                        },
-                        new
-                        {
-                            QID = 15,
-                            CvId = 2,
-                            Description = "Godkänner kompetens inom kvalitetssäkring av kliniska laboratorietester.",
-                            QName = "Clinical Laboratory Improvement Amendments (CLIA) Certification"
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("SkillSkulptor.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("SkillSkulptor.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkillSkulptor.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("SkillSkulptor.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SkillSkulptor.Models.AppUser", b =>

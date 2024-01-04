@@ -23,7 +23,7 @@ namespace SkillSkulptor.Controllers
 			var viewModel = new SearchViewModel
 			{
 				LoggedInUser = _loggedInUser,
-				Users = _users
+				Users = _users,
 			};
 
 			return View(viewModel);
@@ -39,12 +39,16 @@ namespace SkillSkulptor.Controllers
 
 			AppUser _loggedInUser = GetLoggedInUser(); 
 
-			List<AppUser> _users = _dbContext.Users.Where(user => user.Firstname.Contains(searchString)).ToList();
+			List<AppUser> _users = _dbContext.Users
+				.Where(user => user.Firstname.Contains(searchString) || user.Lastname.Contains(searchString)).ToList();
 
+			List<Education> _education = _dbContext.Educations
+				.Where(education => education.Course.Contains(searchString) || education.Degree.Contains(searchString)).ToList();
 			var viewModel = new SearchViewModel
 			{
 				LoggedInUser = _loggedInUser,
 				Users = _users,
+				Educations = _education,
 				SearchString = searchString
 			};
 
