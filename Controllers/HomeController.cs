@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillSkulptor.Models;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 
 namespace SkillSkulptor.Controllers
 {
@@ -16,7 +17,7 @@ namespace SkillSkulptor.Controllers
             _logger = logger;
         }
 
-        
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -33,11 +34,20 @@ namespace SkillSkulptor.Controllers
                 ViewBag.Project = ExP;
 
             }
-
-            List<CV> allCv= _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).ToList();
-            List<CV> testCV = new List<CV>();
-            ViewBag.Heading = "Senaste cv på sidan";
-            return View(allCv);
+            if (User.Identity.IsAuthenticated)
+            {
+                List<CV> allCv = _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).ToList();
+                List<CV> testCV = new List<CV>();
+                ViewBag.Heading = "Senaste cv på sidan";
+                return View(allCv);
+            }
+            else
+            {
+                List<CV> vissaCV = _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).Where(cv => cv.fkUser.ProfileAccess == false).ToList();
+                ViewBag.Heading = "Senaste cv på sidan";
+                return View(vissaCV);
+            }
+            
         }
 
 
@@ -60,6 +70,12 @@ namespace SkillSkulptor.Controllers
             {
                 string[] searchTerms = search.Split(' ');
 
+                if (User.Identity.IsAuthenticated)
+                {
+                    List<CV> CvSearched = _dbContext.CVs
+                        .Where(a => a.fkUser.ProfileAccess == false).ToList();
+                }
+
                 if (searchTerms.Length == 1)
                 {
                     List<CV> CvSearched = _dbContext.CVs
@@ -74,8 +90,7 @@ namespace SkillSkulptor.Controllers
                     string lastName = searchTerms[1];
 
                     List<CV> CvSearched = _dbContext.CVs
-                        .Where(a => a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName))
-                        .ToList();
+                        .Where(a => a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName)).ToList();
                     ViewBag.Heading = "Cv med namnet " + search;
                     return View(CvSearched);
                 }
@@ -85,14 +100,35 @@ namespace SkillSkulptor.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            else
-            {
-                return RedirectToAction("Index");
-            }
-            
+            return RedirectToAction("Index");
+       
+            //[HttpPost]
+            //public IActionResult Search(string search)
+            //{
+            //    try
+            //    {
+            //        Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
+            //        ViewBag.Project = _project;
+            //    }
+            //    catch
+            //    {
+            //        Project ExP = new Project();
+            //        ExP.ProjectName = "Finns inga projekt";
+            //        ViewBag.Project = ExP;
+            //    }
+
+            //    if(search != null)
+            //    {
+            //        List<CV> searched = _dbContext.CVs
+            //            .Where(e => e.fkEducation.Degree.Contains(search)).ToList();
+            //        ViewBag.Heading = "CV med examen:" + search;
+            //        return View(searched);
+            //    } else
+            //    {
+            //        return RedirectToAction("Index");
+            //    }
+            //}
         }
-
-
         public IActionResult Privacy()
         {
  
