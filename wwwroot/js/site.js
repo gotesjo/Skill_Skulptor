@@ -54,6 +54,9 @@ $(document).ready(function () {
 });
 
 function UpdateConversation(otherUserID) {
+    if (otherUserID == null) {
+        var unknonwUserName = $(".receiver_user-div").data("user-id");
+    }
     // Använd AJAX för att skicka en asynkron förfrågan till servern
     $.ajax({
         type: 'GET',
@@ -94,10 +97,15 @@ function sendMessage() {
     });
 }
 
-function readMessage(Message_id) {
+function readMessage(Message_id, otherUserId) {
     console.log("Försöker läsa meddelandet");
     var messageId = Message_id;
     var _otherUserId = $(".receiver_user-div").data("user-id");
+    if (_otherUserId == null) {
+        _otherUserId = $(".unknownID").data("unknown-id");
+        console.log("Okänd användare med id: " + _otherUserId);
+    }
+
     console.log(messageId);
 
     var data = {
@@ -109,7 +117,7 @@ function readMessage(Message_id) {
         url: "/Message/MarkRead",
         data: data,
         success: function () {
-            /*UpdateConversation(_otherUserId);*/
+            UpdateConversation(_otherUserId);
         },
         error: function (error) {
             console.error(error);
@@ -147,4 +155,59 @@ function updateUnreadMessagesCount() {
                 console.error(error);
             }
         });
+}
+
+function sendUnknownMessage() {
+    var _sendTo = document.querySelector('.send-unknown-div').getAttribute('data-to-id');
+    var _from = document.getElementById("UnknowName").value;
+    var _message = document.getElementById("UnknowMessage").value;
+
+    if (_message < 1) {
+        alert('Ogiltigt Meddelande!');
+        return;
+        var messageinput = document.getElementById("UnknowMessage");
+        messageinput.style.background("red");
+
+    }
+    if (!isNameValid(_from)) {
+        alert('Ogiltigt namn!');
+        return;
+    }
+
+    var data = {
+        newmessage: _message,
+        receiverId: _sendTo,
+        from: _from
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/Message/SendUnkown",
+        data: data,
+        success: function () {
+            clearSendUnknownForm();
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+}
+
+function clearSendUnknownForm() {
+    var inputName = document.getElementById('UnknowName');
+    var inputMessage = document.getElementById('UnknowMessage');
+
+    // Rensa värdet i input-elementet
+    inputMessage.value = '';
+    inputName.value = '';
+}
+
+
+//Validering
+function isNameValid($name) {
+    var $pattern = /^[a-zA-Z0-9]*$/;
+    if ($pattern.test($name)) {
+        return true;
+    }
+    return false;
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SkillSkulptor.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class projectstart : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -231,10 +231,11 @@ namespace SkillSkulptor.Migrations
                 {
                     MessageId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Datum = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ViewStatus = table.Column<bool>(type: "bit", nullable: false),
-                    FromUserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UnknownUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FromUserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ToUserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -264,6 +265,7 @@ namespace SkillSkulptor.Migrations
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Startdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Enddate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MaxPeople = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>

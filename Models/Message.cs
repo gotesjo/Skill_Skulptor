@@ -7,11 +7,16 @@ namespace SkillSkulptor.Models
 	{
 		[Key]
 		public int MessageId { get; set; }
-		public string Text { get; set; }
+
+		[Required]
+        [MaxLength(500, ErrorMessage = "Du får bara skicka max 100 tecken")]
+        public string Text { get; set; }
 		public DateTime Datum { get; set; }
 		public Boolean ViewStatus { get; set; }
+		public string? UnknownUser { get; set; }
 
-		public string FromUserID { get; set; }
+		public string? FromUserID { get; set; }
+		[Required]
 		public string ToUserID { get; set; }
 
 		[ForeignKey(nameof(FromUserID))]

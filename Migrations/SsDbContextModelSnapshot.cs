@@ -393,16 +393,19 @@ namespace SkillSkulptor.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FromUserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ToUserID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UnknownUser")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ViewStatus")
                         .HasColumnType("bit");
@@ -454,6 +457,9 @@ namespace SkillSkulptor.Migrations
                     b.Property<DateTime?>("Enddate")
                         .IsRequired()
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("MaxPeople")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProjectName")
                         .IsRequired()
@@ -615,8 +621,7 @@ namespace SkillSkulptor.Migrations
                     b.HasOne("SkillSkulptor.Models.AppUser", "fkFromUser")
                         .WithMany("SentMessages")
                         .HasForeignKey("FromUserID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SkillSkulptor.Models.AppUser", "fkToUser")
                         .WithMany("ReceivedMessages")

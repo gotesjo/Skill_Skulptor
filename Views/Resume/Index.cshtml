@@ -75,7 +75,20 @@
 
                 <h2 class="mb-5">Intressen</h2>
                 <p>@Model.User.userCV.PersonalLetter</p>
+
+                <div class="resume-section d-block">
+                    <h2 class="mb-5">Vill du Kontakta @Model.User.Firstname</h2>
+                    <div class="border-top">
+                        <input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="UnknowMessage" />
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Skriv ditt namn" id="UnknowName" />
+                            <button type="button" onclick="sendUnknownMessage()" class="btn btn-primary send-unknown-div" data-to-id=@Model.User.Id>Skicka</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+            
         </section>
     }
 </div>

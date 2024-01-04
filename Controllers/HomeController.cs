@@ -36,6 +36,7 @@ namespace SkillSkulptor.Controllers
 
             List<CV> allCv= _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).ToList();
             List<CV> testCV = new List<CV>();
+            ViewBag.Heading = "Senaste cv på sidan";
             return View(allCv);
         }
 
@@ -64,7 +65,7 @@ namespace SkillSkulptor.Controllers
                     List<CV> CvSearched = _dbContext.CVs
                         .Where(a => a.fkUser.Firstname.Contains(search) || a.fkUser.Lastname.Contains(search))
                         .ToList();
-
+                    ViewBag.Heading = "Cv med namnet " + search;
                     return View(CvSearched);
                 }
                 else if (searchTerms.Length == 2)
@@ -75,11 +76,12 @@ namespace SkillSkulptor.Controllers
                     List<CV> CvSearched = _dbContext.CVs
                         .Where(a => a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName))
                         .ToList();
-
+                    ViewBag.Heading = "Cv med namnet " + search;
                     return View(CvSearched);
                 }
                 else
                 {
+                    ViewBag.Heading = "Vi hittade inga cv utifrån din sökning";
                     return RedirectToAction("Index");
                 }
             }

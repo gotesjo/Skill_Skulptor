@@ -1,9 +1,11 @@
 ﻿@model MessageServiceModel
 
 <!-- Skriv meddelande -->
-<div class="flex-grow-0 py-3 px-4 border-top">
-	<div class="input-group">
-		<input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="Newmessage" />
-		<button type="button" onclick="sendMessage()" class="btn btn-primary receiver_user-div" data-user-id=@Model.receiver.Id>Skicka</button>
+@if(Model.receiver != null){
+	<div class="flex-grow-0 py-3 px-4 border-top">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="Newmessage" />
+			<button type="button" onclick="sendMessage()" class="btn btn-primary receiver_user-div" data-user-id=@Model.receiver.Id>Skicka</button>
+		</div>
 	</div>
-</div>
+}

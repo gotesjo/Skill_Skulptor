@@ -38,6 +38,9 @@
 							<div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
 								<div class="font-weight-bold mb-1">@message.MessageName</div>
 								@message.Text
+
+								<br />
+								<button type="button" class="btn-close" aria-label="Close"></button>
 							</div>
 						@if(message.ViewStatus == false && message.fkFromUser == Model.receiver)
 						{
@@ -50,12 +53,15 @@
 			
 
 
-				<!-- Skriv meddelande -->
-				<div class="flex-grow-0 py-3 px-4 border-top">
-					<div class="input-group">
-							<input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="Newmessage" />
-						<button type="button" onclick="sendMessage()" class="btn btn-primary receiver_user-div" data-user-id=@Model.receiver.Id>Skicka</button>
-					</div>
-				</div>
+	<!-- Skriv meddelande -->
+	@if (Model.receiver != null)
+	{
+		<div class="flex-grow-0 py-3 px-4 border-top">
+			<div class="input-group">
+					<input type="text" class="form-control" placeholder="Skriv ditt meddelande" id="Newmessage" />
+				<button type="button" onclick="sendMessage()" class="btn btn-primary receiver_user-div" data-user-id=@Model.receiver.Id>Skicka</button>
+			</div>
+		</div>
+	}
 			
 }
