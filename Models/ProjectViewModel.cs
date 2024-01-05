@@ -1,32 +1,32 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using SkillSkulptor.Models;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SkillSkulptor.Models
 {
-    public class Project
+    public class ProjectViewModel
     {
-        [Key]
         public int ProjectId { get; set; }
 
         [Required(ErrorMessage = "Namn är obligatoriskt.")]
         public string ProjectName { get; set; }
-        [Required(ErrorMessage ="Du måste ha en beskrivning")]
+
+        [Required(ErrorMessage = "Du måste ha en beskrivning")]
         [MaxLength(500, ErrorMessage = "Beskrivning får vara högst 500 tecken.")]
         public string Description { get; set; }
+
         [Required(ErrorMessage = "StartDatum är obligatoriskt.")]
         [DataType(DataType.Date)]
         public DateTime Startdate { get; set; }
+
         [Required(ErrorMessage = "SlutDatum är obligatoriskt.")]
         [DataType(DataType.Date)]
         public DateTime Enddate { get; set; }
 
-        public int MaxPeople { get; set; } = 0;
-        public string? CreatedBy { get; set; } 
+        public int MaxPeople { get; set; }
 
-        [ForeignKey(nameof(CreatedBy))]
-        public virtual AppUser? CreatedByUser { get; set; }
+        public string? CreatedBy { get; set; }
 
-        public virtual IEnumerable<ProjectMembers> listProjectmembers { get; set; } = new List<ProjectMembers>();
-
+        public AppUser? CreatedByUser { get; set; }
     }
 }

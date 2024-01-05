@@ -1,4 +1,5 @@
 ﻿using Castle.Core.Logging;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,28 +20,136 @@ namespace SkillSkulptor.Controllers
 			_Logger = logger;
 			_dbContext = _db;
 			_userManager = userManager;
-		}
+
+        }
 
 
 		[HttpGet]
 		public IActionResult IndexProjekt()
 		{
-            var projects = _dbContext.Projects.ToList();
-            ViewBag.Meddelande = "Totalt antal projekt: " + projects.Count;
+            List<Project> projects = _dbContext.Projects.Include(p => p.CreatedByUser).ToList();
+            
+            List<ProjectViewModel> projectViewModels = MapToViewModel(projects);
+            ViewBag.Meddelande = "Totalt antal projekt: " + projectViewModels.Count;
 
-			ViewBag.LoggedIn = GetCurrentUserIdName()?.Id;
+            ViewBag.LoggedIn = GetCurrentUserIdName()?.Id;
 
-            return View(projects);
+            return View(projectViewModels);
 		}
 
-		[HttpGet]
+        private List<ProjectViewModel> MapToViewModel(List<Project> projects)
+        {
+            List<ProjectViewModel> projectViewModels = new List<ProjectViewModel>();
+
+            foreach (var project in projects)
+            {
+                ProjectViewModel viewModel = new ProjectViewModel
+                {
+                    ProjectId = project.ProjectId,
+                    ProjectName = project.ProjectName,
+                    Description = project.Description,
+                    Startdate = project.Startdate,
+                    Enddate = project.Enddate,
+                    MaxPeople = project.MaxPeople,
+                    CreatedBy = project.CreatedBy,
+                    CreatedByUser = project.CreatedByUser
+            };
+
+                projectViewModels.Add(viewModel);
+            }
+
+            return projectViewModels;
+        }
+
+        //private ProjectViewModel MapToViewModelSingel(Project projects)
+        //{
+        //    ProjectViewModel models = new ProjectViewModel();
+
+        //        ProjectViewModel viewModel = new ProjectViewModel
+        //        {
+        //            ProjectId = projects.ProjectId,
+        //            ProjectName = projects.ProjectName,
+        //            Description = projects.Description,
+        //            Startdate = projects.Startdate,
+        //            Enddate = projects.Enddate,
+        //            MaxPeople = projects.MaxPeople,
+        //            CreatedBy = projects.CreatedBy,
+        //        };
+            
+
+        //    return viewModel;
+        //}
+
+        [HttpGet]
 		public IActionResult Index2()
 		{
 			return View();
 		}
 
+		[HttpGet]
+		public IActionResult IndexEdit(int ProjectId) 
+		{
+                var project = _dbContext.Projects.Find(ProjectId);
+                ProjectViewModel model = new ProjectViewModel();
+                model.ProjectId = project.ProjectId;
+                model.ProjectName = project.ProjectName;
+                model.Description = project.Description;
+                model.Startdate = project.Startdate;
+                model.Enddate = project.Enddate;
+                model.MaxPeople = project.MaxPeople;
+                model.CreatedBy = project.CreatedBy;
 
-		[HttpPost]
+                if (project == null)
+                {
+
+                    return RedirectToAction("IndexProjekt");
+                }
+
+                return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateProject(ProjectViewModel updatedProject)
+        {
+            try
+            {
+                var existingProject = _dbContext.Projects
+                    .Include(p => p.CreatedByUser)
+                    .FirstOrDefault(p => p.ProjectId == updatedProject.ProjectId);
+
+
+                    if (ModelState.IsValid)
+                    {
+                        existingProject.ProjectName = updatedProject.ProjectName;
+                        existingProject.Description = updatedProject.Description;
+                        existingProject.Startdate = updatedProject.Startdate;
+                        existingProject.Enddate = updatedProject.Enddate;
+
+                        _dbContext.Attach(existingProject.CreatedByUser);
+
+                        _dbContext.Entry(existingProject).State = EntityState.Modified;
+
+                        _dbContext.SaveChanges();
+
+                        return RedirectToAction("IndexProjekt");
+                    }
+                    else
+                    {
+                        return View("IndexEdit");
+                    }
+                
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and log errors
+                _Logger.LogError(ex, "An error occurred while updating the project.");
+
+                // Optionally, you can return an error view or redirect to an error page
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
 
 		public IActionResult AddProjekt(Project projectObject) 
 		{
@@ -123,7 +232,9 @@ namespace SkillSkulptor.Controllers
 				bool isAlreadyMember = _dbContext.ProjectMembers
 					.Any(pm => pm.ProjectId == ProjectId && pm.UserId.Equals(user.Id));
 
-				if (!isAlreadyMember)
+                TempData["isAlreadyMember"] = isAlreadyMember;
+
+                if (!isAlreadyMember)
 				{
 					if (project != null && project.MaxPeople <= 5)
 					{
@@ -140,7 +251,7 @@ namespace SkillSkulptor.Controllers
 						_dbContext.ProjectMembers.Add(member);
 						_dbContext.SaveChanges();
 
-						return RedirectToAction("IndexProjekt");
+                        return RedirectToAction("IndexProjekt");
 					}
 					else
 					{
@@ -161,10 +272,12 @@ namespace SkillSkulptor.Controllers
 			}
 			
 		}
+
 		public AppUser GetCurrentUserIdName()
 		{
-            AppUser loggedInUser = _userManager.GetUserAsync(User).Result;
-            return loggedInUser;
+            
+                AppUser loggedInUser = _userManager.GetUserAsync(User).Result;
+                return loggedInUser;
         }
 
     }
