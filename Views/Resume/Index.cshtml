@@ -103,7 +103,34 @@
                     <a href="@Url.Action("CreateQualification","Resume")" class="btn btn-primary btn-sm">Lägg till Färdighet</a>
                 }
 
-                <h2 class="mb-5">Intressen</h2>
+                @if (Model.Projects != null)
+                {
+                    <h2 class="mb-5">Projekt</h2>
+                    @foreach (Project p in Model.Projects)
+                    {
+                        <div class="mb-3">
+                            <h3>@p.ProjectName</h3>
+                            <p>@p.Description</p>
+                            <p>Från: @p.Startdate</p>
+                            <p>Till: @p.Enddate</p>
+                            @foreach(ProjectMembers pm in p.listProjectmembers)
+                            {
+                                @if(pm.User.ProfileAccess && pm.User.Active)
+                                {
+                                    <img src="@Url.Action("UserImage", "Profile", new { userId = pm.User.Id })" class="rounded-circle mr-1" alt="@pm.User.Firstname @pm.User.Lastname" width="40" height="0">
+                                    <span>@pm.User.Firstname @pm.User.Lastname</span>
+                                }   
+                            }
+                        </div>
+                    }
+                
+                    @if (User.Identity.IsAuthenticated && Model.User.UserName.Equals(User.Identity.Name))
+                    {
+                        <a href="@Url.Action("IndexProjekt","Project")" class="btn btn-primary btn-sm">Gå till projektsidan</a>
+                    }
+                }
+
+                <h2 class="mb-5">Personligt brev</h2>
                 <p>@Model.User.userCV.PersonalLetter</p>
 
                 @if (!User.Identity.IsAuthenticated || !Model.User.UserName.Equals(User.Identity.Name))

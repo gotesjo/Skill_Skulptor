@@ -38,12 +38,15 @@ namespace SkillSkulptor.Controllers
             }
             AppUser choosenUser;
             CV userCV;
+            List<Project> projects;
 
             try
             {
                 choosenUser = _dbContext.Users.Find(_id);
                 userCV = choosenUser.userCV;
-            }
+                List<int> projectIdsForUser = _dbContext.ProjectMembers.Where(pm => pm.UserId == choosenUser.Id).Select(pm => pm.ProjectId).ToList();
+				projects = _dbContext.Projects.Where(p => projectIdsForUser.Contains(p.ProjectId)).ToList();
+			}
             catch (Exception e)
             {
                 Console.WriteLine(e);
@@ -55,6 +58,7 @@ namespace SkillSkulptor.Controllers
             {
                 viewModel.UserCV = userCV;
                 viewModel.User = choosenUser;
+                viewModel.Projects = projects;
                 return View(viewModel);
             }
 

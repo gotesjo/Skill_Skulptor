@@ -80,24 +80,32 @@
                     <div class="col-sm-4 col-md-3 item">
                         <h3>Projekt</h3>
                         <ul>
-                            <li><a href="#">Alla projekt</a></li>
-                            <li><a href="#">Mina Projekt</a></li>
-                            <li><a href="#">Skapa nytt projekt</a></li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a href="@Url.Action("IndexProjekt", "Projekt")">Alla projekt</a></li>
+                                <li><a href="@Url.Action("Index2", "Projekt")">Skapa nytt projekt</a></li> 
+                            }
                         </ul>
                     </div>
                     <div class="col-sm-4 col-md-3 item">
                         <h3>CV</h3>
                         <ul>
-                            <li><a href="#">Mitt Cv</a></li>
-                            <li><a href="#">Sök på Cv</a></li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a href="@Url.Action("Index", "Resume")">Mitt Cv</a></li>
+                            }                         
+                            <li><a href="@Url.Action("Index", "Home")">Sök på Cv</a></li>
                         </ul>
                     </div>
                     <div class="col-sm-4 col-md-3 item">
                         <h3>Personliga länkar</h3>
                         <ul>
-                            <li><a href="#">Redigera personinfo</a></li>
-                            <li><a href="#">Hantera inloggning</a></li>
-                            <li><a href="#">Logga ut</a></li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a href="@Url.Action("Index", "Profile")">Redigera personinfo</a></li>
+                                <li><a href="@Url.Action("Index", "Profile")">Hantera inloggning</a></li>
+                                <li><a href="@Url.Action("Signout", "Account")">Logga ut</a></li>
+                            }
                         </ul>
                     </div>
                     <div class="col-lg-3 item social">
