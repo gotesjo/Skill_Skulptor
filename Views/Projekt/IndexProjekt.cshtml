@@ -1,7 +1,11 @@
-﻿@model List<Project>
+﻿@model List<ProjectViewModel>
 
 @{
     ViewData["Title"] = "Home Page";
+}
+
+@{
+    bool? isAlreadyMember = TempData["isAlreadyMember"] as bool?;
 }
 
 <!--Projekt Content-->
@@ -12,8 +16,8 @@
 
     <h4 class="d-block d-lg-non">@ViewBag.Meddelande</h4>
 
-  <table class="table table-hover">
-            <thead>
+    <table class="table table-hover">
+        <thead>
                 <tr>
                     <th scope="col">Skapad Av</th>
                     <th scope="col">Projekt Namn</th>
@@ -26,27 +30,36 @@
             <tbody>
             @foreach (var prod in Model)
             {
+                
                     <tr>
-                    <td scope="col">@prod.CreatedByUser.UserName</td>
-                    <td scope="col">@prod.ProjectName</td>
-                    <td scope="col">@prod.Description</td>
-                    <td scope="col">@prod.Startdate</td>
-                    <td scope="col">@prod.Enddate</td>
-                    <td scope="col">5/@prod.MaxPeople</td>
-
-                    @if (User.Identity.IsAuthenticated && prod.CreatedByUser.Id == ViewBag.LoggedIn)
+                        <td scope="col">@prod.CreatedByUser</td>
+                        <td scope="col">@prod.ProjectName</td>
+                        <td scope="col">@prod.Description</td>
+                        <td scope="col">@prod.Startdate</td>
+                        <td scope="col">@prod.Enddate</td>
+                        <td scope="col">@prod.MaxPeople/5</td>
+                   
+                    @if (User.Identity.IsAuthenticated)
                     {
+                        
                         <form method="post" asp-controller="Projekt" asp-action="JoinProject">
-                            <input type="hidden" name="projectId" value="@prod.ProjectId" />
-                            <td> <button class="btn btn-primary" type="submit">Gå med</button> </td>
+                           <input type="hidden" name="projectId" value="@prod.ProjectId" />
+                           <td> <button class="btn btn-primary" type="submit">Gå med</button> </td>
+                        </form>
+                        
+                        @if (prod.CreatedBy == ViewBag.LoggedIn)
+                        {
+                        <form method="post" asp-controller="Projekt" asp-action="RemoveProject">
+                           <input type="hidden" name="projectId" value="@prod.ProjectId" />
+                           <td> <button class="btn btn-primary" type="submit">Ta Bort</button> </td>
                         </form>
 
-                        <form method="post" asp-controller="Projekt" asp-action="RemoveProject">
-                            <input type="hidden" name="projectId" value="@prod.ProjectId" />
-                        <td> <button class="btn btn-primary" type="submit">Ta Bort</button> </td>
-                        </form>
+                        <td>
+                           <a class="btn btn-primary" href="@Url.Action("IndexEdit", "Projekt", new { projectId = prod.ProjectId })">Redigera</a>
+                        </td>
+                        }
                     }
-                </tr>  
+                    </tr>
             }
             </tbody>
   </table>

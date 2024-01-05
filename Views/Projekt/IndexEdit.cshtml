@@ -1,13 +1,16 @@
-﻿@model Project
+﻿@model ProjectViewModel
 
-	<h2>Här ska det skapas nya projekt</h2>
+<h2>REDIGERA PROJEKT</h2>
 
 <!--Skapa projekt Content-->
 <div asp-validation-summary="All" class="text-danger"></div>
-<form asp-action="AddProjekt" method="Post" class="flex-md-column justify-content-center m-5">
+<form asp-action="UpdateProject" method="Post" class="flex-md-column justify-content-center m-5">
+
+    <input type="hidden" asp-for="ProjectId" />
+
     <div class="form1 form-group">
         <label asp-for="ProjectName">Namn</label>
-        <input asp-for="ProjectName" type="text" class="form-control" placeholder="Skriv namnet här">
+        <input asp-for="ProjectName" type="text" class="form-control" placeholder="Skriv Namn här">
     </div>
     <div class="form4 form-group">
         <label asp-for="Description">Beskrivning</label>
@@ -21,7 +24,8 @@
         <label asp-for="Enddate">SlutDatum</label>
         <input asp-for="Enddate" type="date" class="form-control" placeholder="Skriv SlutDatum här">
     </div>
-  <div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block m-5">Lägg till Projektet</button>
-  </div>
- </form>
+    <div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block m-5">Redigera Projekt</button>
+    </div>
+
+</form>
