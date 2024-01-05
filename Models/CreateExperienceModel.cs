@@ -4,6 +4,8 @@ namespace SkillSkulptor.Models
 {
     public class CreateExperienceModel
     {
+        public int? ExID { get; set; }
+
         [Required(ErrorMessage ="Du måste skriva in vilken position du hade")]
         public string Position { get; set; }
         public string? ExDescription { get; set; }

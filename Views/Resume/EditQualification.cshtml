@@ -1,11 +1,11 @@
 ﻿@model CreateQualificationModel
 @{
-    ViewData["Title"] = "Lägg till färdighet";
+    ViewData["Title"] = "Redigera Färdighet";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-controller="Resume" asp-action="CreateQualification" method="post" enctype="multipart/form-data">
+<form asp-controller="Resume" asp-action="EditQualification" method="post" enctype="multipart/form-data">
 
     <!-- Kompetens Sektion -->
     <div class="experiences-info mb-4">
@@ -26,5 +26,5 @@
 
     </div>
 
-    <button type="submit" class="btn btn-primary">Lägg till Färdighet</button>
+    <button type="submit" class="btn btn-primary">Spara Färdighet</button>
 </form>

@@ -1,17 +1,20 @@
 ﻿@model CreateEducationModel
 @{
-    ViewData["Title"] = "Lägg till en Utbildning";
+    ViewData["Title"] = "Redigera Utbildning";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-controller="Resume" asp-action="CreateEducation" method="post" enctype="multipart/form-data">
-   
+<form asp-controller="Resume" asp-action="EditEducation" method="post" enctype="multipart/form-data">
+
+  
+
     <!-- Erfarenheter Sektion -->
     <div class="experiences-info mb-4">
-        <h3>Erfarenheter</h3>
+        <h3>Utbildning</h3>
         <div class="mb-3">
             <div>
+               <input type="hidden" asp-for="EdID">
                 <label asp-for="Institution" class="form-label">Institution</label>
                 <span asp-validation-for="Institution" class="text-danger"></span>
                 <input asp-for="Institution" class="form-control" placeholder="Institution" />
@@ -40,5 +43,5 @@
 
     </div>
 
-    <button type="submit" class="btn btn-primary">Lägg till Utbildning</button>
+    <button type="submit" class="btn btn-primary">Spara utbildning</button>
 </form>
