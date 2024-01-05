@@ -15,12 +15,12 @@ namespace SkillSkulptor.Models
         public string Description { get; set; }
         [Required(ErrorMessage = "StartDatum är obligatoriskt.")]
         [DataType(DataType.Date)]
-        public DateTime? Startdate { get; set; }
+        public DateTime Startdate { get; set; }
         [Required(ErrorMessage = "SlutDatum är obligatoriskt.")]
         [DataType(DataType.Date)]
-        public DateTime? Enddate { get; set; }
+        public DateTime Enddate { get; set; }
 
-        public int MaxPeople { get; set; }
+        public int? MaxPeople { get; set; } = 0;
         public string? CreatedBy { get; set; } 
 
         [ForeignKey(nameof(CreatedBy))]

@@ -26,19 +26,34 @@
             <tbody>
             @foreach (var prod in Model)
             {
-                <tr>
-                    <td scope="col">@prod.CreatedByUser.Firstname</td>
+                    <tr>
+                    <td scope="col">@prod.CreatedByUser.UserName</td>
                     <td scope="col">@prod.ProjectName</td>
                     <td scope="col">@prod.Description</td>
                     <td scope="col">@prod.Startdate</td>
                     <td scope="col">@prod.Enddate</td>
-                    <td scope="col">@prod.CreatedByUser.Firstname.Count()</td>
-                    <td><button class="btn btn-primary" type="submit">Gå med</button></td>
-                </tr>
+                    <td scope="col">5/@prod.MaxPeople</td>
+
+                    @if (User.Identity.IsAuthenticated && prod.CreatedByUser.Id == ViewBag.LoggedIn)
+                    {
+                        <form method="post" asp-controller="Projekt" asp-action="JoinProject">
+                            <input type="hidden" name="projectId" value="@prod.ProjectId" />
+                            <td> <button class="btn btn-primary" type="submit">Gå med</button> </td>
+                        </form>
+
+                        <form method="post" asp-controller="Projekt" asp-action="RemoveProject">
+                            <input type="hidden" name="projectId" value="@prod.ProjectId" />
+                        <td> <button class="btn btn-primary" type="submit">Ta Bort</button> </td>
+                        </form>
+                    }
+                </tr>  
             }
             </tbody>
   </table>
 
-    <a href="@Url.Action("Index2", "Projekt")" class="btn btn-primary p">Skapa nytt projekt</a>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a href="@Url.Action("Index2", "Projekt")" class="btn btn-primary p">Skapa nytt projekt</a>
+    }
 
 </div>
