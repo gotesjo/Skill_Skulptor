@@ -86,6 +86,11 @@ namespace SkillSkulptor.Controllers
 			return View();
 		}
 
+        public IActionResult IndexShowProject() 
+        {
+            return View();
+        }
+
 		[HttpGet]
 		public IActionResult IndexEdit(int ProjectId) 
 		{
