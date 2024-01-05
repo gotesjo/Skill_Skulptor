@@ -25,9 +25,12 @@ namespace SkillSkulptor.Controllers
 		[HttpGet]
 		public IActionResult IndexProjekt()
 		{
-            var _projects = _dbContext.Projects.ToList();
-            ViewBag.Meddelande = "Totalt antal projekt: " + _projects.Count;
-            return View(_projects);
+            var projects = _dbContext.Projects.ToList();
+            ViewBag.Meddelande = "Totalt antal projekt: " + projects.Count;
+
+			ViewBag.LoggedIn = GetCurrentUserIdName()?.Id;
+
+            return View(projects);
 		}
 
 		[HttpGet]
@@ -36,12 +39,6 @@ namespace SkillSkulptor.Controllers
 			return View();
 		}
 
-		//[HttpPost]
-		//public IActionResult AddProjekt()
-		//{
-		//	Console.WriteLine("Denna borde inte kallas på addprojekt utan parametrear");
-		//	return View(new Project());
-		//}
 
 		[HttpPost]
 
@@ -59,9 +56,6 @@ namespace SkillSkulptor.Controllers
 
                     _dbContext.Projects.Add(projectObject);
                     _dbContext.SaveChanges();
-
-
-					
 
                     var member = new ProjectMembers
                     {
@@ -95,49 +89,78 @@ namespace SkillSkulptor.Controllers
             }
         }
 
+		public IActionResult RemoveProject(int projectId) 
+		{
+            AppUser user = GetCurrentUserIdName();
+            var project = _dbContext.Projects.FirstOrDefault(p => p.ProjectId == projectId);
+
+            if (user != null && project != null && project.CreatedByUser.Firstname == project.CreatedByUser.Firstname)
+            {
+                var projectMembers = _dbContext.ProjectMembers.Where(pm => pm.ProjectId == projectId);
+                _dbContext.ProjectMembers.RemoveRange(projectMembers);
+                
+                _dbContext.Projects.Remove(project);
+                _dbContext.SaveChanges();
+
+                ViewBag.SuccessMessage = "Projektet har tagits bort!";
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Du har inte behörighet att ta bort detta projekt eller så finns projektet inte.";
+            }
+
+            return RedirectToAction("IndexProjekt");
+        
+    }
+
 		public IActionResult JoinProject(int ProjectId)
 		{
 			AppUser user = GetCurrentUserIdName();
             var project = _dbContext.Projects.Find(ProjectId);
 
-            bool isAlreadyMember = _dbContext.ProjectMembers
-				.Any(pm => pm.ProjectId == ProjectId && pm.UserId.Equals(user.Id));
-
-            if (!isAlreadyMember)
+			if (user != null)
 			{
-				if (project != null && project.MaxPeople <= 5)
+				bool isAlreadyMember = _dbContext.ProjectMembers
+					.Any(pm => pm.ProjectId == ProjectId && pm.UserId.Equals(user.Id));
+
+				if (!isAlreadyMember)
 				{
-					project.MaxPeople++;
+					if (project != null && project.MaxPeople <= 5)
+					{
+						project.MaxPeople++;
 
-					_dbContext.SaveChanges();
+						_dbContext.SaveChanges();
 
-                    var member = new ProjectMembers
-                    {
-                        ProjectId = ProjectId,
-                        UserId = user.Id
-                    };
+						var member = new ProjectMembers
+						{
+							ProjectId = ProjectId,
+							UserId = user.Id
+						};
 
-					
+						_dbContext.ProjectMembers.Add(member);
+						_dbContext.SaveChanges();
 
-                    _dbContext.ProjectMembers.Add(member);
-                    _dbContext.SaveChanges();
-
-                    return View("IndexProjekt");
+						return RedirectToAction("IndexProjekt");
+					}
+					else
+					{
+						ViewBag.Error = "Får max finnas 5 deltagare per projekt";
+						return RedirectToAction("ProjketController");
+					}
 				}
 				else
 				{
-					ViewBag.Error = "Får max finnas 5 deltagare per projekt";
-					return View("ProjketController");
-				}
+                    TempData["ErrorMessage"] = "Du är redan del av detta projekt!";
+                    return RedirectToAction("IndexProjekt");
+                    
+                }
 			}
 			else
 			{
-				ViewBag.Error = "Du är redan del av detta projekt!";
-                return View("IndexProjekt");
-            }
+				return RedirectToAction("IndexProjekt");
+			}
 			
 		}
-
 		public AppUser GetCurrentUserIdName()
 		{
             AppUser loggedInUser = _userManager.GetUserAsync(User).Result;
