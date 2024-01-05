@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SkillSkulptor.Models;
 using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SkillSkulptor.Controllers
 {
@@ -47,7 +48,12 @@ namespace SkillSkulptor.Controllers
                 ViewBag.Heading = "Senaste cv på sidan";
                 return View(vissaCV);
             }
-            
+
+        }
+
+        public SsDbContext Get_dbContext()
+        {
+            return _dbContext;
         }
 
 
@@ -65,70 +71,66 @@ namespace SkillSkulptor.Controllers
                 ExP.ProjectName = "Finns inga projekt";
                 ViewBag.Project = ExP;
             }
+            // fethcar alla CV från databasen
+            List<CV> CvSearched = _dbContext.CVs.ToList();
 
+           
             if (search != null)
             {
                 string[] searchTerms = search.Split(' ');
-
-                if (User.Identity.IsAuthenticated)
-                {
-                    List<CV> CvSearched = _dbContext.CVs
-                        .Where(a => a.fkUser.ProfileAccess == false).ToList();
-                }
-
+                // Om användaren är inloggad I.E., auktoriserad filtrerar den endast på för- och eftenamn
+                // för alla CVs. 
                 if (searchTerms.Length == 1)
                 {
-                    List<CV> CvSearched = _dbContext.CVs
-                        .Where(a => a.fkUser.Firstname.Contains(search) || a.fkUser.Lastname.Contains(search))
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        CvSearched = CvSearched
+                        .Where
+                        (a => a.fkUser.Firstname.Contains(search) ||
+                        a.fkUser.Lastname.Contains(search)).ToList();
+                        ViewBag.Heading = "CV med namnet " + search;
+                    }
+                    // annars kommer denna else sats att även filtera på om kolumnen ProfileAccess är sann
+                    // eller falsk, och endast ta med objekt där det är falskt. 
+                    else
+                    {
+                        CvSearched = CvSearched
+                        .Where
+                        (a => a.fkUser.ProfileAccess == false &&
+                        (a.fkUser.Firstname.Contains(search) || a.fkUser.Lastname.Contains(search)))
                         .ToList();
-                    ViewBag.Heading = "Cv med namnet " + search;
-                    return View(CvSearched);
+                        ViewBag.Heading = "CV med namnet " + search;
+
+                    }
                 }
-                else if (searchTerms.Length == 2)
+                // även om användaren skriver båda för- och efternamn ska metoden fungera, därav en extra sats
+                // som splittar upp de båda strängarna. 
+                if (searchTerms.Length == 2)
                 {
                     string firstName = searchTerms[0];
                     string lastName = searchTerms[1];
 
-                    List<CV> CvSearched = _dbContext.CVs
-                        .Where(a => a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName)).ToList();
-                    ViewBag.Heading = "Cv med namnet " + search;
+                    CvSearched = CvSearched
+                    .Where(a => a.fkUser.ProfileAccess == false &&
+                    a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName)).ToList();
+                    ViewBag.Heading = "CV med namnet " + search;
+
+                } 
+                else
+                // Om den inte hittar ett CV kopplat till någon användare skall ett meddelande komma fram
+                // som låter användaren veta det. 
+                {
+                    if (CvSearched.Count == 0)
+                    {
+                        ViewBag.Heading = "Vi hittade inga CV utifrån din sökning";
+                    }
                     return View(CvSearched);
                 }
-                else
-                {
-                    ViewBag.Heading = "Vi hittade inga cv utifrån din sökning";
-                    return RedirectToAction("Index");
-                }
             }
-            return RedirectToAction("Index");
-       
-            //[HttpPost]
-            //public IActionResult Search(string search)
-            //{
-            //    try
-            //    {
-            //        Project _project = _dbContext.Projects.OrderByDescending(p => p.ProjectId).First();
-            //        ViewBag.Project = _project;
-            //    }
-            //    catch
-            //    {
-            //        Project ExP = new Project();
-            //        ExP.ProjectName = "Finns inga projekt";
-            //        ViewBag.Project = ExP;
-            //    }
-
-            //    if(search != null)
-            //    {
-            //        List<CV> searched = _dbContext.CVs
-            //            .Where(e => e.fkEducation.Degree.Contains(search)).ToList();
-            //        ViewBag.Heading = "CV med examen:" + search;
-            //        return View(searched);
-            //    } else
-            //    {
-            //        return RedirectToAction("Index");
-            //    }
-            //}
-        }
+            // returnerar den filtrerade eller ofiltrerade listan till vyn. 
+            return View(CvSearched);
+        } 
+        
         public IActionResult Privacy()
         {
  
