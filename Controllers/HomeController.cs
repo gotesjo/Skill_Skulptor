@@ -4,6 +4,7 @@ using SkillSkulptor.Models;
 using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 
 namespace SkillSkulptor.Controllers
 {
@@ -37,7 +38,13 @@ namespace SkillSkulptor.Controllers
             }
             if (User.Identity.IsAuthenticated)
             {
-                List<CV> allCv = _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).ToList();
+                var currentID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                List<CV> allCv = _dbContext.CVs
+                    .Where(cv => cv.fkUser.Id != currentID)
+                    .OrderByDescending(cv => cv.CVID)
+                    .Take(3)
+                    .ToList();
                 List<CV> testCV = new List<CV>();
                 ViewBag.Heading = "Senaste cv på sidan";
                 return View(allCv);
