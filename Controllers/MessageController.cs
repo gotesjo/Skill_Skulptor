@@ -8,7 +8,6 @@ using AutoMapper;
 
 namespace SkillSkulptor.Controllers
 {
-    [Authorize]
     public class MessageController : Controller
     {
         private SsDbContext _dbContext;
@@ -22,7 +21,7 @@ namespace SkillSkulptor.Controllers
 			signInManager = _signInManager;
 	}
 
-
+		[Authorize]
 		public IActionResult Start()
 		{
 			AppUser _loggedInUser = GetLoggedInUser();
@@ -40,6 +39,7 @@ namespace SkillSkulptor.Controllers
 			return View(viewModel);
 		}
 
+		[Authorize]
 		[HttpPost]
 		public IActionResult Search(string searchString)
 		{
@@ -62,6 +62,7 @@ namespace SkillSkulptor.Controllers
 			return View("Start", viewModel);
 		}
 
+		[Authorize]
 		[HttpGet]
 		public IActionResult GetConversation(string otherUserID)
 		{
@@ -181,6 +182,7 @@ namespace SkillSkulptor.Controllers
             return RedirectToAction("Index", "Resume", new { id = receiverId });
         }
 
+		[Authorize]
 		[HttpPost]
 		public IActionResult MarkRead(int _messageID)
 		{
@@ -195,7 +197,11 @@ namespace SkillSkulptor.Controllers
 
 		}
 
-
+		[HttpGet]
+		public Boolean IsLoggedIn()
+		{
+			return User.Identity.IsAuthenticated;
+		}
 
 		private AppUser GetLoggedInUser()
 		{

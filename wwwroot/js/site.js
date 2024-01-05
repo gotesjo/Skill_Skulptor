@@ -38,10 +38,11 @@ window.addEventListener('DOMContentLoaded', event => {
 $(document).ready(function () {
 
     // Uppdatera meddelandeantal vid sidan av
-    updateUnreadMessagesCount();
-
     // Timer för uppdareringen
     setInterval(updateUnreadMessagesCount, 1000);
+
+   
+    
 
     $(document).on('click', '.user-div', function () {
         var otherUserID = $(this).data('user-id');
@@ -52,6 +53,21 @@ $(document).ready(function () {
     });
     scrollToBottom();
 });
+
+function RunTimer() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            type: 'GET',
+            url: '/Message/IsLoggedIn',
+            success: function (result) {
+                resolve(result);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
 
 function UpdateConversation(otherUserID) {
     if (otherUserID == null) {
@@ -136,8 +152,14 @@ function scrollToBottom() {
 
     // Funktion för att uppdatera meddelandeantal
 function updateUnreadMessagesCount() {
+    RunTimer().then(function (isLoggedIn) {
+        if (!isLoggedIn) {
+            // Användaren är inte inloggad, så avbryt uppdateringen
+            return;
+        }
+
         $.ajax({
-            url: '/Message/UnreadMessages', 
+            url: '/Message/UnreadMessages',
             type: 'GET',
             success: function (result) {
                 var unreadMessagesCountElement = $('#unreadMessagesCount');
@@ -155,11 +177,14 @@ function updateUnreadMessagesCount() {
                 console.error(error);
             }
         });
+    }).catch(function (error) {
+        
+    });
 }
 
 function sendUnknownMessage() {
     var _sendTo = document.querySelector('.send-unknown-div').getAttribute('data-to-id');
-
+    var _from = null;
     //ifall en användare är inloggad eller inte
     try {
         _from = document.getElementById("UnknowName").value;
@@ -188,14 +213,11 @@ function sendUnknownMessage() {
         return;
     }
 
-
-
     var data = {
         newmessage: _message,
         receiverId: _sendTo,
         from: _from
     };
-
 
     $.ajax({
         type: "POST",

@@ -50,15 +50,16 @@
 					{
 						@Html.Partial("_ConversationPartial", Model.ConversationData)
 					}
-@* 					else if(Model.ConversationData.receiver != null)
+					else if(Model.ConversationData.receiver != null)
 					{
 						@Html.Partial("_NewMessagePartial", Model.ConversationData)
-					} *@
+					} 
 					else
 					{
 						@Html.Partial("_UnknownMessages", Model.ConversationData);
 					}
 				</div>
+
 
 		</div>
 	</div>
