@@ -17,11 +17,15 @@
                                 <div class="form-outline form-white mb-4">
                                     <input asp-for="Username" type="text" id="RegUsername" class="form-control form-control-lg" />
                                     <label class="form-label" for="RegUsername">Användarnamn</label>
+                                    <span asp-validation-for="Username" class=" text-danger"></span>
+
                                 </div>
 
                                 <div class="form-outline form-white mb-4">
                                     <input asp-for="Email" type="email" id="typeEmailX" class="form-control form-control-lg" />
                                     <label class="form-label" for="typeEmailX">Email</label>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+
                                 </div>
 
                                 <div class="form-outline form-white mb-4">
@@ -32,6 +36,8 @@
                                 <div class="form-outline form-white mb-4">
                                     <input asp-for="ConfirmPassord" type="password" id="typePasswordConfirm" class="form-control form-control-lg" />
                                     <label class="form-label" for="typePasswordConfirm">Bekräfta Lösenordet</label>
+                                    <span asp-validation-for="ConfirmPassord" class="text-danger"></span>
+
                                 </div>
 
                                 <br />
@@ -39,10 +45,14 @@
                                 <div class="form-outline form-white mb-4">
                                     <input asp-for="Firstname" type="text" id="fNamn" class="form-control form-control-lg" />
                                     <label class="form-label" for="fNamn">Förnamn</label>
+                                    <span asp-validation-for="Firstname" class="text-danger"></span>
+
                                 </div>
                                 <div class="form-outline form-white mb-4">
                                     <input asp-for="Lastname" type="text" id="lNamn" class="form-control form-control-lg" />
                                     <label class="form-label" for="lNamn">Efternamn</label>
+                                    <span asp-validation-for="Lastname" class="text-danger"></span>
+
                                 </div>
 
 
