@@ -141,7 +141,7 @@
                             <p>Till: @p.Enddate</p>
                             @foreach(ProjectMembers pm in p.listProjectmembers)
                             {
-                                @if(pm.User.ProfileAccess && pm.User.Active)
+                                @if(pm.User.ProfileAccess && pm.User.Active || pm.User.UserName.Equals(User.Identity.Name))
                                 {
                                     <img src="@Url.Action("UserImage", "Profile", new { userId = pm.User.Id })" class="rounded-circle mr-1" alt="@pm.User.Firstname @pm.User.Lastname" width="40" height="40">
                                     <span>@pm.User.Firstname @pm.User.Lastname</span>
