@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,8 +29,11 @@ namespace SkillSkulptor.Controllers
         public IActionResult Index()
         {
 			AppUser user = userManager.GetUserAsync(User).Result;
+            ProfileViewModel model = MapToProfileViewModel(user);
 
-			return View(user);
+            ViewBag.fkPicture = user.fkPicture;
+
+			return View(model);
         }
 
         [Authorize]
@@ -75,88 +79,82 @@ namespace SkillSkulptor.Controllers
 
         }
 
-        [Authorize]
-        [HttpGet]
-        public IActionResult EditCV()
-        {
-            AppUser user = userManager.GetUserAsync(User).Result;
-
-            var resumeViewModel = new ResumeViewModel
-            {
-                User = user,
-                UserCV = user.userCV 
-            };
-
-            return View(resumeViewModel);
-        }
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> ProfileEdit(AppUser user, IFormFile file)
+        public async Task<IActionResult> ProfileEdit(ProfileViewModel model, IFormFile file)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // Hämta den befintliga användaren från databasen
-                var _existingUser = await _dbContext.Users.FindAsync(user.Id);
-
-                if (_existingUser == null)
+                try
                 {
-                    // Hantera fallet då användaren inte hittades
-                    return View("Index", "Home");
-                }
+                    // Hämta den befintliga användaren från databasen
+                    var _existingUser = await _dbContext.Users.FindAsync(model.Id);
 
-                _existingUser.Firstname = user.Firstname;
-
-                _existingUser.Lastname = user.Lastname;
-            
-                _existingUser.Email = user.Email;
-            
-                _existingUser.Phonenr = user.Phonenr;
-            
-                _existingUser.Active = user.Active;
-            
-                _existingUser.ProfileAccess = user.ProfileAccess;
-
-                _existingUser.fkAddress.Street = user.fkAddress.Street;
-
-                _existingUser.fkAddress.City = user.fkAddress.City;
-
-                _existingUser.fkAddress.ZipCode = user.fkAddress.ZipCode;
-
-                _existingUser.fkAddress.Country = user.fkAddress.Country;
-
-
-                if (file != null && file.Length > 0)
-                {
-                    using (var stream = new MemoryStream())
+                    if (_existingUser == null)
                     {
-                        await file.CopyToAsync(stream);
-
-                        if (_existingUser.fkPicture == null)
-                        {
-                            _existingUser.fkPicture = new Profilepicture(); // Ersätt 'Profilepicture' med korrekt klassnamn
-                        }
-
-                        _existingUser.fkPicture.ImageData = stream.ToArray();
-                        _existingUser.fkPicture.Filename = file.FileName;
+                        // Hantera fallet då användaren inte hittades
+                        return View("Index", "Home");
                     }
-                }
 
- 
-                var result = await _dbContext.SaveChangesAsync();
-                if(result > 0)
-                {
-                    return RedirectToAction("Index", "Home");
+                    _existingUser.Firstname = model.Firstname;
+
+                    _existingUser.Lastname = model.Lastname;
+
+                    _existingUser.Email = model.Email;
+
+                    _existingUser.Phonenr = model.Phonenr;
+
+                    _existingUser.Active = model.Active;
+
+                    _existingUser.ProfileAccess = model.ProfileAccess;
+
+                    _existingUser.fkAddress.Street = model.Street;
+
+                    _existingUser.fkAddress.City = model.City;
+
+                    _existingUser.fkAddress.ZipCode = model.ZipCode;
+
+                    _existingUser.fkAddress.Country = model.Country;
+
+
+                    if (file != null && file.Length > 0)
+                    {
+                        using (var stream = new MemoryStream())
+                        {
+                            await file.CopyToAsync(stream);
+
+                            if (_existingUser.fkPicture == null)
+                            {
+                                _existingUser.fkPicture = new Profilepicture(); // Ersätt 'Profilepicture' med korrekt klassnamn
+                            }
+
+                            _existingUser.fkPicture.ImageData = stream.ToArray();
+                            _existingUser.fkPicture.Filename = file.FileName;
+                        }
+                    }
+
+
+                    var result = await _dbContext.SaveChangesAsync();
+                    if (result > 0)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+
                 }
-                
+                catch (DbUpdateException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return RedirectToAction("Index", "Error");
+                }
             }
-            catch (DbUpdateException ex)
+            else
             {
-                Console.WriteLine(ex.Message);
-                return RedirectToAction("Index", "Error");
+                //ifall inget ändrats skickas användaren tillbaka till redigera sidan
+                return View("Index", model);
             }
-            //ifall inget ändrats skickas användaren tillbaka till redigera sidan
-            return View("Index",user);
+
+            return View("Index", model);
         }
 
 
@@ -180,6 +178,23 @@ namespace SkillSkulptor.Controllers
 
             return File(imageBytes, mimeType);
 
+        }
+
+        private ProfileViewModel MapToProfileViewModel(AppUser user)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AppUser, ProfileViewModel>()
+                    .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.fkAddress.Street))
+                    .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.fkAddress.City))
+                    .ForMember(dest => dest.ZipCode, opt => opt.MapFrom(src => src.fkAddress.ZipCode))
+                    .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.fkAddress.Country));
+            });
+
+            var mapper = new Mapper(config);
+
+            // Använd AutoMapper för att kartlägga egenskaperna
+            return mapper.Map<ProfileViewModel>(user);
         }
     }
 }

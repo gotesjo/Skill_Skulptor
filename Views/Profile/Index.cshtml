@@ -1,4 +1,4 @@
-﻿@model SkillSkulptor.Models.AppUser
+﻿@model ProfileViewModel
 @{
     ViewData["Title"] = "Redigera Profil";
 }
@@ -12,7 +12,7 @@
         <h3>Profilbild</h3>
         <label for="file" class="form-label">Nuvarande Bild</label>
         <div>
-            @if (Model.fkPicture != null && Model.fkPicture.ImageData != null)
+            @if (ViewBag.fkPicture != null && ViewBag.fkPicture.ImageData != null)
             {
                 <img src="@Url.Action("UserImage", "Profile", new { userId = Model.Id })" class="img-thumbnail img-responsive mb-3" style="max-width: 300px; height: auto;" />
             }
@@ -58,27 +58,27 @@
     <div class="address-info mb-4">
         <h3>Adress Information</h3>
         <div class="mb-3">
-            <label asp-for="fkAddress.Street" class="form-label">Gata</label>
-            <input asp-for="fkAddress.Street" class="form-control" placeholder="Gatunamn" />
-            <span asp-validation-for="fkAddress.Street" class="text-danger"></span>
+            <label asp-for="Street" class="form-label">Gata</label>
+            <input asp-for="Street" class="form-control" placeholder="Gatunamn" />
+            <span asp-validation-for="Street" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="fkAddress.City" class="form-label">Stad</label>
-            <input asp-for="fkAddress.City" class="form-control" placeholder="Stad" />
-            <span asp-validation-for="fkAddress.City" class="text-danger"></span>
+            <label asp-for="City" class="form-label">Stad</label>
+            <input asp-for="City" class="form-control" placeholder="Stad" />
+            <span asp-validation-for="City" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="fkAddress.ZipCode" class="form-label">Postnummer</label>
-            <input asp-for="fkAddress.ZipCode" class="form-control" placeholder="Postnummer" />
-            <span asp-validation-for="fkAddress.ZipCode" class="text-danger"></span>
+            <label asp-for="ZipCode" class="form-label">Postnummer</label>
+            <input asp-for="ZipCode" class="form-control" placeholder="Postnummer" />
+            <span asp-validation-for="ZipCode" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="fkAddress.Country" class="form-label">Land</label>
-            <input asp-for="fkAddress.Country" class="form-control" placeholder="Land" />
-            <span asp-validation-for="fkAddress.Country" class="text-danger"></span>
+            <label asp-for="Country" class="form-label">Land</label>
+            <input asp-for="Country" class="form-control" placeholder="Land" />
+            <span asp-validation-for="Country" class="text-danger"></span>
         </div>
     </div>
 
@@ -99,7 +99,7 @@
     <button type="submit" class="btn btn-primary">Spara Ändringar</button>
 
     <a href="@Url.Action("ChangePassword", "Profile")" class="btn btn-primary">Ändra Lösenord</a>
-    <a href="@Url.Action("EditCV", "Profile")" class="btn btn-primary">Redigera CV</a>
+    <a href="@Url.Action("Index", "Resume")" class="btn btn-primary">Redigera CV</a>
 
 </form>
 
