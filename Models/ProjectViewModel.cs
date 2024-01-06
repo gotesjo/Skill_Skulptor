@@ -28,5 +28,8 @@ namespace SkillSkulptor.Models
         public string? CreatedBy { get; set; }
 
         public AppUser? CreatedByUser { get; set; }
+
+        public List<ProjectMembers> ProjectMembers { get; set; }
+
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using SkillSkulptor.Models;
 
@@ -52,7 +53,8 @@ namespace SkillSkulptor.Controllers
                     Enddate = project.Enddate,
                     MaxPeople = project.MaxPeople,
                     CreatedBy = project.CreatedBy,
-                    CreatedByUser = project.CreatedByUser
+                    CreatedByUser = project.CreatedByUser,
+                    ProjectMembers = project.listProjectmembers.ToList()
             };
 
                 projectViewModels.Add(viewModel);
@@ -73,7 +75,8 @@ namespace SkillSkulptor.Controllers
                 Enddate = projects.Enddate,
                 MaxPeople = projects.MaxPeople,
                 CreatedBy = projects.CreatedBy,
-                CreatedByUser = projects.CreatedByUser
+                CreatedByUser = projects.CreatedByUser,
+                ProjectMembers = projects.listProjectmembers.ToList()
             };
 
 
@@ -88,7 +91,13 @@ namespace SkillSkulptor.Controllers
 
         public IActionResult IndexShowProject(int projectId) 
         {
+
             var project = _dbContext.Projects.Find(projectId);
+
+            List<ProjectViewModel> pro = new List<ProjectViewModel>();
+
+            ViewBag.ProjectList = pro;
+
             if (project != null)
             {
                 var model = MapToViewModelSingel(project);
