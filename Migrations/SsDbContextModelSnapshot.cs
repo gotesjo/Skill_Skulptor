@@ -167,18 +167,15 @@ namespace SkillSkulptor.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdressID"));
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Street")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ZipCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AdressID");
@@ -454,8 +451,7 @@ namespace SkillSkulptor.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime?>("Enddate")
-                        .IsRequired()
+                    b.Property<DateTime>("Enddate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("MaxPeople")
@@ -465,8 +461,7 @@ namespace SkillSkulptor.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Startdate")
-                        .IsRequired()
+                    b.Property<DateTime>("Startdate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ProjectId");

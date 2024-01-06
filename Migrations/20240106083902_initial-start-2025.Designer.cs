@@ -12,8 +12,8 @@ using SkillSkulptor.Models;
 namespace SkillSkulptor.Migrations
 {
     [DbContext(typeof(SsDbContext))]
-    [Migration("20240104085155_projectstart")]
-    partial class projectstart
+    [Migration("20240106083902_initial-start-2025")]
+    partial class initialstart2025
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,18 +170,15 @@ namespace SkillSkulptor.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdressID"));
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Street")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ZipCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AdressID");
@@ -457,8 +454,7 @@ namespace SkillSkulptor.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime?>("Enddate")
-                        .IsRequired()
+                    b.Property<DateTime>("Enddate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("MaxPeople")
@@ -468,8 +464,7 @@ namespace SkillSkulptor.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Startdate")
-                        .IsRequired()
+                    b.Property<DateTime>("Startdate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ProjectId");

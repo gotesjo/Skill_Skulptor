@@ -80,6 +80,8 @@ namespace SkillSkulptor.Controllers
                 appUser.Email = _urm.Email;
                 appUser.Firstname = _urm.Firstname;
                 appUser.Lastname = _urm.Lastname;
+				appUser.fkAddress = new Adress();
+				appUser.fkAddress.Street = "";
 
                 var result = await userManager.CreateAsync(appUser, _urm.Password);
                 if (result.Succeeded)

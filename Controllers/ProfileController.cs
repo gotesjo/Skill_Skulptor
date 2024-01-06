@@ -9,6 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SkillSkulptor.Controllers
 {
+    
 	public class ProfileController : Controller
 	{
         private SsDbContext _dbContext;
@@ -22,6 +23,7 @@ namespace SkillSkulptor.Controllers
 			_hostingEnvironment = hostingEnvironment;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Index()
         {
@@ -73,7 +75,7 @@ namespace SkillSkulptor.Controllers
 
         }
 
-
+        [Authorize]
         [HttpGet]
         public IActionResult EditCV()
         {
@@ -88,7 +90,7 @@ namespace SkillSkulptor.Controllers
             return View(resumeViewModel);
         }
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ProfileEdit(AppUser user, IFormFile file)
         {
@@ -103,55 +105,25 @@ namespace SkillSkulptor.Controllers
                     return View("Index", "Home");
                 }
 
-                // Uppdatera övriga egenskaper (förnamn, efternamn, e-post etc.)
-                if(user.Firstname != null)
-                {
-                    _existingUser.Firstname = user.Firstname;
-                }
-                if (user.Firstname != null)
-                {
-                    _existingUser.Lastname = user.Lastname;
-                }
-                if (user.Firstname != null)
-                {
-                    _existingUser.Email = user.Email;
-                }
-                if (user.Firstname != null)
-                {
-                    _existingUser.Phonenr = user.Phonenr;
-                }
-                if (user.Firstname != null)
-                {
-                    _existingUser.Active = user.Active;
-                }
-                if (user.Firstname != null)
-                {
-                    _existingUser.ProfileAccess = user.ProfileAccess;
-                }
+                _existingUser.Firstname = user.Firstname;
 
-                if(_existingUser.fkAddress == null && user.fkAddress != null)
-                {
-                    Adress newAddress = new Adress();
-                    _existingUser.fkAddress = newAddress;
-                    
-                }
+                _existingUser.Lastname = user.Lastname;
+            
+                _existingUser.Email = user.Email;
+            
+                _existingUser.Phonenr = user.Phonenr;
+            
+                _existingUser.Active = user.Active;
+            
+                _existingUser.ProfileAccess = user.ProfileAccess;
 
-                //Adress
-                
-                    _existingUser.fkAddress.Street = user.fkAddress.Street;
-                
-                if (user.fkAddress.City != null)
-                {
-                    _existingUser.fkAddress.City = user.fkAddress.City;
-                }
-                if (user.fkAddress.ZipCode != null)
-                {
-                    _existingUser.fkAddress.ZipCode = user.fkAddress.ZipCode;
-                }
-                if (user.fkAddress.Country != null)
-                {
-                    _existingUser.fkAddress.Country = user.fkAddress.Country;
-                }
+                _existingUser.fkAddress.Street = user.fkAddress.Street;
+
+                _existingUser.fkAddress.City = user.fkAddress.City;
+
+                _existingUser.fkAddress.ZipCode = user.fkAddress.ZipCode;
+
+                _existingUser.fkAddress.Country = user.fkAddress.Country;
 
 
                 if (file != null && file.Length > 0)
@@ -183,7 +155,8 @@ namespace SkillSkulptor.Controllers
                 Console.WriteLine(ex.Message);
                 return RedirectToAction("Index", "Error");
             }
-            return RedirectToAction("Index", "Error");
+            //ifall inget ändrats skickas användaren tillbaka till redigera sidan
+            return View("Index",user);
         }
 
 
