@@ -33,7 +33,11 @@
                 
                     <tr>
                         <td scope="col">@prod.CreatedByUser</td>
-                        <td scope="col">@prod.ProjectName</td>
+                        <td scope="col">
+                        <a href="@Url.Action("IndexShowProject", "Projekt", new { projectId = prod.ProjectId })">
+                                @prod.ProjectName
+                            </a>
+                        </td>
                         <td scope="col">@prod.Description</td>
                         <td scope="col">@prod.Startdate</td>
                         <td scope="col">@prod.Enddate</td>

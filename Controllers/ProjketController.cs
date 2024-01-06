@@ -61,24 +61,24 @@ namespace SkillSkulptor.Controllers
             return projectViewModels;
         }
 
-        //private ProjectViewModel MapToViewModelSingel(Project projects)
-        //{
-        //    ProjectViewModel models = new ProjectViewModel();
+        private ProjectViewModel MapToViewModelSingel(Project projects)
+        {
 
-        //        ProjectViewModel viewModel = new ProjectViewModel
-        //        {
-        //            ProjectId = projects.ProjectId,
-        //            ProjectName = projects.ProjectName,
-        //            Description = projects.Description,
-        //            Startdate = projects.Startdate,
-        //            Enddate = projects.Enddate,
-        //            MaxPeople = projects.MaxPeople,
-        //            CreatedBy = projects.CreatedBy,
-        //        };
-            
+            ProjectViewModel viewModel = new ProjectViewModel
+            {
+                ProjectId = projects.ProjectId,
+                ProjectName = projects.ProjectName,
+                Description = projects.Description,
+                Startdate = projects.Startdate,
+                Enddate = projects.Enddate,
+                MaxPeople = projects.MaxPeople,
+                CreatedBy = projects.CreatedBy,
+                CreatedByUser = projects.CreatedByUser
+            };
 
-        //    return viewModel;
-        //}
+
+            return viewModel;
+        }
 
         [HttpGet]
 		public IActionResult Index2()
@@ -86,9 +86,21 @@ namespace SkillSkulptor.Controllers
 			return View();
 		}
 
-        public IActionResult IndexShowProject() 
+        public IActionResult IndexShowProject(int projectId) 
         {
+            var project = _dbContext.Projects.Find(projectId);
+            if (project != null)
+            {
+                var model = MapToViewModelSingel(project);
+                return View(model);
+            }
+            else 
+            {
+                NotFound();
+            }
+
             return View();
+            
         }
 
 		[HttpGet]
