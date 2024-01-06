@@ -5,6 +5,21 @@
 
 <div class="container-fluid p-0">
    
-    <h1>@Model.ProjectName</h1>
+    <h1>@Model.CreatedByUser</h1>
+
+    <div class="subheading mb-5">
+        <h2 class="mb-5">Beskrivning</h2>
+        @Model.Description
+    </div>
+
+    <div class="subheading mb-5">
+        <h2 class="mb-5">Varaktighet</h2>
+        @Model.Startdate - @Model.Enddate
+    </div>
+
+    <div class="subheading mb-5">
+        <h2 class="mb-5">Deltagare</h2>
+        
+    </div>
 
 </div>
