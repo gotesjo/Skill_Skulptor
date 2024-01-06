@@ -26,7 +26,7 @@ namespace SkillSkulptor.Controllers
 		{
 			AppUser _loggedInUser = GetLoggedInUser();
 
-			List<AppUser> _users = _dbContext.Users.ToList();
+			List<AppUser> _users = _dbContext.Users.Where(u => u.Active).ToList();
 			_users.Remove(_loggedInUser);
 			_users.AddRange(GetUnknonwUsers(_loggedInUser));
 
@@ -50,7 +50,7 @@ namespace SkillSkulptor.Controllers
 
 			AppUser _loggedInUser = GetLoggedInUser(); 
 
-			List<AppUser> _users = _dbContext.Users.Where(user => user.Firstname.Contains(searchString) && user.Id != _loggedInUser.Id).ToList();
+			List<AppUser> _users = _dbContext.Users.Where(user => user.Firstname.Contains(searchString) && user.Id != _loggedInUser.Id && user.Active).ToList();
 
 			var viewModel = new SearchViewModel
 			{
