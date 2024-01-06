@@ -93,8 +93,8 @@ namespace SkillSkulptor.Controllers
                     {
                         CvSearched = CvSearched
                         .Where(a => a.fkUser.Active == true &&
-                        a.fkUser.Firstname.Contains(search) ||
-                        (a.fkUser.Lastname.Contains(search))).ToList();
+                        a.fkUser.Firstname.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                        (a.fkUser.Lastname.Contains(search, StringComparison.OrdinalIgnoreCase))).ToList();
                         ViewBag.Heading = "CV med namnet " + search;
                     }
                     // annars kommer denna else sats att även filtera på om kolumnen ProfileAccess är sann
@@ -102,7 +102,9 @@ namespace SkillSkulptor.Controllers
                     else
                     {
                         CvSearched = CvSearched
-                        .Where(a => a.fkUser.ProfileAccess == true && a.fkUser.Active == true && a.fkUser.Firstname.Contains(search, StringComparison.OrdinalIgnoreCase) || (a.fkUser.Lastname.Contains(search, StringComparison.OrdinalIgnoreCase)))
+                        .Where(a => a.fkUser.ProfileAccess == true && a.fkUser.Active == true && 
+                        a.fkUser.Firstname.Contains(search, StringComparison.OrdinalIgnoreCase) || 
+                        (a.fkUser.Lastname.Contains(search, StringComparison.OrdinalIgnoreCase)))
                         .ToList();
                         ViewBag.Heading = "CV med namnet " + search;
 
@@ -117,7 +119,8 @@ namespace SkillSkulptor.Controllers
 
                     CvSearched = CvSearched
                     .Where(a => a.fkUser.ProfileAccess == true && a.fkUser.Active == true &&
-                    a.fkUser.Firstname.Contains(firstName, StringComparison.OrdinalIgnoreCase) && a.fkUser.Lastname.Contains(lastName, StringComparison.OrdinalIgnoreCase)).ToList();
+                    a.fkUser.Firstname.Contains(firstName, StringComparison.OrdinalIgnoreCase) && 
+                    a.fkUser.Lastname.Contains(lastName, StringComparison.OrdinalIgnoreCase)).ToList();
                     ViewBag.Heading = "CV med namnet " + search;
 
                 } 
