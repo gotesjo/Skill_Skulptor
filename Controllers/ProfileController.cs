@@ -82,7 +82,7 @@ namespace SkillSkulptor.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> ProfileEdit(ProfileViewModel model, IFormFile file)
+        public async Task<IActionResult> ProfileEdit(ProfileViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
@@ -134,7 +134,7 @@ namespace SkillSkulptor.Controllers
                         }
                     }
 
-
+                    ViewBag.fkPicture = _existingUser.fkPicture;
                     var result = await _dbContext.SaveChangesAsync();
                     if (result > 0)
                     {
@@ -153,7 +153,6 @@ namespace SkillSkulptor.Controllers
                 //ifall inget ändrats skickas användaren tillbaka till redigera sidan
                 return View("Index", model);
             }
-
             return View("Index", model);
         }
 

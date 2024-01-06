@@ -20,9 +20,9 @@ namespace SkillSkulptor.Models
         [EmailAddress(ErrorMessage ="Du måste ange en giltig email")]
         public string Email { get; set; }
 
-        public bool ProfileAccess { get; set; }
+        public Boolean ProfileAccess { get; set; }
 
-        public bool Active { get; set; }
+        public Boolean Active { get; set; }
 
         [Display(Name = "Gatuadress")]
         [StringLength(30, ErrorMessage = "Postnummer får inte vara längre än 30 bokstäver")]
