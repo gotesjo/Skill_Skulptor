@@ -1,0 +1,22 @@
+﻿@model SkillSkulptor.Models.EditSummaryLetterModel
+@{
+    ViewData["Title"] = "Redigera Sammanfattning och Personligt Brev";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Resume" asp-action="EditSummaryLetter" method="post">
+    <div class="mb-3">
+        <label for="summary" class="form-label">Sammanfattning</label>
+        <textarea id="summary" asp-for="Summary" class="form-control" rows="5" placeholder="Skriv din sammanfattning här"></textarea>
+        <span asp-validation-for="Summary" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="personalLetter" class="form-label">Personligt Brev</label>
+        <textarea id="personalLetter" asp-for="PersonalLetter" class="form-control" rows="5" placeholder="Skriv ditt personliga brev här"></textarea>
+        <span asp-validation-for="PersonalLetter" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spara Ändringar</button>
+</form>

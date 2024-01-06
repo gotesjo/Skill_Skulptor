@@ -200,6 +200,7 @@ namespace SkillSkulptor.Controllers
         [HttpGet]
         public IActionResult CreateQualification()
         {
+
             CreateQualificationModel model = new CreateQualificationModel();
             return View(model);
 
@@ -232,7 +233,58 @@ namespace SkillSkulptor.Controllers
                 return View(model);
             }
 
+            
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditSummaryLetter(int id)
+        {
+            var cv = await _dbContext.CVs.FirstOrDefaultAsync(c => c.CVID == id);
+            if (cv == null)
+            {
+               
+                return RedirectToAction("Index", "Resume"); 
+            }
+
+            var model = new EditSummaryLetterModel
+            {
+                Summary = cv.Summary,
+                PersonalLetter = cv.PersonalLetter
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditSummaryLetter(EditSummaryLetterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var cv = await _dbContext.CVs.FirstOrDefaultAsync(c => c.CVID == GetLoggedInUser().userCV.CVID);
+                if (cv != null)
+                {
+                    cv.Summary = model.Summary;
+                    cv.PersonalLetter = model.PersonalLetter;
+
+                    _dbContext.Update(cv);
+                    var result = await _dbContext.SaveChangesAsync();
+                    if (result > 0)
+                    {
+                        return RedirectToAction("Index", "Resume");
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ingen summary eller personligtbrev hittades för användaren!";
+                    return RedirectToAction("Index", "Resume");
+                }
+            }
+            return View(model);
+        }
+
+
+
 
         private Education MakeEducation(CreateEducationModel model)
         {
@@ -271,6 +323,15 @@ namespace SkillSkulptor.Controllers
             return qu;
         }
 
+        //private CV MakeSummaryLetter(EditSummaryLetterModel model)
+        //{
+        //    CV cv = new CV();
+        //    cv.Summary = model.Summary;
+        //    cv.PersonalLetter = model.PersonalLetter;
+
+        //    return cv;
+        //}
+
         private AppUser GetLoggedInUser()
         {
             AppUser loggedInUser = userManager.GetUserAsync(User).Result;
@@ -278,42 +339,7 @@ namespace SkillSkulptor.Controllers
 
         }
 
-
-
-
-
-        [HttpGet]
-        public async Task<IActionResult> DeleteCV()
-        {
-            var loggedInUser = await userManager.GetUserAsync(User);
-            if (loggedInUser == null)
-            {
-                // Användaren är inte inloggad
-                return RedirectToAction("Login", "Account"); // Eller någon annan lämplig åtgärd
-            }
-
-            var userCV = _dbContext.CVs.FirstOrDefault(cv => cv.BelongsTo == loggedInUser.Id);
-            if (userCV != null)
-            {
-
-
-
-                _dbContext.CVs.Remove(userCV);
-                await _dbContext.SaveChangesAsync();
-
-                TempData["SuccessMessage"] = "Ditt CV har tagits bort.";
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Inget CV hittades att ta bort.";
-            }
-            return RedirectToAction("Index", "Home");
-
-
-
-        }
-
+      
         [HttpGet]
         public async Task<IActionResult> EditEducation(int edid)
 
@@ -478,6 +504,92 @@ namespace SkillSkulptor.Controllers
 
             await _dbContext.SaveChangesAsync();
             return RedirectToAction("Index", "Resume");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult>DeleteExperience(int id)
+        {
+            var experience = await _dbContext.Experiences.FindAsync(id);
+
+            if(experience != null)
+            {
+                _dbContext.Experiences.Remove(experience);
+                await _dbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Erfarenheten har tagits bort!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Ingen erfarenhet hittades!";
+            }
+            return RedirectToAction("Index", "Resume");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult>DeleteEducation(int id)
+        {
+            var education = await _dbContext.Educations.FindAsync(id);
+                if(education!=null)
+            {
+                _dbContext.Educations.Remove(education);
+                await _dbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Utbildning har tagits bort!";
+            }
+                else
+            {
+                TempData["ErrorMessage"] = "Ingen utbildning hittades!";
+
+            }
+            return RedirectToAction("Index", "Resume");
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult>DeleteQualification(int id)
+        {
+            var qualification = await _dbContext.Qualifications.FindAsync(id);
+            if(qualification!=null)
+            {
+                _dbContext.Qualifications.Remove(qualification);
+                await _dbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Färdighet har tagits bort!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Ingen färdighet hittades!";
+            }
+            return RedirectToAction("Index", "Resume");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteCV()
+        {
+            var loggedInUser = await userManager.GetUserAsync(User);
+            if (loggedInUser == null)
+            {
+                
+                return RedirectToAction("Login", "Account"); 
+            }
+
+            var userCV = _dbContext.CVs.FirstOrDefault(cv => cv.BelongsTo == loggedInUser.Id);
+            if (userCV != null)
+            {
+
+
+
+                _dbContext.CVs.Remove(userCV);
+                await _dbContext.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Ditt CV har tagits bort.";
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Inget CV hittades att ta bort.";
+            }
+            return RedirectToAction("Index", "Home");
+
+
+
         }
     }
 }

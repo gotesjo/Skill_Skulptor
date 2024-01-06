@@ -36,7 +36,11 @@
                         <a href="mailto:@Model.User.Email">@Model.User.Email</a>
                     </div>
                 }
+                <h2 class="mb-5">Kort om mig</h2>
                 <p class="lead mb-5">@Model.User.userCV?.Summary</p>
+                 
+               
+
 
                 @if (Model.User.userCV.Experiences != null)
                 {
@@ -51,6 +55,11 @@
                             {
 
                                 <a href="@Url.Action("EditExperience", "Resume", new { exid = experience.ExId })" class="btn btn-secondary btn-sm">Redigera Erfarenheter</a>
+                           
+                                <form asp-action="DeleteExperience" asp-controller="Resume" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@experience.ExId" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Är du säker på att du vill radera denna erfarenhet?');">Radera Erfarenhet</button>
+                                </form>
                             }
                         </div>
                     }
@@ -74,6 +83,11 @@
                             {
                              
                                 <a href="@Url.Action("EditEducation", "Resume", new { edid = education.EdID })" class="btn btn-secondary btn-sm">Redigera Utbildning</a>
+
+                                <form asp-action="DeleteEducation" asp-controller="Resume" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@education.EdID" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Är du säker på att du vill radera denna utbildning?');">Radera Utbildning</button>
+                                </form>
                             }
                         </div>
                     }
@@ -94,6 +108,12 @@
                         {
 
                             <a href="@Url.Action("EditQualification", "Resume", new { qid = skill.QID })" class="btn btn-secondary btn-sm">Redigera Färdighet</a>
+                            <form asp-action="DeleteQualification" asp-controller="Resume" method="post" class ="d-inline">
+                                <input type="hidden" name="id" value="@skill.QID" />
+                                <button type="submit" class=" btn btn-danger btn-sm" on-click="return confirm('Är du säker på att du vill radera denna färdighet?');">Radera Färdighet</button>
+
+                            </form>
+                        
                         }
 
                     }
@@ -126,12 +146,14 @@
                 
                     @if (User.Identity.IsAuthenticated && Model.User.UserName.Equals(User.Identity.Name))
                     {
-                        <a href="@Url.Action("IndexProjekt","Project")" class="btn btn-primary btn-sm">Gå till projektsidan</a>
+                        <a href="@Url.Action("IndexProjekt","Projekt")" class="btn btn-primary btn-sm">Gå till projektsidan</a>
                     }
                 }
 
                 <h2 class="mb-5">Personligt brev</h2>
                 <p>@Model.User.userCV.PersonalLetter</p>
+              
+
 
                 @if (!User.Identity.IsAuthenticated || !Model.User.UserName.Equals(User.Identity.Name))
                 {
@@ -155,7 +177,8 @@
                 }
                 else
                 {
-                    <button type="button" class="btn btn-primary">Redigera CV</button>
+                    <a href="@Url.Action("EditSummaryLetter", "Resume", new { id = Model.User.userCV.CVID })" class="btn btn-primary">Redigera Information</a>
+
                     <button type="button" class="btn btn-danger" onclick="confirmDeleteCV('@Model.User.Id')">Radera CV</button>
                 }
 
