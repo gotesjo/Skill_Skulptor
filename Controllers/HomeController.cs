@@ -43,7 +43,7 @@ namespace SkillSkulptor.Controllers
                 List<CV> allCv = _dbContext.CVs
                     .Where(cv => cv.fkUser.Id != currentID)
                     .OrderByDescending(cv => cv.CVID)
-                    .Take(3)
+                    .Take(3).Where(cv => cv.fkUser.Active == true)
                     .ToList();
                 List<CV> testCV = new List<CV>();
                 ViewBag.Heading = "Senaste cv på sidan";
@@ -51,7 +51,7 @@ namespace SkillSkulptor.Controllers
             }
             else
             {
-                List<CV> vissaCV = _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).Where(cv => cv.fkUser.ProfileAccess == false).ToList();
+                List<CV> vissaCV = _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).Where(cv => cv.fkUser.ProfileAccess == true && cv.fkUser.Active == true).ToList();
                 ViewBag.Heading = "Senaste cv på sidan";
                 return View(vissaCV);
             }
@@ -92,9 +92,9 @@ namespace SkillSkulptor.Controllers
                     if (User.Identity.IsAuthenticated)
                     {
                         CvSearched = CvSearched
-                        .Where
-                        (a => a.fkUser.Firstname.Contains(search) ||
-                        a.fkUser.Lastname.Contains(search)).ToList();
+                        .Where(a => a.fkUser.Active == true &&
+                        a.fkUser.Firstname.Contains(search) ||
+                        (a.fkUser.Lastname.Contains(search))).ToList();
                         ViewBag.Heading = "CV med namnet " + search;
                     }
                     // annars kommer denna else sats att även filtera på om kolumnen ProfileAccess är sann
@@ -102,9 +102,7 @@ namespace SkillSkulptor.Controllers
                     else
                     {
                         CvSearched = CvSearched
-                        .Where
-                        (a => a.fkUser.ProfileAccess == false &&
-                        (a.fkUser.Firstname.Contains(search) || a.fkUser.Lastname.Contains(search)))
+                        .Where(a => a.fkUser.ProfileAccess == true && a.fkUser.Active == true && a.fkUser.Firstname.Contains(search, StringComparison.OrdinalIgnoreCase) || (a.fkUser.Lastname.Contains(search, StringComparison.OrdinalIgnoreCase)))
                         .ToList();
                         ViewBag.Heading = "CV med namnet " + search;
 
@@ -118,8 +116,8 @@ namespace SkillSkulptor.Controllers
                     string lastName = searchTerms[1];
 
                     CvSearched = CvSearched
-                    .Where(a => a.fkUser.ProfileAccess == false &&
-                    a.fkUser.Firstname.Contains(firstName) && a.fkUser.Lastname.Contains(lastName)).ToList();
+                    .Where(a => a.fkUser.ProfileAccess == true && a.fkUser.Active == true &&
+                    a.fkUser.Firstname.Contains(firstName, StringComparison.OrdinalIgnoreCase) && a.fkUser.Lastname.Contains(lastName, StringComparison.OrdinalIgnoreCase)).ToList();
                     ViewBag.Heading = "CV med namnet " + search;
 
                 } 
