@@ -38,6 +38,7 @@
                 }
                 <h2 class="mb-5">Kort om mig</h2>
                 <p class="lead mb-5">@Model.User.userCV?.Summary</p>
+                <hr class="m-5" />
                  
                
 
@@ -48,8 +49,8 @@
                     @foreach (var experience in Model.User.userCV.Experiences)
                     {
                         <div class="mb-3">
-                            <h3>@experience.Position hos @experience.Employer</h3>
-                            <p>@experience.Description</p>
+                            <h3 class="mb-0">@experience.Position hos @experience.Employer</h3>
+                            <p class ="subheading mb-3">@experience.Description</p>
                             <p>Från @experience.StartDate till @experience.EndDate</p>
                             @if (User.Identity.IsAuthenticated && Model.User.UserName.Equals(User.Identity.Name))
                             {
@@ -69,6 +70,7 @@
                 {
                     <a href="@Url.Action("CreateExperience","Resume")" class="btn btn-primary btn-sm">Lägg till Erfarenhet</a>
                 }
+                <hr class="m-4" />
 
                 @if (Model.User.userCV.Educations != null)
                 {
@@ -76,8 +78,8 @@
                     @foreach (var education in Model.User.userCV.Educations)
                     {
                         <div class="mb-3">
-                            <h3>@education.Institution</h3>
-                            <p>@education.Course, @education.Degree</p>
+                            <h3 class="mb-0">@education.Institution</h3>
+                            <p class="subheading mb-3">@education.Course, @education.Degree</p>
                             <p>Från @education.StartDate till @education.EndDate</p>
                             @if (User.Identity.IsAuthenticated && Model.User.UserName.Equals(User.Identity.Name))
                             {
@@ -96,25 +98,28 @@
                 {
                     <a href="@Url.Action("CreateEducation","Resume")" class="btn btn-primary btn-sm">Lägg till Utbildning</a>
                 }
+                <hr class="m-4" />
 
                 @if (Model.User.userCV.Qualifications != null)
                 {
                     <h2 class="mb-5">Färdigheter</h2>
                     @foreach (var skill in Model.User.userCV.Qualifications)
                     {
-                        <p>@skill.QName: @skill.Description</p>
+                        <div class="mb-3">
+                            <p class ="subheading mb-3">@skill.QName: @skill.Description</p>
 
-                        @if (User.Identity.IsAuthenticated && Model.User.UserName.Equals(User.Identity.Name))
-                        {
+                            @if (User.Identity.IsAuthenticated && Model.User.UserName.Equals(User.Identity.Name))
+                            {
 
-                            <a href="@Url.Action("EditQualification", "Resume", new { qid = skill.QID })" class="btn btn-secondary btn-sm">Redigera Färdighet</a>
-                            <form asp-action="DeleteQualification" asp-controller="Resume" method="post" class ="d-inline">
-                                <input type="hidden" name="id" value="@skill.QID" />
-                                <button type="submit" class=" btn btn-danger btn-sm" on-click="return confirm('Är du säker på att du vill radera denna färdighet?');">Radera Färdighet</button>
+                                <a href="@Url.Action("EditQualification", "Resume", new { qid = skill.QID })" class="btn btn-secondary btn-sm">Redigera Färdighet</a>
+                                <form asp-action="DeleteQualification" asp-controller="Resume" method="post" class ="d-inline">
+                                    <input type="hidden" name="id" value="@skill.QID" />
+                                    <button type="submit" class=" btn btn-danger btn-sm" on-click="return confirm('Är du säker på att du vill radera denna färdighet?');">Radera Färdighet</button>
 
-                            </form>
+                                </form>
                         
-                        }
+                            }
+                        </div>
 
                     }
                 }
@@ -122,6 +127,7 @@
                 {
                     <a href="@Url.Action("CreateQualification","Resume")" class="btn btn-primary btn-sm">Lägg till Färdighet</a>
                 }
+                <hr class="m-4" />
 
                 @if (Model.Projects != null)
                 {
@@ -129,15 +135,15 @@
                     @foreach (Project p in Model.Projects)
                     {
                         <div class="mb-3">
-                            <h3>@p.ProjectName</h3>
-                            <p>@p.Description</p>
+                            <h3 class="mb-0">@p.ProjectName</h3>
+                            <p class="subheading mb-3">@p.Description</p>
                             <p>Från: @p.Startdate</p>
                             <p>Till: @p.Enddate</p>
                             @foreach(ProjectMembers pm in p.listProjectmembers)
                             {
                                 @if(pm.User.ProfileAccess && pm.User.Active)
                                 {
-                                    <img src="@Url.Action("UserImage", "Profile", new { userId = pm.User.Id })" class="rounded-circle mr-1" alt="@pm.User.Firstname @pm.User.Lastname" width="40" height="0">
+                                    <img src="@Url.Action("UserImage", "Profile", new { userId = pm.User.Id })" class="rounded-circle mr-1" alt="@pm.User.Firstname @pm.User.Lastname" width="40" height="40">
                                     <span>@pm.User.Firstname @pm.User.Lastname</span>
                                 }   
                             }
@@ -149,9 +155,11 @@
                         <a href="@Url.Action("IndexProjekt","Projekt")" class="btn btn-primary btn-sm">Gå till projektsidan</a>
                     }
                 }
+                <hr class="m-4" />
 
                 <h2 class="mb-5">Personligt brev</h2>
                 <p>@Model.User.userCV.PersonalLetter</p>
+                <hr class="m-4" />
               
 
 
@@ -188,168 +196,3 @@
         </section>
     }
 </div>
-
-
-
-
-
-
-@* @model AppUser
-@{ViewData["Title"] = "Redigera Profil";
-}
-
-<!-- Page Content -->
-<div class="container-fluid p-0">
-    <!-- About -->
-    <section class="resume-section" id="about">
-        <div class="resume-section-content">
-            <form asp-controller="Resume" asp-action ="SubmitResume" method="post" enctype="multipart/form-data">
-                <!-- Profil Bildinformation -->
-                <div class="mb-3">
-                    <div>
-                        <img src="@Model.fkPicture?.ImageData != null ? Url.Action("UserImage", "Profile", new { userId = Model.Id }) : Url.Content("~/images/default-profile.png")" 
-                             alt="Profilbild" 
-                             class="img-thumbnail img-responsive mb-3" 
-                             style="max-width: 300px; height: auto;" />
-                    </div>
-                </div>
-
-                <!-- User Information -->
-                <h1 class="mb-0">
-                    @Model.Firstname
-                    <span class="text-primary">@Model.Lastname</span>
-                </h1>
-                <div class="subheading mb-5">
-                    @Model.fkAddress?.Street · @Model.fkAddress?.City · @Model.fkAddress?.Street · @Model.Phonenr
-                    <a href="mailto:@Model.Email">@Model.Email</a>
-                </div>
-                <p class="lead mb-5">@Model.userCV?.Summary</p>
-                <!-- Social Icons etc... -->
-            </form>
-        </div>
-    </section>
-    <hr class="m-0" />
-    <!-- Experience-->
-    <section class="resume-section" id="experience">
-        <div class="resume-section-content">
-            <h2 class="mb-5">Erfarenheter</h2>   
-            @foreach (var experience in Model.userCV.Experiences)
-            {
-                <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                <div class="flex-grow-1">
-               
-                    <h3 class="mb-0">@Model.userCV.Experiences.First().Position</h3>
-                        <div class="subheading mb-3">@Model.userCV.Experiences.First().Employer</div>
-                        <p>@Model.userCV.Experiences.First().Description</p>
-                </div>
-                    <div class="flex-shrink-0 align-items-end"><span class="text-primary"> Startdatum @Model.userCV.Experiences.First().StartDate <br />
-                        Slutdatum @Model.userCV.Experiences.First().EndDate</span></div>
-
-            </div>
-
-            }
-            
-          
-           
-        </div>
-    </section>
-    <hr class="m-0" />
-    <!-- Education-->
-    <section class="resume-section" id="education">
-        <div class="resume-section-content">
-            <h2 class="mb-5">Utbildning</h2>
-            @foreach (var education in Model.userCV.Educations)
-            {
-                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                <div class="flex-grow-1">
-                    <h3 class="mb-0">@education.Institution</h3>
-                    <div class="subheading mb-3">@education.Course</div>
-                
-                    <p>@education.Degree</p>
-                </div>
-                    <div class="flex-shrink-0"><span class="text-primary"> Startdatum @Model.userCV.Educations.First().StartDate <br /> Slutdatum @Model.userCV.Educations.First().EndDate </span></div> <br>
-            </div>
-            }
-           
-           
-        </div>
-    </section>
-    <hr class="m-0" />
-    <!-- Skills-->
-    <section class="resume-section" id="skills">
-        <div class="resume-section-content">
-            <h2 class="mb-5">Färdigheter</h2>
-             @foreach (var qualification in Model.userCV.Qualifications)
-           { <div class="subheading mb-3">@qualification.QName</div>
-            <ul class="fa-ul mb-0">
-                <li>
-                    <span class="fa-li"><i class="fas fa-check"></i></span>
-                    @qualification.Description
-                </li>
-            
-               
-            </ul>
-            
-          
-         
-        
-           }
-       </div>
-    </section>
-    <hr class="m-0" />
-    <!-- Interests-->
-    <section class="resume-section" id="interests">
-        <div class="resume-section-content">
-            <h2 class="mb-5">Intressen</h2>
-           
-            <p class="mb-0">@Model.userCV.PersonalLetter</p>
-        </div>
-    </section>
-    <hr class="m-0" />
-    <!-- Awards-->
-    <section class="resume-section" id="awards">
-        <div class="resume-section-content">
-            <h2 class="mb-5">Awards & Certifications</h2>
-            <ul class="fa-ul mb-0">
-                <li>
-                    <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                    Google Analytics Certified Developer
-                </li>
-                <li>
-                    <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                    Mobile Web Specialist - Google Certification
-                </li>
-                <li>
-                    <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                    1
-                    <sup>st</sup>
-                    Place - University of Colorado Boulder - Emerging Tech Competition 2009
-                </li>
-                <li>
-                    <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                    1
-                    <sup>st</sup>
-                    Place - University of Colorado Boulder - Adobe Creative Jam 2008 (UI Design Category)
-                </li>
-                <li>
-                    <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                    2
-                    <sup>nd</sup>
-                    Place - University of Colorado Boulder - Emerging Tech Competition 2008
-                </li>
-                <li>
-                    <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                    1
-                    <sup>st</sup>
-                    Place - James Buchanan High School - Hackathon 2006
-                </li>
-                <li>
-                    <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
-                    3
-                    <sup>rd</sup>
-                    Place - James Buchanan High School - Hackathon 2005
-                </li>
-            </ul>
-        </div>
-    </section>
-</div> *@
