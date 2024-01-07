@@ -32,7 +32,7 @@
         <h2 class="mb-5">Deltagare<span style="color:#D98B6C; font-size: small;""> kan finnas dolda medlemmar</span></h2>
         @foreach (ProjectMembers p in Model.ProjectMembers)
         {
-                    @if (p.User.ProfileAccess && p.User.Active)
+                    @if ((p.User.ProfileAccess && p.User.Active) || (User.Identity.IsAuthenticated && p.User.Active))
                     {
                         <img src="@Url.Action("UserImage", "Profile", new { userId = p.User.Id })" class="rounded-circle mr-1" alt="@p.User.Firstname @p.User.Lastname" width="40" height="40">
                         <span>@p.User.Firstname @p.User.Lastname</span>
