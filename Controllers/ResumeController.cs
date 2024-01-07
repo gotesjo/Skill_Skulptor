@@ -21,6 +21,7 @@ namespace SkillSkulptor.Controllers
             this.userManager = userManager;
         }
 
+        //Visar ett CV, skickas inget id med visas den inloggades CV
         [HttpGet]
         public async Task<IActionResult> Index(string? id)
         {
@@ -40,6 +41,7 @@ namespace SkillSkulptor.Controllers
             CV userCV;
             List<Project> projects;
 
+            //Lägger till alla projekt man medverkar till ViewModeln
             try
             {
                 choosenUser = _dbContext.Users.Find(_id);
@@ -98,6 +100,7 @@ namespace SkillSkulptor.Controllers
                     //Education
                     if (model.Education != null)
                     {
+                        //Använder privat metod för att mappa modellen till ett Education objekt
                         _cv.Educations.Add(MakeEducation(model.Education));
                     }
                     //Experience
@@ -121,8 +124,8 @@ namespace SkillSkulptor.Controllers
                     ModelState.AddModelError("", "Ingen inloggad användare hittades.");
                 }
             }
-
-            return View(model); // Om valideringsfel finns, visa formuläret igen
+			// Om valideringsfel finns, visa formuläret igen
+			return View(model); 
         }
         
         [HttpGet]
@@ -287,53 +290,7 @@ namespace SkillSkulptor.Controllers
             }
             return View(model);
         }
-
-        private Education MakeEducation(CreateEducationModel model)
-        {
-            Education ed = new Education();
-            if (model.EdID.HasValue && model.EdID > 0)
-            {
-                ed.EdID = model.EdID.Value;
-            }
-
-            ed.StartDate = model.EdStartDate;
-            ed.EndDate = model.EdEndDate;
-            ed.Institution = model.Institution;
-            ed.Course = model.Course;
-            ed.Degree = model.Degree; 
-
-            return ed;
-        }
-        private Experience MakeExperience(CreateExperienceModel model)
-        {
-            Experience ex = new Experience();
-            
-            ex.StartDate = model.ExStartDate;
-            ex.EndDate = model.ExEndDate;
-            ex.Position = model.Position;
-            ex.Description = model.ExDescription;
-            ex.Employer = model.Employer;
-
-            return ex;
-        }
-        private Qualification MakeQualification(CreateQualificationModel model)
-        {
-            Qualification qu = new Qualification();
-            qu.QName = model.QName;
-            qu.Description = model.QDescription;
-
-            return qu;
-        }
-
-
-        private AppUser GetLoggedInUser()
-        {
-            AppUser loggedInUser = userManager.GetUserAsync(User).Result;
-            return loggedInUser;
-
-        }
-
-      
+    
         [HttpGet]
         public async Task<IActionResult> EditEducation(int edid)
 
@@ -586,49 +543,55 @@ namespace SkillSkulptor.Controllers
                 TempData["ErrorMessage"] = "Inget CV hittades att ta bort.";
             }
             return RedirectToAction("Index", "Home");
-
-
-
         }
 
-        // Ökning av klickräkningen när någon besöker profilsidan
-        public async Task IncreaseClickCount(string id)
-        {
-            var cv = await _dbContext.CVs.FirstOrDefaultAsync(c => c.BelongsTo == id);
+		//Metod för att mappa modellen till en DatabasEntitet
+		private Education MakeEducation(CreateEducationModel model)
+		{
+			Education ed = new Education();
+			if (model.EdID.HasValue && model.EdID > 0)
+			{
+				ed.EdID = model.EdID.Value;
+			}
 
-            if (cv != null)
-            {
-                cv.Clicks++;
-                await _dbContext.SaveChangesAsync();
-            }
-        }
+			ed.StartDate = model.EdStartDate;
+			ed.EndDate = model.EdEndDate;
+			ed.Institution = model.Institution;
+			ed.Course = model.Course;
+			ed.Degree = model.Degree;
 
-    }
+			return ed;
+		}
+		//Metod för att mappa modellen till en DatabasEntitet
+		private Experience MakeExperience(CreateExperienceModel model)
+		{
+			Experience ex = new Experience();
+
+			ex.StartDate = model.ExStartDate;
+			ex.EndDate = model.ExEndDate;
+			ex.Position = model.Position;
+			ex.Description = model.ExDescription;
+			ex.Employer = model.Employer;
+
+			return ex;
+		}
+		//Metod för att mappa modellen till en DatabasEntitet
+		private Qualification MakeQualification(CreateQualificationModel model)
+		{
+			Qualification qu = new Qualification();
+			qu.QName = model.QName;
+			qu.Description = model.QDescription;
+
+			return qu;
+		}
+
+        //Metod för att hämta inloggad användare
+		private AppUser GetLoggedInUser()
+		{
+			AppUser loggedInUser = userManager.GetUserAsync(User).Result;
+			return loggedInUser;
+
+		}
+	}
 }
-
-
-
-
-//[HttpGet("{id:int}")]
-//public IActionResult Index(int id)
-//{
-//  var myUser = _dbContext.Users.FirstOrDefault(u => u.UserId == id);
-//        return View (myUser);
-//}
-//public async Task<IActionResult> UserImage(int userId)
-//{
-//    var userPicture = await _dbContext.ProfilePictures
-//                                      .FirstOrDefaultAsync(p => p.pictureUser.UserId == userId);
-
-//    if (userPicture?.ImageData != null)
-//    {
-//        // Anta att bilden är av typen JPEG, uppdatera MIME-typen enligt bildformatet
-//        return File(userPicture.ImageData, "image/jpeg");
-//    }
-
-
-//    var path = Path.Combine(_hostingEnvironment.WebRootPath, "images", "default-profile.png");
-//    var imageBytes = await System.IO.File.ReadAllBytesAsync(path);
-//    return File(imageBytes, "image/png"); // Anpassa MIME-typen enligt standardbilden
-//}
 
