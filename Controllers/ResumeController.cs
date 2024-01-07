@@ -49,7 +49,6 @@ namespace SkillSkulptor.Controllers
                 List<int> projectIdsForUser = _dbContext.ProjectMembers.Where(pm => pm.UserId == choosenUser.Id).Select(pm => pm.ProjectId).ToList();
 				projects = _dbContext.Projects.Where(p => projectIdsForUser.Contains(p.ProjectId)).ToList();
 
-                await IncreaseClickCount(_id);
             }
             catch (Exception e)
             {
