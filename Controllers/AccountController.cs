@@ -31,7 +31,10 @@ namespace SkillSkulptor.Controllers
 			return View(loginViewModel);
 		}
 
-
+		// En asynkron metod för att logga in en användare som registrerat sig. Den använder sig av
+		// den inbyggda metoden PasswordSignInAsync() inom SignInManager klassen
+		// för att invänta ett resultat, och om resultaten går genom ska den returnera till 
+		// hem-skärmen. 
 		[HttpPost]
         public async Task<ActionResult> Login(LoginViewModel loginViewModel)
         {
@@ -54,7 +57,9 @@ namespace SkillSkulptor.Controllers
 			return View(loginViewModel);
 
 		}
-
+		// En metod som möjliggör en användare att logga ut från sitt konto. 
+		// Metoden använder sig av en av SignInManagers inkluderande metoder 'SignOutAsync()'
+		// för att logga ut en användare och sedan returnera de till hem-skärmen. 
 		[HttpGet]
         public async Task<ActionResult> Signout()
 		{
@@ -70,6 +75,8 @@ namespace SkillSkulptor.Controllers
             return View(userRegistrationViewModel);
         }
 
+		// En asynkron metod för att registrera nya användare. Den kollar om ModelState är valid
+		// och skapar sedan in en ny AppUser. 
 		[HttpPost]
 		public async Task<IActionResult> SignUp(UserRegistrationViewModel _urm)
 		{

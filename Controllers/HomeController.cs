@@ -19,7 +19,10 @@ namespace SkillSkulptor.Controllers
             _logger = logger;
         }
 
-
+        // Denna metod tar alla projekt som skapats och visar de 3 senaste på hemskärmen brevid alla CVs.  
+        // Metoden tar i åtanke om användaren är inloggad eller ej, och hämtar objekt av projekt beroende 
+        // på olika krav baserat på en status för inloggning. 
+        // De krav som kollas är om användaren som skapat projektet är aktiv och om den har sin profil gömd. 
         [HttpGet]
         public IActionResult Index()
         {
@@ -51,7 +54,11 @@ namespace SkillSkulptor.Controllers
             }
             else
             {
-                List<CV> vissaCV = _dbContext.CVs.OrderByDescending(cv => cv.CVID).Take(3).Where(cv => cv.fkUser.ProfileAccess == true && cv.fkUser.Active == true).ToList();
+                List<CV> vissaCV = _dbContext.CVs
+                    .OrderByDescending(cv => cv.CVID)
+                    .Take(3)
+                    .Where(cv => cv.fkUser.ProfileAccess == true && cv.fkUser.Active == true)
+                    .ToList();
                 ViewBag.Heading = "Senaste cv på sidan";
                 return View(vissaCV);
             }
@@ -63,7 +70,10 @@ namespace SkillSkulptor.Controllers
             return _dbContext;
         }
 
-
+        // Metodens funktionalitet är att söka efter CV baserat på ett förnamn, ett efternamn,
+        // eller en kombination av de båda, och sedan visa det CV som sen går att se vidare på.
+        // Denna metod tar även i åtanke om användaren som söker är inloggad eller ej, 
+        // och även om användaren som det söks på är aktiv eller ej.
         [HttpPost]
         public IActionResult Index(string search)
         {
@@ -78,7 +88,7 @@ namespace SkillSkulptor.Controllers
                 ExP.ProjectName = "Finns inga projekt";
                 ViewBag.Project = ExP;
             }
-            // fethcar alla CV från databasen
+            // fethcar alla CV från databasen till en lista. 
             List<CV> CvSearched = _dbContext.CVs.ToList();
 
            
@@ -93,9 +103,10 @@ namespace SkillSkulptor.Controllers
                     {
                         CvSearched = CvSearched
                         .Where(a => a.fkUser.Active == true &&
-                        a.fkUser.Firstname.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                        a.fkUser.Firstname.Contains(search, StringComparison.OrdinalIgnoreCase) || 
                         (a.fkUser.Lastname.Contains(search, StringComparison.OrdinalIgnoreCase))).ToList();
                         ViewBag.Heading = "CV med namnet " + search;
+                        // StringComparison.OrdinalIgnoreCase används under alla sökningar för ätt säkerställa att söksträngen fungerar oavsett versaler.
                     }
                     // annars kommer denna else sats att även filtera på om kolumnen ProfileAccess är sann
                     // eller falsk, och endast ta med objekt där det är falskt. 
