@@ -58,6 +58,19 @@
                     </div>
                     
                 }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="text-center">
+                        <h4>Klickräknare för ditt CV:</h4>
+                        @foreach (var cv in Model)
+                        {
+                            @if (User.Identity.Name == cv.fkUser.UserName) // Visa räknaren endast för inloggad användare vars CV visas
+                            {
+                                <p>Antal klick: @cv.Clicks</p>
+                            }
+                        }
+                    </div>
+                }
             </div>
         </div>
     </div>

@@ -46,7 +46,9 @@ namespace SkillSkulptor.Controllers
                 userCV = choosenUser.userCV;
                 List<int> projectIdsForUser = _dbContext.ProjectMembers.Where(pm => pm.UserId == choosenUser.Id).Select(pm => pm.ProjectId).ToList();
 				projects = _dbContext.Projects.Where(p => projectIdsForUser.Contains(p.ProjectId)).ToList();
-			}
+
+                await IncreaseClickCount(_id);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e);
@@ -68,14 +70,14 @@ namespace SkillSkulptor.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult CreateCV()
+        public IActionResult CreateCV() 
         {
             CreateResumeModel model = new CreateResumeModel();
 
             return View(model);
         }
 
-
+        //Skapar ett cv för en inloggad användare 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateCV(CreateResumeModel model)
@@ -108,7 +110,7 @@ namespace SkillSkulptor.Controllers
                     {
                         _cv.Qualifications.Add(MakeQualification(model.Qualification));
                     }
-
+                    
                     _dbContext.CVs.Add(_cv);
                     await _dbContext.SaveChangesAsync();
 
@@ -122,7 +124,7 @@ namespace SkillSkulptor.Controllers
 
             return View(model); // Om valideringsfel finns, visa formuläret igen
         }
-
+        
         [HttpGet]
         public IActionResult CreateExperience()
         {
@@ -236,6 +238,8 @@ namespace SkillSkulptor.Controllers
             
         }
 
+        //Hämtar och fyller modell med befintliga data från summary och personalletter
+
         [HttpGet]
         public async Task<IActionResult> EditSummaryLetter(int id)
         {
@@ -243,7 +247,7 @@ namespace SkillSkulptor.Controllers
             if (cv == null)
             {
                
-                return RedirectToAction("Index", "Resume"); 
+                return RedirectToAction("Index"); 
             }
 
             var model = new EditSummaryLetterModel
@@ -255,6 +259,7 @@ namespace SkillSkulptor.Controllers
             return View(model);
         }
 
+        //Uppdaterar summary eller personligtbrev från modellen
 
         [HttpPost]
         public async Task<IActionResult> EditSummaryLetter(EditSummaryLetterModel model)
@@ -271,20 +276,17 @@ namespace SkillSkulptor.Controllers
                     var result = await _dbContext.SaveChangesAsync();
                     if (result > 0)
                     {
-                        return RedirectToAction("Index", "Resume");
+                        return RedirectToAction("Index");
                     }
                 }
                 else
                 {
                     TempData["ErrorMessage"] = "Ingen summary eller personligtbrev hittades för användaren!";
-                    return RedirectToAction("Index", "Resume");
+                    return RedirectToAction("Index");
                 }
             }
             return View(model);
         }
-
-
-
 
         private Education MakeEducation(CreateEducationModel model)
         {
@@ -323,14 +325,6 @@ namespace SkillSkulptor.Controllers
             return qu;
         }
 
-        //private CV MakeSummaryLetter(EditSummaryLetterModel model)
-        //{
-        //    CV cv = new CV();
-        //    cv.Summary = model.Summary;
-        //    cv.PersonalLetter = model.PersonalLetter;
-
-        //    return cv;
-        //}
 
         private AppUser GetLoggedInUser()
         {
@@ -344,13 +338,15 @@ namespace SkillSkulptor.Controllers
         public async Task<IActionResult> EditEducation(int edid)
 
         {
+            //hämtar id:et för education från databasen
             var education =  await _dbContext.Educations.FindAsync(edid);
 
           if(education == null)
             {
                 TempData["ErrorMessage"] = "Ingen erfarenhet hittades för användaren";
-                return RedirectToAction("Index", "Resume");
+                return RedirectToAction("Index");
             }
+            //Fyller modellen
             var model = new CreateEducationModel
 
             {
@@ -380,10 +376,10 @@ namespace SkillSkulptor.Controllers
                 if (education == null)
                 {
                     TempData["ErrorMessage"] = "Utbildningen hittades inte.";
-                    return RedirectToAction("Index", "Resume");
+                    return RedirectToAction("Index");
                 }
 
-                
+                //uppdaterar befintlig utbildning från modellen
                 education.Institution = model.Institution;
                 education.Course = model.Course;
                 education.Degree = model.Degree;
@@ -407,9 +403,11 @@ namespace SkillSkulptor.Controllers
                 TempData["ErrorMessage"] = "Ingen erfarenhet hittades för användaren";
                 return RedirectToAction("Index", "Resume");
             }
-            var model = new CreateExperienceModel
 
+            //Fyller modellen
+            var model = new CreateExperienceModel
             {
+
                 Position = experience.Position,
                 ExDescription = experience.Description,
                 Employer = experience.Employer,
@@ -437,11 +435,11 @@ namespace SkillSkulptor.Controllers
                 if (experience == null)
                 {
                     TempData["ErrorMessage"] = "Erfarenhet hittades inte.";
-                    return RedirectToAction("Index", "Resume");
+                    return RedirectToAction("Index");
                 }
 
-                //Uppdatera befintlig utbildning
-                //education.Institution = model.Institution;
+                //Uppdatera befintlig erfarenhet från modellen
+                
                 experience.Position = model.Position;
                 experience.Employer = model.Employer;
                 experience.Description = model.ExDescription;
@@ -465,6 +463,7 @@ namespace SkillSkulptor.Controllers
                 TempData["ErrorMessage"] = "Ingen färdighet hittades för användaren";
                 return RedirectToAction("Index", "Resume");
             }
+            //Fyller modellen
             var model = new CreateQualificationModel
 
             {
@@ -494,7 +493,7 @@ namespace SkillSkulptor.Controllers
                     TempData["ErrorMessage"] = "Färdighet hittades inte.";
                     return RedirectToAction("Index", "Resume");
                 }
-
+                //uppdaterar befintliga färdigheter från modellen
                
                 qualification.QName = model.QName;
                 qualification.Description = model.QDescription;
@@ -591,6 +590,19 @@ namespace SkillSkulptor.Controllers
 
 
         }
+
+        // Ökning av klickräkningen när någon besöker profilsidan
+        public async Task IncreaseClickCount(string id)
+        {
+            var cv = await _dbContext.CVs.FirstOrDefaultAsync(c => c.BelongsTo == id);
+
+            if (cv != null)
+            {
+                cv.Clicks++;
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
     }
 }
 
