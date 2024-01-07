@@ -33,6 +33,7 @@
                 {
                     <div class="col card m-3 bg-info">
                         <a asp-controller="Resume" asp-action="Index" asp-route-id="@cv.fkUser.Id">
+                            <img src="@Url.Action("UserImage", "Profile", new { userId = @cv.fkUser.Id })" class="rounded-circle mr-1 m-3" alt="@cv.fkUser.Firstname @cv.fkUser.Lastname" width="100" height="100">
                             <h3>@cv.fkUser.Firstname @cv.fkUser.Lastname</h3>
                             <h6 class="subheading">@cv.Summary</h6>
                             <br />
