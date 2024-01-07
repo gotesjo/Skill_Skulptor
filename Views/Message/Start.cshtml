@@ -23,7 +23,6 @@
 					@foreach(AppUser user in Model.Users)
 					{
 						<div class="list-group-item list-group-item-action border-0 user-div m-4 position-relative overflow-auto" data-user-id=@user.Id>
-	@* 						<div class="badge bg-success float-right">1</div> *@
 							<div class="d-flex align-items-start h-25 overflow-auto">
 								<img src="@Url.Action("UserImage", "Profile", new { userId = user.Id })" class="rounded-circle mr-1" alt="@user.Firstname @user.Lastname" width="40" height="40">
 								<div class="flex-grow-1 ml-3">
@@ -48,14 +47,17 @@
 				<div id="conversation">
 					@if (Model.ConversationData != null)
 					{
+						<!-- Ladda in Konversationsdatan för en konversation-->
 						@Html.Partial("_ConversationPartial", Model.ConversationData)
 					}
 					else if(Model.ConversationData.receiver != null)
 					{
+					<!-- Ladda in sida för att skriva nya meddelande-->
 						@Html.Partial("_NewMessagePartial", Model.ConversationData)
 					} 
 					else
 					{
+					<!-- Ladda in en sida -->
 						@Html.Partial("_UnknownMessages", Model.ConversationData);
 					}
 				</div>

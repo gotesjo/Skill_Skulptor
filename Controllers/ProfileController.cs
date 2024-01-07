@@ -126,7 +126,7 @@ namespace SkillSkulptor.Controllers
 
                             if (_existingUser.fkPicture == null)
                             {
-                                _existingUser.fkPicture = new Profilepicture(); // Ersätt 'Profilepicture' med korrekt klassnamn
+                                _existingUser.fkPicture = new Profilepicture(); 
                             }
 
                             _existingUser.fkPicture.ImageData = stream.ToArray();
@@ -156,20 +156,20 @@ namespace SkillSkulptor.Controllers
             return View("Index", model);
         }
 
-
+        //Metod för att hämta en profilbild för en användare, Har användaren ingen profilbild så retuneras en standard bild
         public async Task<IActionResult> UserImage(string userId)
         {
             var userPicture = await _dbContext.ProfilePictures
                                               .FirstOrDefaultAsync(p => p.pictureUser.Id == userId);
 
+            //retunerar användarens bild
             if (userPicture?.ImageData != null)
             {
-                // Typen JPEG, uppdatera MIME-typen enligt bildformatet
                 return File(userPicture.ImageData, "image/jpeg");
             }
 
-
-            var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "datafiles", "pictures", "default-profile.jpg");
+			//Hämtar standarbilden ifall man inte har profilbild
+			var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "datafiles", "pictures", "default-profile.jpg");
             var imageBytes = await System.IO.File.ReadAllBytesAsync(imagePath);
 
             
@@ -179,6 +179,7 @@ namespace SkillSkulptor.Controllers
 
         }
 
+        //Mappar en AppUser till våran ViewModel som används 
         private ProfileViewModel MapToProfileViewModel(AppUser user)
         {
             var config = new MapperConfiguration(cfg =>
@@ -191,8 +192,6 @@ namespace SkillSkulptor.Controllers
             });
 
             var mapper = new Mapper(config);
-
-            // Använd AutoMapper för att kartlägga egenskaperna
             return mapper.Map<ProfileViewModel>(user);
         }
     }

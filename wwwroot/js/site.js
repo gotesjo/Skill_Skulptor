@@ -1,11 +1,4 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-// Scripts
-// 
-
+﻿
 window.addEventListener('DOMContentLoaded', event => {
 
     // Activate Bootstrap scrollspy on the main nav element
@@ -33,23 +26,19 @@ window.addEventListener('DOMContentLoaded', event => {
 });
 
 
-//För konversationssida
-
+//För konversationssidan
 $(document).ready(function () {
 
     // Uppdatera meddelandeantal vid sidan av
     // Timer för uppdareringen
     setInterval(updateUnreadMessagesCount, 1000);
 
-   
-    
-
+    //När man klickar på en person i Meddelandesidan. För att öppna konversationen
     $(document).on('click', '.user-div', function () {
         var otherUserID = $(this).data('user-id');
 
         // Anropa din metod med användarens id och uppdatera konversationen
         UpdateConversation(otherUserID);
-        console.log('User clicked. User ID:', otherUserID);
     });
     scrollToBottom();
 });
@@ -69,17 +58,17 @@ function RunTimer() {
     });
 }
 
+//Uppdaterar konversationen på meddelandesidan
 function UpdateConversation(otherUserID) {
     if (otherUserID == null) {
         var unknonwUserName = $(".receiver_user-div").data("user-id");
     }
-    // Använd AJAX för att skicka en asynkron förfrågan till servern
     $.ajax({
         type: 'GET',
         url: '/Message/GetConversation',
-        data: { otherUserID: otherUserID }, // Här skickar du med userId som parameter
+        data: { otherUserID: otherUserID }, 
         success: function (result) {
-            // Uppdatera konversationssektionen med den nya delvis vyn
+            //Renderar in en _Partial Vy för konversationen
             $('#conversation').html(result);
             scrollToBottom();
         },
@@ -113,6 +102,7 @@ function sendMessage(newMessage, otherUserId) {
     });
 }
 
+//När man klickar på "Läs meddelande" knappen
 function readMessage(Message_id, otherUserId) {
     console.log("Försöker läsa meddelandet");
     var messageId = Message_id;
@@ -141,16 +131,7 @@ function readMessage(Message_id, otherUserId) {
     });
 
 }
-
-function scrollToBottom() {
-    var messageContainer = document.getElementById('messageContainer');
-    messageContainer.scrollTop = messageContainer.scrollHeight;
-}
-
-// Hantering av olästa meddelanden
-
-
-    // Funktion för att uppdatera meddelandeantal
+// Funktion för att uppdatera meddelandeantal
 function updateUnreadMessagesCount() {
     RunTimer().then(function (isLoggedIn) {
         if (!isLoggedIn) {
@@ -181,7 +162,7 @@ function updateUnreadMessagesCount() {
         
     });
 }
-
+//Metod för att skicka meddelanden ifall man inte är inloggad
 function sendUnknownMessage() {
     var _sendTo = document.querySelector('.send-unknown-div').getAttribute('data-to-id');
     var _from = null;
@@ -239,6 +220,11 @@ function clearSendUnknownForm() {
     // Rensa värdet i input-elementet
     inputMessage.value = '';
     inputName.value = '';
+}
+
+function scrollToBottom() {
+    var messageContainer = document.getElementById('messageContainer');
+    messageContainer.scrollTop = messageContainer.scrollHeight;
 }
 
 

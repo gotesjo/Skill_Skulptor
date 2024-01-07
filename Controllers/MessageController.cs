@@ -26,8 +26,10 @@ namespace SkillSkulptor.Controllers
 		{
 			AppUser _loggedInUser = GetLoggedInUser();
 
+			//Lägger till alla anvvändare  man kan skicka till och tar bort sin egna profil
 			List<AppUser> _users = _dbContext.Users.Where(u => u.Active).ToList();
 			_users.Remove(_loggedInUser);
+			//Lägger till Anonyma användare som har skickat via Meddelandefunktionen på CV sidan
 			_users.AddRange(GetUnknonwUsers(_loggedInUser));
 
 			var viewModel = new SearchViewModel
@@ -39,6 +41,8 @@ namespace SkillSkulptor.Controllers
 			return View(viewModel);
 		}
 
+		//Metod för sökning på användare 
+		//Anropas via Ajax
 		[Authorize]
 		[HttpPost]
 		public IActionResult Search(string searchString)
@@ -50,7 +54,8 @@ namespace SkillSkulptor.Controllers
 
 			AppUser _loggedInUser = GetLoggedInUser(); 
 
-			List<AppUser> _users = _dbContext.Users.Where(user => user.Firstname.Contains(searchString) && user.Id != _loggedInUser.Id && user.Active).ToList();
+			//Tarbort användare som inte är aktiva eller har privat åtkomst
+			List<AppUser> _users = _dbContext.Users.Where(user => user.Firstname.Contains(searchString) && user.Id != _loggedInUser.Id && user.Active && user.ProfileAccess).ToList();
 
 			var viewModel = new SearchViewModel
 			{
@@ -62,21 +67,25 @@ namespace SkillSkulptor.Controllers
 			return View("Start", viewModel);
 		}
 
+		//Metod för att Läsa in en konversation mellan två användare
+		//Anropas via Ajax
 		[Authorize]
 		[HttpGet]
 		public IActionResult GetConversation(string otherUserID)
 		{
-			// Hämta konversationsdata baserat på användarens ID
 			string currentUserId = GetLoggedInUser().Id;
 
+			//Ifall användaren id som skickas med är korrekt emot databasen
 			if (_dbContext.Users.Find(otherUserID) != null)
 			{
+				//Hämtar konversationen mellan det två deltagarna och lägger dem i en lista
 				List<Message> conversation = _dbContext.Messages.Where(received => received.FromUserID == otherUserID && received.ToUserID == currentUserId).ToList();
 				conversation.AddRange(_dbContext.Messages.Where(sent => sent.ToUserID == otherUserID && sent.FromUserID == currentUserId).ToList());
 
 				conversation = conversation.OrderBy(message => message.MessageId).ToList();
 				List<Message_object> list_objects = new List<Message_object>();
 
+				//Lägger på information om meddelandet för att hantera css klasser i html sidan 
 				foreach (Message message in conversation)
 				{
 					Message_object mess_obj = new Message_object();
@@ -99,12 +108,12 @@ namespace SkillSkulptor.Controllers
 						mess_obj.ImageId = message.fkFromUser.Id;
 					}
 
+					// Använd AutoMapper för att mappa entiteterna 
 					var config = new MapperConfiguration(cfg => cfg.CreateMap<Message, Message_object>());
 					var mapper = new Mapper(config);
-
-					// Använd AutoMapper för att kartlägga egenskaperna
 					mess_obj = mapper.Map<Message_object>(message);
 
+					//Uppdaterar modellen 
 					mess_obj.classCss = messdir;
 					mess_obj.MessageName = messName;
 					mess_obj.MessageId = message.MessageId;
@@ -112,11 +121,12 @@ namespace SkillSkulptor.Controllers
 
 					list_objects.Add(mess_obj);
 				}
-
+				//Skapar en viewModel där varje meddelande ska läggas i
 				MessageServiceModel data = new MessageServiceModel();
 				data.messagesObjects = list_objects;
 				data.receiver = _dbContext.Users.Find(otherUserID);
 
+				//Ifall man har en konversation visas konversationen annars visas nytt meddelande sida
 				if (data.messagesObjects != null && data.messagesObjects.Any())
 				{
 					return PartialView("_ConversationPartial", data);
@@ -137,12 +147,9 @@ namespace SkillSkulptor.Controllers
 
 				return PartialView("_UnknownMessages", dataUnknown);
 			}
-
-			
-
-
 		}
 
+		//Anropas via Ajax
 		[HttpPost]
 		public IActionResult Send(string Newmessage, string receiverId)
 		{
@@ -163,6 +170,7 @@ namespace SkillSkulptor.Controllers
 			return RedirectToAction("GetConversation", new {otherUserId = receiverId });
 		}
 
+		//Metod för att skicka meddelanden ifall man inte är en användare. Anropas via Ajax
 		[HttpPost]
 		public IActionResult SendUnkown(string newmessage, string receiverId, string from)
 		{
@@ -182,6 +190,7 @@ namespace SkillSkulptor.Controllers
             return RedirectToAction("Index", "Resume", new { id = receiverId });
         }
 
+		//metod för att markera meddelanden som lästa. Anropas via Ajax
 		[Authorize]
 		[HttpPost]
 		public IActionResult MarkRead(int _messageID)
@@ -210,13 +219,15 @@ namespace SkillSkulptor.Controllers
 			
 		}
 
+		//Anropas via Ajax
+		//Kollar hur många meddelanden som man har olästa. 
 		[HttpGet]
 		public IActionResult UnreadMessages()
 		{
 			if (User.Identity.IsAuthenticated)
 			{
                 AppUser myuser = GetLoggedInUser();
-                int unreadMessages = myuser.ReceivedMessages.Where(m => m.ViewStatus == false).Count();
+                int unreadMessages = myuser.ReceivedMessages.Where(m => m.ViewStatus == false && m.fkFromUser.Active).Count();
                 return Json(unreadMessages);
             } else
 			{

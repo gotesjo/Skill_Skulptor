@@ -3,9 +3,6 @@
 <div class="col-12 col-lg-7 col-xl-9" id="conversation">
 	<div class="py-2 px-4 border-bottom d-none d-lg-block">
 		<div class="d-flex align-items-center py-1">
-			<div class="position-relative">
-				@* <img src='@Url.Action("UserImage", "Profile", new { userId = Model.receiver.Id })' class="rounded-circle mr-1" alt="@Model.receiver.Firstname" width="40" height="40"> *@
-			</div>
 			<div class="flex-grow-1 pl-3">
 				<strong>@Model.UnknonwMessages.First().UnknownUser</strong>
 				<div class="text-muted small"><em>Chatta med @Model.UnknonwMessages.First().UnknownUser</em></div>
@@ -24,7 +21,6 @@
 		{
 			<div class="chat-message-left pb-4">
 				<div>
-					@* <img src='@Url.Action("UserImage", "Profile", new { userId = message.fkFromUser.Id })' class="rounded-circle mr-1" alt="@message.MessageName" width="40" height="40"> *@
 					<div class="text-muted small text-nowrap mt-2">@message.Datum</div>
 				</div>
 				<div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
