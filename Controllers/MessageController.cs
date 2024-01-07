@@ -227,7 +227,7 @@ namespace SkillSkulptor.Controllers
 			if (User.Identity.IsAuthenticated)
 			{
                 AppUser myuser = GetLoggedInUser();
-                int unreadMessages = myuser.ReceivedMessages.Where(m => m.ViewStatus == false && m.fkFromUser.Active).Count();
+                int unreadMessages = myuser.ReceivedMessages.Where(m => m.ViewStatus == false).Count();
                 return Json(unreadMessages);
             } else
 			{
