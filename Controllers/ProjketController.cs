@@ -26,7 +26,8 @@ namespace SkillSkulptor.Controllers
 
         }
 
-
+        // En metod som hämtar alla projekt och lägger det till en lista.
+        // Skapar en Lista av ProjectViewModel som returnerar viewen för den ViewModelen. 
 		[HttpGet]
 		public IActionResult IndexProjekt()
 		{
