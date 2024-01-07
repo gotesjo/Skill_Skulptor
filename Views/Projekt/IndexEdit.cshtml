@@ -18,11 +18,22 @@
     </div>
     <div class="form2 form-group">
         <label asp-for="Startdate">StartDatum</label>
-        <input asp-for="Startdate" type="date" class="form-control" placeholder="Skriv StartDatum här">
+        <input asp-for="Startdate" type="datetime" class="form-control" placeholder="Skriv StartDatum här">
     </div>
     <div class="form3 form-group">
         <label asp-for="Enddate">SlutDatum</label>
-        <input asp-for="Enddate" type="date" class="form-control" placeholder="Skriv SlutDatum här">
+        <input asp-for="Enddate" type="datetime" class="form-control" placeholder="Skriv SlutDatum här">
+    </div>
+    <div class="form3 form-group">
+        <label asp-for="MaxPeople">Antal Deltagare</label>
+        <select asp-for="MaxPeople" class="form-control">
+
+            @for (int i = ViewBag.Count; i <= 10; i++)
+            {
+                <option value="@i">@i</option>
+            }
+            
+        </select>
     </div>
     <div>
         <button type="submit" class="btn btn-primary btn-lg btn-block m-5">Redigera Projekt</button>

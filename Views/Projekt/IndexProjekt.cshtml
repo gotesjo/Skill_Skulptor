@@ -34,14 +34,15 @@
                     <tr>
                         <td scope="col">@prod.CreatedByUser</td>
                         <td scope="col">
-                        <a href="@Url.Action("IndexShowProject", "Projekt", new { projectId = prod.ProjectId })">
-                                @prod.ProjectName
+                            <a href="@Url.Action("IndexShowProject", "Projekt", new { projectId = prod.ProjectId })" class="text-decoration-none">
+                                @prod.ProjectName 
                             </a>
                         </td>
-                        <td scope="col">@prod.Description</td>
+
+                    <td scope="col" class="text-truncate" style="max-width: 200px;">@prod.Description</td>
                         <td scope="col">@prod.Startdate</td>
                         <td scope="col">@prod.Enddate</td>
-                        <td scope="col">@prod.MaxPeople/5</td>
+                        <td scope="col">@prod.PersonCount/@prod.MaxPeople</td>
                    
                     @if (User.Identity.IsAuthenticated)
                     {

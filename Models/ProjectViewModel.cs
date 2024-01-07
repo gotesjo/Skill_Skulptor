@@ -23,13 +23,16 @@ namespace SkillSkulptor.Models
         [DataType(DataType.Date)]
         public DateTime Enddate { get; set; }
 
+        [Required(ErrorMessage ="Antal är obligatoriskt")]
         public int MaxPeople { get; set; }
+
+        public int PersonCount { get; set; } = 1;
 
         public string? CreatedBy { get; set; }
 
         public AppUser? CreatedByUser { get; set; }
 
-        public List<ProjectMembers> ProjectMembers { get; set; }
+        public List<ProjectMembers>? ProjectMembers { get; set; }
 
     }
 }
