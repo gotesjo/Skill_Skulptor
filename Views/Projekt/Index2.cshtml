@@ -1,6 +1,6 @@
 ﻿@model Project
 
-	<h2>Här ska det skapas nya projekt</h2>
+	<h2>SKAPA PROJEKT</h2>
 
 <!--Skapa projekt Content-->
 <div asp-validation-summary="All" class="text-danger"></div>
@@ -21,6 +21,22 @@
         <label asp-for="Enddate">SlutDatum</label>
         <input asp-for="Enddate" type="date" class="form-control" placeholder="Skriv SlutDatum här">
     </div>
+    <div class="form3 form-group">
+        <label asp-for="MaxPeople">Antal Deltagare</label>
+        <select asp-for="MaxPeople" class="form-control">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+
   <div>
         <button type="submit" class="btn btn-primary btn-lg btn-block m-5">Lägg till Projektet</button>
   </div>

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using SkillSkulptor.Models;
+using System.Diagnostics.Eventing.Reader;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace SkillSkulptor.Controllers
 {
@@ -28,13 +30,13 @@ namespace SkillSkulptor.Controllers
 		[HttpGet]
 		public IActionResult IndexProjekt()
 		{
+            
             List<Project> projects = _dbContext.Projects.Include(p => p.CreatedByUser).ToList();
             
             List<ProjectViewModel> projectViewModels = MapToViewModel(projects);
             ViewBag.Meddelande = "Totalt antal projekt: " + projectViewModels.Count;
 
             ViewBag.LoggedIn = GetCurrentUserIdName()?.Id;
-
             return View(projectViewModels);
 		}
 
@@ -54,8 +56,10 @@ namespace SkillSkulptor.Controllers
                     MaxPeople = project.MaxPeople,
                     CreatedBy = project.CreatedBy,
                     CreatedByUser = project.CreatedByUser,
-                    ProjectMembers = project.listProjectmembers.ToList()
-            };
+                    ProjectMembers = project.listProjectmembers.ToList(),
+                    PersonCount = project.listProjectmembers.Count()
+                };
+
 
                 projectViewModels.Add(viewModel);
             }
@@ -76,7 +80,8 @@ namespace SkillSkulptor.Controllers
                 MaxPeople = projects.MaxPeople,
                 CreatedBy = projects.CreatedBy,
                 CreatedByUser = projects.CreatedByUser,
-                ProjectMembers = projects.listProjectmembers.ToList()
+                ProjectMembers = projects.listProjectmembers.ToList(),
+                PersonCount = projects.listProjectmembers.Count(pm => pm.ProjectId == projects.ProjectId),
             };
 
 
@@ -115,6 +120,8 @@ namespace SkillSkulptor.Controllers
 		[HttpGet]
 		public IActionResult IndexEdit(int ProjectId) 
 		{
+            ViewBag.Count = _dbContext.ProjectMembers.Count(pm => pm.ProjectId == ProjectId);
+
                 var project = _dbContext.Projects.Find(ProjectId);
                 ProjectViewModel model = new ProjectViewModel();
                 model.ProjectId = project.ProjectId;
@@ -150,6 +157,7 @@ namespace SkillSkulptor.Controllers
                         existingProject.Description = updatedProject.Description;
                         existingProject.Startdate = updatedProject.Startdate;
                         existingProject.Enddate = updatedProject.Enddate;
+                        existingProject.MaxPeople = updatedProject.MaxPeople;
 
                         _dbContext.Attach(existingProject.CreatedByUser);
 
@@ -167,10 +175,10 @@ namespace SkillSkulptor.Controllers
             }
             catch (Exception ex)
             {
-                // Handle exceptions and log errors
+
                 _Logger.LogError(ex, "An error occurred while updating the project.");
 
-                // Optionally, you can return an error view or redirect to an error page
+
                 return View("Error");
             }
         }
@@ -247,13 +255,12 @@ namespace SkillSkulptor.Controllers
             return RedirectToAction("IndexProjekt");
         
     }
-
-		public IActionResult JoinProject(int ProjectId)
+        public IActionResult JoinProject(int ProjectId)
 		{
 			AppUser user = GetCurrentUserIdName();
             var project = _dbContext.Projects.Find(ProjectId);
 
-			if (user != null)
+			if (user != null && project != null)
 			{
 				bool isAlreadyMember = _dbContext.ProjectMembers
 					.Any(pm => pm.ProjectId == ProjectId && pm.UserId.Equals(user.Id));
@@ -262,41 +269,41 @@ namespace SkillSkulptor.Controllers
 
                 if (!isAlreadyMember)
 				{
-					if (project != null && project.MaxPeople <= 5)
-					{
-						project.MaxPeople++;
+                        int personCount = _dbContext.ProjectMembers.Count(pm => pm.ProjectId == ProjectId);
+                        
 
-						_dbContext.SaveChanges();
+                    if (personCount < project.MaxPeople)
+                        {
+                            _dbContext.SaveChanges();
 
-						var member = new ProjectMembers
-						{
-							ProjectId = ProjectId,
-							UserId = user.Id
-						};
+                            var member = new ProjectMembers
+                            {
+                                ProjectId = ProjectId,
+                                UserId = user.Id
+                            };
 
-						_dbContext.ProjectMembers.Add(member);
-						_dbContext.SaveChanges();
+                            _dbContext.ProjectMembers.Add(member);
+                            _dbContext.SaveChanges();
 
-                        return RedirectToAction("IndexProjekt");
-					}
-					else
-					{
-						ViewBag.Error = "Får max finnas 5 deltagare per projekt";
-						return RedirectToAction("ProjketController");
-					}
-				}
-				else
-				{
-                    TempData["ErrorMessage"] = "Du är redan del av detta projekt!";
+                            return RedirectToAction("IndexProjekt");
+                        }
+                        else
+                        {
+                            ViewBag.Error = "Får max finnas " + project.MaxPeople + " deltagare per projekt";
+                            return RedirectToAction("IndexProjekt");
+                        }
+                    }
+                else
+                {
+                    ViewBag.Error = "Du är redan medlem";
                     return RedirectToAction("IndexProjekt");
-                    
                 }
-			}
-			else
-			{
-				return RedirectToAction("IndexProjekt");
-			}
-			
+				}
+            else
+            { 
+                ViewBag.Error = "Finns inge projekt";
+                return View("IndexProjekt");
+            }
 		}
 
 		public AppUser GetCurrentUserIdName()
