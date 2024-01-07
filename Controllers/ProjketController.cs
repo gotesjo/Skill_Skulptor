@@ -41,6 +41,7 @@ namespace SkillSkulptor.Controllers
             return View(projectViewModels);
 		}
 
+        //Tilldelar Viemodelen värdet av project model för en lista
         private List<ProjectViewModel> MapToViewModel(List<Project> projects)
         {
             List<ProjectViewModel> projectViewModels = new List<ProjectViewModel>();
@@ -58,7 +59,8 @@ namespace SkillSkulptor.Controllers
                     CreatedBy = project.CreatedBy,
                     CreatedByUser = project.CreatedByUser,
                     ProjectMembers = project.listProjectmembers.ToList(),
-                    PersonCount = project.listProjectmembers.Count()
+                    PersonCount = project.listProjectmembers.Count(),
+                    IsUserPartOfProject = UserIsAlreadyPartOfProject(project)
                 };
 
 
@@ -68,6 +70,7 @@ namespace SkillSkulptor.Controllers
             return projectViewModels;
         }
 
+        //För ett enskilt projekt
         private ProjectViewModel MapToViewModelSingel(Project projects)
         {
 
@@ -87,6 +90,11 @@ namespace SkillSkulptor.Controllers
 
 
             return viewModel;
+        }
+
+        public bool UserIsAlreadyPartOfProject(Project project)
+        {
+            return project.listProjectmembers.Any(pm => pm.UserId == GetCurrentUserId());
         }
 
         [HttpGet]
@@ -312,6 +320,12 @@ namespace SkillSkulptor.Controllers
             
                 AppUser loggedInUser = _userManager.GetUserAsync(User).Result;
                 return loggedInUser;
+        }
+
+        public string GetCurrentUserId()
+        {
+            AppUser loggedInUser = _userManager.GetUserAsync(User).Result;
+            return loggedInUser?.Id;
         }
 
     }

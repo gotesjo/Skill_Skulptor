@@ -46,12 +46,25 @@
                    
                     @if (User.Identity.IsAuthenticated)
                     {
-                        
-                        <form method="post" asp-controller="Projekt" asp-action="JoinProject">
-                           <input type="hidden" name="projectId" value="@prod.ProjectId" />
-                           <td> <button class="btn btn-primary" type="submit">Gå med</button> </td>
-                        </form>
-                        
+                        @if (!prod.IsUserPartOfProject)
+                        {
+                        @if(prod.MaxPeople > prod.PersonCount)
+                            {
+                                <form method="post" asp-controller="Projekt" asp-action="JoinProject">
+                                   <input type="hidden" name="projectId" value="@prod.ProjectId" />
+                                   <td> <button class="btn btn-primary" type="submit">Gå med</button> </td>
+                                </form>
+                            }
+                            else
+                            {
+                                <td><p style="color:#D98B6C">Detta projektet är fullt</p></td>
+                            }
+                        }
+                        else
+                        {
+                            <td><p style="color:#6CBAD9">Du är redan med i detta projeket</p></td>
+                        }
+
                         @if (prod.CreatedBy == ViewBag.LoggedIn)
                         {
                         <form method="post" asp-controller="Projekt" asp-action="RemoveProject">

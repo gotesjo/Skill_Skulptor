@@ -12,7 +12,7 @@ namespace SkillSkulptor.Models
         public string ProjectName { get; set; }
 
         [Required(ErrorMessage = "Du måste ha en beskrivning")]
-        [MaxLength(500, ErrorMessage = "Beskrivning får vara högst 500 tecken.")]
+        [MaxLength(1000, ErrorMessage = "Beskrivning får vara högst 500 tecken.")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "StartDatum är obligatoriskt.")]
@@ -33,6 +33,8 @@ namespace SkillSkulptor.Models
         public AppUser? CreatedByUser { get; set; }
 
         public List<ProjectMembers>? ProjectMembers { get; set; }
+
+        public bool IsUserPartOfProject { get; set; }
 
     }
 }
