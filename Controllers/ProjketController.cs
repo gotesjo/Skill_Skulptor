@@ -178,7 +178,7 @@ namespace SkillSkulptor.Controllers
                     }
                     else
                     {
-                        return View("IndexEdit");
+                        return View("IndexEdit", updatedProject);
                     }
                 
             }

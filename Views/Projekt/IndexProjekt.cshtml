@@ -11,10 +11,9 @@
 <!--Projekt Content-->
 <div class="container">
 
-    <h2 class="d-block d-lg-none">PROJEKT</h2>
+    <h2 class="mb-0">PROJEKT</h2>
 
-
-    <h4 class="d-block d-lg-non">@ViewBag.Meddelande</h4>
+    <h4 class="mb-0">@ViewBag.Meddelande</h4>
 
     <table class="table table-hover">
         <thead>
@@ -57,12 +56,12 @@
                             }
                             else
                             {
-                                <td><p style="color:#D98B6C">Detta projektet är fullt</p></td>
+                                <td><p style="color:#D98B6C">Detta projekt är fullt</p></td>
                             }
                         }
                         else
                         {
-                            <td><p style="color:#6CBAD9">Du är redan med i detta projeket</p></td>
+                            <td><p style="color:#6CBAD9">Du är redan med i detta projekt</p></td>
                         }
 
                         @if (prod.CreatedBy == ViewBag.LoggedIn)
